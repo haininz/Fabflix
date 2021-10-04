@@ -72,24 +72,24 @@ public class SingleStarServlet extends HttpServlet {
             while (rs.next()) {
 
                 String starId = rs.getString("starId");
-                String starName = rs.getString("name");
-                String starDob = rs.getString("birthYear");
+                String starName = rs.getString("name");  //
+                String starBirth = rs.getString("birthYear"); //
 
                 String movieId = rs.getString("movieId");
                 String movieTitle = rs.getString("title");
-                String movieYear = rs.getString("year");
-                String movieDirector = rs.getString("director");
+                // String movieYear = rs.getString("year");
+                // String movieDirector = rs.getString("director");
 
                 // Create a JsonObject based on the data we retrieve from rs
 
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("star_id", starId);
                 jsonObject.addProperty("star_name", starName);
-                jsonObject.addProperty("star_dob", starDob);
+                jsonObject.addProperty("star_birth", starBirth);
                 jsonObject.addProperty("movie_id", movieId);
                 jsonObject.addProperty("movie_title", movieTitle);
-                jsonObject.addProperty("movie_year", movieYear);
-                jsonObject.addProperty("movie_director", movieDirector);
+                // jsonObject.addProperty("movie_year", movieYear);
+                // jsonObject.addProperty("movie_director", movieDirector);
 
                 jsonArray.add(jsonObject);
             }
