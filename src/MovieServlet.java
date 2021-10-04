@@ -46,12 +46,13 @@ public class MovieServlet extends HttpServlet {
             // Declare our statement
             Statement statement = conn.createStatement();
 
-            String query = "SELECT * from movies LIMIT 20";
+            String query = "SELECT * from movies JOIN ratings on movies.id = ratings.movieId JOIN (SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as genres FROM (genres_in_movies JOIN genres on genres_in_movies.genreId = genres.id) GROUP BY movieId) as g on movies.id = g.movieId JOIN (SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as stars FROM (stars_in_movies JOIN stars on stars_in_movies.starId = stars.id) GROUP BY movieId) as s on movies.id = s.movieId ORDER BY ratings.rating DESC limit 20;";
 
             // Perform the query
             ResultSet rs = statement.executeQuery(query);
 
             JsonArray jsonArray = new JsonArray();
+
 
             // Iterate through each row of rs
             while (rs.next()) {
@@ -59,6 +60,11 @@ public class MovieServlet extends HttpServlet {
                 String movies_title = rs.getString("title");
                 String movies_year = rs.getString("year");
                 String movies_director = rs.getString("director");
+                String movies_genres = rs.getString("genres");
+                String movies_rating = rs.getString("rating");
+                String movies_stars = rs.getString("stars_list");
+
+                String[] starsTemp = movies_stars.split(",");
 
                 // Create a JsonObject based on the data we retrieve from rs
                 JsonObject jsonObject = new JsonObject();
@@ -66,6 +72,11 @@ public class MovieServlet extends HttpServlet {
                 jsonObject.addProperty("movies_title", movies_title);
                 jsonObject.addProperty("movies_year", movies_year);
                 jsonObject.addProperty("movies_director", movies_director);
+                jsonObject.addProperty("movies_genres", movies_genres);
+                jsonObject.addProperty("movies_rating", movies_rating);
+                jsonObject.addProperty("movies_stars", movies_stars);
+
+                System.out.println(jsonArray.toString());
 
                 jsonArray.add(jsonObject);
             }
@@ -97,3 +108,6 @@ public class MovieServlet extends HttpServlet {
 
     }
 }
+
+
+    // select movies.id, title, director, year, group_concat(distinct genres.name) as genre_list, group_concat(distinct concat(stars.name, \':\', stars.id)) as stars_list, rating from movies, genres_in_movies, genres, stars, stars_in_movies, ratings where movies.id = genres_in_movies.movieId and genres_in_movies.genreId = genres.id and movies.id = stars_in_movies.movieId and stars_in_movies.starId = stars.id and movies.id = ratings.movieId group by movies.id, title, rating, year, director having title like ?;

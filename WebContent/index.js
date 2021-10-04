@@ -28,9 +28,9 @@ function handleStarResult(resultData) {
         rowHTML += "<th>" + resultData[i]["movies_title"] + "</th>";
         rowHTML += "<th>" + resultData[i]["movies_year"] + "</th>";
         rowHTML += "<th>" + resultData[i]["movies_director"] + "</th>";
-        rowHTML += "<th>" + "-" + "</th>";  // genres
-        rowHTML += "<th>" + "-" + "</th>"; // stars
-        rowHTML += "<th>" + "-" + "</th>" // rating;
+        rowHTML += "<th>" + resultData[i]["movies_genres"] + "</th>";  // genres
+        rowHTML += "<th>" + resultData[i]["movies_stars"] + "</th>"; // stars
+        rowHTML += "<th>" + resultData[i]["movies_rating"] + "</th>" // rating;
         rowHTML += "</tr>";
         /*
         // Concatenate the html tags with resultData jsonObject
