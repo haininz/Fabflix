@@ -76,15 +76,13 @@ public class SingleStarServlet extends HttpServlet {
                 String starName = rs.getString("name");  //
                 String starBirth = rs.getString("birthYear"); //
 
+                // when birth is null, set to N/A
                 if(starBirth == null){
                     starBirth = "N/A";
                 }
 
                 String movieId = rs.getString("movieId");
                 String movieTitle = rs.getString("title");
-                // String movieYear = rs.getString("year");
-                // String movieDirector = rs.getString("director");
-
 
                 movieInfo += movieTitle + "," + movieId + "\n";
                 System.out.println("movieInfo-->" + movieInfo);

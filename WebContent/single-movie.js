@@ -68,13 +68,6 @@ function handleResult(resultData) {
 
     rowHTML += "<p>Rating: " + resultData[0]["movies_rating"] + "</p>";
 
-    // append two html <p> created to the h3 body, which will refresh the page
-    // starInfoElement.append("<p>Movie Title: " + resultData[0]["movies_title"] + "</p>" +
-    //     "<p>Year: " + resultData[0]["movies_year"] + "</p>" +
-    //     "<p>Director: " + resultData[0]["movies_director"] + "</p>" +
-    //     "<p>Genres: " + resultData[0]["movies_genres"] + "</p>" +
-    //     "<p>Stars: " + resultData[0]["movies_stars"] + "</p>" +
-    //     "<p>Rating: " + resultData[0]["movies_rating"] + "</p>");
 
     starInfoElement.append(rowHTML);
 

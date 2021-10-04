@@ -53,19 +53,6 @@ function handleResult(resultData) {
     // Populate the star table
     // Find the empty table body by id "movie_table_body"
     let movieTableBodyElement = jQuery("#movie_table_body");
-    /*
-    let rowHTML = "";
-    let moviesInfo = resultData[0]["movie_info"].split("\n");
-    console.log("-------->" + moviesInfo)
-    for(let j = 0; j < moviesInfo.length - 1; j++){
-        let movie_split = moviesInfo[j].split(",");
-        let movie_name = movie_split[0];
-        let movie_id = movie_split[1];
-        rowHTML += "<li>"+ '<a href="single-movie.html?id=' + movie_id + '">'
-            + movie_name + '</a >' + "</li>";
-    }
-    movieTableBodyElement.append(rowHTML);
-     */
 
     // Concatenate the html tags with resultData jsonObject to create table rows
     let moviesInfo = null;

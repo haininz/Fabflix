@@ -45,16 +45,17 @@ public class MovieServlet extends HttpServlet {
 
             // Declare our statement
             Statement statement = conn.createStatement();
-            Statement statement1 = conn.createStatement();
+            Statement movieToStar = conn.createStatement(); // used for find star info accoring to the movie
 
-            String query = "SELECT id, title, year, director, genres, stars, rating \n" +
+            String query;
+            query = "SELECT id, title, year, director, Genres_List, Stars_List, rating \n" +
                     "from movies JOIN ratings on movies.id = ratings.movieId JOIN \n" +
-                    "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as genres \n" +
-                    "FROM (genres_in_movies JOIN genres on genres_in_movies.genreId = genres.id) \n" +
-                    "GROUP BY movieId) as g on movies.id = g.movieId JOIN \n" +
-                    "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as stars \n" +
-                    "FROM (stars_in_movies JOIN stars on stars_in_movies.starId = stars.id) \n" +
-                    "GROUP BY movieId) as s on movies.id = s.movieId \n" +
+                    "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List \n" +
+                    "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id) \n" +
+                    "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN \n" +
+                    "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List \n" +
+                    "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id) \n" +
+                    "GROUP BY movieId) as slist on movies.id = slist.movieId \n" +
                     "ORDER BY ratings.rating DESC limit 20";
 
             // Perform the query
@@ -68,8 +69,8 @@ public class MovieServlet extends HttpServlet {
                 String movies_title = rs.getString("title");
                 String movies_year = rs.getString("year");
                 String movies_director = rs.getString("director");
-                String movies_genres = rs.getString("genres");
-                String movies_stars = rs.getString("stars");
+                String movies_genres = rs.getString("Genres_List");
+                String movies_stars = rs.getString("Stars_List");
                 String movies_rating = rs.getString("rating");
 
                 String movies_stars_id = new String("");
@@ -83,7 +84,7 @@ public class MovieServlet extends HttpServlet {
                         "where movies.id = " + "\"" + movies_id + "\"" + "\n" +
                         "limit 3";
 
-                ResultSet rs1 = statement1.executeQuery(query1);
+                ResultSet rs1 = movieToStar.executeQuery(query1);
                 while (rs1.next()){
                     String stars_id = rs1.getString("id");
                     String star_name = rs1.getString("name");
@@ -109,7 +110,7 @@ public class MovieServlet extends HttpServlet {
             }
             rs.close();
             statement.close();
-            statement1.close();
+            movieToStar.close();
 
             // Log to localhost log
             request.getServletContext().log("getting " + jsonArray.size() + " results");
