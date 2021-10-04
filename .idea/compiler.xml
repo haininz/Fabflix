@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="cs122b-fall21-project1-api-example" />
+        <module name="project1" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="cs122b-fall21-project1-api-example" target="11" />
+      <module name="project1" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
