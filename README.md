@@ -10,13 +10,13 @@
     - run war file on tomcat manager page
 
 3. Each member's contribution:
-    Haoxin Lin: 
+    - Haoxin Lin: 
         - Set up the environment 
         - Worked on index page and MovieServlet
         - Worked on single star page and SingleStarServlet
         - Developed the link between single star and movie
    
-    Haining Zhou:
+    - Haining Zhou:
         - Created mysql table
         - Worked on index page and MovieServlet
         - Worked on single movie page and SingleMovieServlet
