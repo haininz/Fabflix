@@ -46,7 +46,15 @@ public class MovieServlet extends HttpServlet {
             // Declare our statement
             Statement statement = conn.createStatement();
 
-            String query = "SELECT * from movies LIMIT 20";
+            String query = "SELECT id, title, year, director, genres, stars, rating \n" +
+                    "from movies JOIN ratings on movies.id = ratings.movieId JOIN \n" +
+                    "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as genres \n" +
+                    "FROM (genres_in_movies JOIN genres on genres_in_movies.genreId = genres.id) \n" +
+                    "GROUP BY movieId) as g on movies.id = g.movieId JOIN \n" +
+                    "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as stars \n" +
+                    "FROM (stars_in_movies JOIN stars on stars_in_movies.starId = stars.id) \n" +
+                    "GROUP BY movieId) as s on movies.id = s.movieId \n" +
+                    "ORDER BY ratings.rating DESC limit 20;";
 
             // Perform the query
             ResultSet rs = statement.executeQuery(query);
@@ -59,6 +67,12 @@ public class MovieServlet extends HttpServlet {
                 String movies_title = rs.getString("title");
                 String movies_year = rs.getString("year");
                 String movies_director = rs.getString("director");
+                String movies_genres = rs.getString("genres");
+                String movies_stars = rs.getString("stars");
+                String movies_rating = rs.getString("rating");
+
+                String[] temp = movies_stars.split(",");
+                movies_stars = String.join(", ", temp[0], temp[1], temp[2]);
 
                 // Create a JsonObject based on the data we retrieve from rs
                 JsonObject jsonObject = new JsonObject();
@@ -66,6 +80,9 @@ public class MovieServlet extends HttpServlet {
                 jsonObject.addProperty("movies_title", movies_title);
                 jsonObject.addProperty("movies_year", movies_year);
                 jsonObject.addProperty("movies_director", movies_director);
+                jsonObject.addProperty("movies_genres", movies_genres);
+                jsonObject.addProperty("movies_stars", movies_stars);
+                jsonObject.addProperty("movies_rating", movies_rating);
 
                 jsonArray.add(jsonObject);
             }
@@ -77,6 +94,8 @@ public class MovieServlet extends HttpServlet {
 
             // Write JSON string to output
             out.write(jsonArray.toString());
+
+            System.out.println(jsonArray.toString());
             // Set response status to 200 (OK)
             response.setStatus(200);
 
