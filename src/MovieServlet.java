@@ -95,7 +95,6 @@ public class MovieServlet extends HttpServlet {
             // Write JSON string to output
             out.write(jsonArray.toString());
 
-            System.out.println(jsonArray.toString());
             // Set response status to 200 (OK)
             response.setStatus(200);
 
