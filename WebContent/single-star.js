@@ -53,19 +53,37 @@ function handleResult(resultData) {
     // Populate the star table
     // Find the empty table body by id "movie_table_body"
     let movieTableBodyElement = jQuery("#movie_table_body");
+    /*
+    let rowHTML = "";
+    let moviesInfo = resultData[0]["movie_info"].split("\n");
+    console.log("-------->" + moviesInfo)
+    for(let j = 0; j < moviesInfo.length - 1; j++){
+        let movie_split = moviesInfo[j].split(",");
+        let movie_name = movie_split[0];
+        let movie_id = movie_split[1];
+        rowHTML += "<li>"+ '<a href="single-movie.html?id=' + movie_id + '">'
+            + movie_name + '</a >' + "</li>";
+    }
+    movieTableBodyElement.append(rowHTML);
+     */
 
     // Concatenate the html tags with resultData jsonObject to create table rows
-    for (let i = 0; i < Math.min(10, resultData.length); i++) {
-        let rowHTML = "";
-        // owHTML += "<tr>";
-        rowHTML += "<li>" + resultData[i]["movie_title"] + "</li>";
-        // rowHTML += "<th>" + resultData[i]["movie_year"] + "</th>";
-        // rowHTML += "<th>" + resultData[i]["movie_director"] + "</th>";
-        // rowHTML += "</tr>";
-
-        // Append the row created to the table body, which will refresh the page
-        movieTableBodyElement.append(rowHTML);
+    let moviesInfo = null;
+    for (let i = 0; i < resultData.length; i++) {
+        moviesInfo = resultData[i]["movie_info"]
     }
+    moviesInfo = moviesInfo.split("\n");
+    // console.log("moviesInfo-------->" + moviesInfo)
+    let rowHTML = "";
+    for(let j = 0; j < moviesInfo.length - 1; j++){
+        let movie_split = moviesInfo[j].split(",");
+        let movie_name = movie_split[0];
+        let movie_id = movie_split[1];
+        rowHTML += "<li>"+ '<a href="single-movie.html?id=' + movie_id + '">'
+            + movie_name + '</a >' + "</li>";
+    }
+    movieTableBodyElement.append(rowHTML);
+
 }
 
 /**

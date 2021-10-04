@@ -67,6 +67,7 @@ public class SingleStarServlet extends HttpServlet {
             ResultSet rs = statement.executeQuery();
 
             JsonArray jsonArray = new JsonArray();
+            String movieInfo = "";
 
             // Iterate through each row of rs
             while (rs.next()) {
@@ -75,21 +76,27 @@ public class SingleStarServlet extends HttpServlet {
                 String starName = rs.getString("name");  //
                 String starBirth = rs.getString("birthYear"); //
 
+                if(starBirth == null){
+                    starBirth = "N/A";
+                }
+
                 String movieId = rs.getString("movieId");
                 String movieTitle = rs.getString("title");
                 // String movieYear = rs.getString("year");
                 // String movieDirector = rs.getString("director");
 
-                // Create a JsonObject based on the data we retrieve from rs
 
+                movieInfo += movieTitle + "," + movieId + "\n";
+                System.out.println("movieInfo-->" + movieInfo);
+
+                // Create a JsonObject based on the data we retrieve from rs
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("star_id", starId);
                 jsonObject.addProperty("star_name", starName);
                 jsonObject.addProperty("star_birth", starBirth);
                 jsonObject.addProperty("movie_id", movieId);
                 jsonObject.addProperty("movie_title", movieTitle);
-                // jsonObject.addProperty("movie_year", movieYear);
-                // jsonObject.addProperty("movie_director", movieDirector);
+                jsonObject.addProperty("movie_info", movieInfo);
 
                 jsonArray.add(jsonObject);
             }
