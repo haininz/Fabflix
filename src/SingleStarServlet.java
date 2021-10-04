@@ -85,7 +85,7 @@ public class SingleStarServlet extends HttpServlet {
                 String movieTitle = rs.getString("title");
 
                 movieInfo += movieTitle + "," + movieId + "\n";
-                System.out.println("movieInfo-->" + movieInfo);
+                // System.out.println("movieInfo-->" + movieInfo);
 
                 // Create a JsonObject based on the data we retrieve from rs
                 JsonObject jsonObject = new JsonObject();
