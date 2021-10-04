@@ -82,7 +82,7 @@ public class SingleMovieServlet extends HttpServlet {
                     movies_stars_id += stars_id + "," + star_name + "\n";
                 }
 
-                System.out.println(movies_stars_id);
+                // System.out.println(movies_stars_id);
 
                 // Create a JsonObject based on the data we retrieve from rs
                 JsonObject jsonObject = new JsonObject();
