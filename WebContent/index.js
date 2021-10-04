@@ -21,8 +21,8 @@ function handleStarResult(resultData) {
     let moviesTableBodyElement = jQuery("#movieList_table_body");
 
     // Iterate through resultData, no more than 10 entries
-    for (let i = 0; i < Math.min(10, resultData.length); i++) {
-
+    for (let i = 0; i < Math.min(20, resultData.length); i++) {
+        console.log("loop " + i);
         let rowHTML = "";
         rowHTML += "<tr>";
         rowHTML += "<th>" + resultData[i]["movies_title"] + "</th>";
@@ -47,6 +47,7 @@ function handleStarResult(resultData) {
         rowHTML += "</tr>";
         */
         // Append the row created to the table body, which will refresh the page
+        console.log(rowHTML);
         moviesTableBodyElement.append(rowHTML);
     }
 }
