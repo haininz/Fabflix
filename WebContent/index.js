@@ -25,11 +25,14 @@ function handleStarResult(resultData) {
         console.log("loop " + i);
         let rowHTML = "";
         rowHTML += "<tr>";
-        rowHTML += "<th>" + resultData[i]["movies_title"] + "</th>";
+        rowHTML += "<th>" + '<a href="single-movie.html?id=' + resultData[i]["movies_id"] + '">'
+            + resultData[i]["movies_title"] + '</a >' + "</th>";
         rowHTML += "<th>" + resultData[i]["movies_year"] + "</th>";
         rowHTML += "<th>" + resultData[i]["movies_director"] + "</th>";
         rowHTML += "<th>" + resultData[i]["movies_genres"] + "</th>";  // genres
         rowHTML += "<th>" + resultData[i]["movies_stars"] + "</th>"; // stars
+
+
         rowHTML += "<th>" + resultData[i]["movies_rating"] + "</th>" // rating;
         rowHTML += "</tr>";
         /*
