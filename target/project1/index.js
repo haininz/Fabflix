@@ -22,7 +22,6 @@ function handleStarResult(resultData) {
 
     // Iterate through resultData, no more than 10 entries
     for (let i = 0; i < Math.min(20, resultData.length); i++) {
-        console.log("loop " + i);
         let rowHTML = "";
         rowHTML += "<tr>";
         rowHTML += "<th>" + '<a href="single-movie.html?id=' + resultData[i]["movies_id"] + '">'
@@ -35,20 +34,7 @@ function handleStarResult(resultData) {
 
         rowHTML += "<th>" + resultData[i]["movies_rating"] + "</th>" // rating;
         rowHTML += "</tr>";
-        /*
-        // Concatenate the html tags with resultData jsonObject
-        let rowHTML = "";
-        rowHTML += "<tr>";
-        rowHTML +=
-            "<th>" +
-            // Add a link to single-star.html with id passed with GET url parameter
-            '<a href="single-star.html?id=' + resultData[i]['star_id'] + '">'
-            + resultData[i]["star_name"] +     // display star_name for the link text
-            '</a>' +
-            "</th>";
-        rowHTML += "<th>" + resultData[i]["star_dob"] + "</th>";
-        rowHTML += "</tr>";
-        */
+
         // Append the row created to the table body, which will refresh the page
         console.log(rowHTML);
         moviesTableBodyElement.append(rowHTML);
