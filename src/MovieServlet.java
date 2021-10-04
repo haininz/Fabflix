@@ -45,6 +45,7 @@ public class MovieServlet extends HttpServlet {
 
             // Declare our statement
             Statement statement = conn.createStatement();
+            Statement statement1 = conn.createStatement();
 
             String query = "SELECT id, title, year, director, genres, stars, rating \n" +
                     "from movies JOIN ratings on movies.id = ratings.movieId JOIN \n" +
@@ -54,7 +55,7 @@ public class MovieServlet extends HttpServlet {
                     "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as stars \n" +
                     "FROM (stars_in_movies JOIN stars on stars_in_movies.starId = stars.id) \n" +
                     "GROUP BY movieId) as s on movies.id = s.movieId \n" +
-                    "ORDER BY ratings.rating DESC limit 20;";
+                    "ORDER BY ratings.rating DESC limit 20";
 
             // Perform the query
             ResultSet rs = statement.executeQuery(query);
@@ -71,8 +72,25 @@ public class MovieServlet extends HttpServlet {
                 String movies_stars = rs.getString("stars");
                 String movies_rating = rs.getString("rating");
 
+                String movies_stars_id = new String("");
+
                 String[] temp = movies_stars.split(",");
                 movies_stars = String.join(", ", temp[0], temp[1], temp[2]);
+
+                String query1 = "select stars.id, stars.name from movies \n" +
+                        "join stars_in_movies on movies.id = stars_in_movies.movieId \n" +
+                        "join stars on stars_in_movies.starId = stars.id\n" +
+                        "where movies.id = " + "\"" + movies_id + "\"" + "\n" +
+                        "limit 3";
+
+                ResultSet rs1 = statement1.executeQuery(query1);
+                while (rs1.next()){
+                    String stars_id = rs1.getString("id");
+                    String star_name = rs1.getString("name");
+                    movies_stars_id += stars_id + "," + star_name + "\n";
+                }
+
+                System.out.println(movies_stars_id);
 
                 // Create a JsonObject based on the data we retrieve from rs
                 JsonObject jsonObject = new JsonObject();
@@ -84,10 +102,15 @@ public class MovieServlet extends HttpServlet {
                 jsonObject.addProperty("movies_stars", movies_stars);
                 jsonObject.addProperty("movies_rating", movies_rating);
 
+                jsonObject.addProperty("movies_stars_id", movies_stars_id);
+
                 jsonArray.add(jsonObject);
+
+                rs1.close();
             }
             rs.close();
             statement.close();
+            statement1.close();
 
             // Log to localhost log
             request.getServletContext().log("getting " + jsonArray.size() + " results");

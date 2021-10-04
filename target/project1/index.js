@@ -23,13 +23,28 @@ function handleStarResult(resultData) {
     // Iterate through resultData, no more than 10 entries
     for (let i = 0; i < Math.min(20, resultData.length); i++) {
         let rowHTML = "";
+
         rowHTML += "<tr>";
         rowHTML += "<th>" + '<a href="single-movie.html?id=' + resultData[i]["movies_id"] + '">'
             + resultData[i]["movies_title"] + '</a >' + "</th>";
         rowHTML += "<th>" + resultData[i]["movies_year"] + "</th>";
         rowHTML += "<th>" + resultData[i]["movies_director"] + "</th>";
-        rowHTML += "<th>" + resultData[i]["movies_genres"] + "</th>";  // genres
-        rowHTML += "<th>" + resultData[i]["movies_stars"] + "</th>"; // stars
+        rowHTML += "<th>" + resultData[i]["movies_genres"] + "</th>" + "<th>" ;
+
+        let actors = resultData[i]["movies_stars_id"].split("\n");
+        for (let j = 0; j < 3; j++) {
+            let actor_split = actors[j].split(",");
+            let actor_id = actor_split[0];
+            let actor_name = actor_split[1];
+            rowHTML += '<a href="single-star.html?id=' + actor_id + '">'
+                + actor_name + '</a >'; // FIXME
+            if (j === 2){
+                rowHTML += "</th>";
+            }
+            else {
+                rowHTML += ", ";
+            }
+        }
 
 
         rowHTML += "<th>" + resultData[i]["movies_rating"] + "</th>" // rating;
