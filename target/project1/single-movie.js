@@ -38,19 +38,45 @@ function getParameterByName(target) {
 
 function handleResult(resultData) {
 
-    console.log("handleResult: populating star info from resultData");
+    console.log("handleResult: populating movies info from resultData");
 
     // populate the star info h3
     // find the empty h3 body by id "star_info"
     let starInfoElement = jQuery("#movie_info");
 
-    // append two html <p> created to the h3 body, which will refresh the page
-    starInfoElement.append("<p>Movie Title: " + resultData[0]["movies_title"] + "</p>" +
+    let rowHTML = "";
+    rowHTML += "<p>Movie Title: " + resultData[0]["movies_title"] + "</p>" +
         "<p>Year: " + resultData[0]["movies_year"] + "</p>" +
         "<p>Director: " + resultData[0]["movies_director"] + "</p>" +
-        "<p>Genres: " + resultData[0]["movies_genres"] + "</p>" +
-        "<p>Stars: " + resultData[0]["movies_stars"] + "</p>" +
-        "<p>Rating: " + resultData[0]["movies_rating"] + "</p>");
+        "<p>Genres: " + resultData[0]["movies_genres"] + "</p>";
+
+    let actors = resultData[0]["movies_stars_id"].split("\n");
+    console.log("========" + actors);
+    for (let j = 0; j < actors.length - 1; j++) {
+        let actor_split = actors[j].split(",");
+        let actor_id = actor_split[0];
+        let actor_name = actor_split[1];
+        rowHTML += '<a href="single-star.html?id=' + actor_id + '">'
+            + actor_name + '</a >'; // FIXME
+        if (j === actors.length - 2){
+            rowHTML += "</th>";
+        }
+        else {
+            rowHTML += ", ";
+        }
+    }
+
+    rowHTML += "<p>Rating: " + resultData[0]["movies_rating"] + "</p>";
+
+    // append two html <p> created to the h3 body, which will refresh the page
+    // starInfoElement.append("<p>Movie Title: " + resultData[0]["movies_title"] + "</p>" +
+    //     "<p>Year: " + resultData[0]["movies_year"] + "</p>" +
+    //     "<p>Director: " + resultData[0]["movies_director"] + "</p>" +
+    //     "<p>Genres: " + resultData[0]["movies_genres"] + "</p>" +
+    //     "<p>Stars: " + resultData[0]["movies_stars"] + "</p>" +
+    //     "<p>Rating: " + resultData[0]["movies_rating"] + "</p>");
+
+    starInfoElement.append(rowHTML);
 
     console.log("handleResult: populating single movie table from resultData");
 }

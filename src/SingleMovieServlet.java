@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 
 @WebServlet(name = "SingleMovieServlet", urlPatterns = "/api/single-movie")
 public class SingleMovieServlet extends HttpServlet {
@@ -52,6 +53,8 @@ public class SingleMovieServlet extends HttpServlet {
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setString(1, id);
 
+            Statement statement1 = conn.createStatement();
+
             ResultSet rs = statement.executeQuery();
 
             JsonArray jsonArray = new JsonArray();
@@ -65,6 +68,22 @@ public class SingleMovieServlet extends HttpServlet {
                 String movies_stars = rs.getString("stars");
                 String movies_rating = rs.getString("rating");
 
+                String movies_stars_id = new String("");
+
+                String query1 = "select stars.id, stars.name from movies \n" +
+                        "join stars_in_movies on movies.id = stars_in_movies.movieId \n" +
+                        "join stars on stars_in_movies.starId = stars.id\n" +
+                        "where movies.id = " + "\"" + movies_id + "\"";
+
+                ResultSet rs1 = statement1.executeQuery(query1);
+                while (rs1.next()){
+                    String stars_id = rs1.getString("id");
+                    String star_name = rs1.getString("name");
+                    movies_stars_id += stars_id + "," + star_name + "\n";
+                }
+
+                System.out.println(movies_stars_id);
+
                 // Create a JsonObject based on the data we retrieve from rs
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("movies_id", movies_id);
@@ -75,10 +94,15 @@ public class SingleMovieServlet extends HttpServlet {
                 jsonObject.addProperty("movies_stars", movies_stars);
                 jsonObject.addProperty("movies_rating", movies_rating);
 
+                jsonObject.addProperty("movies_stars_id", movies_stars_id);
+
                 jsonArray.add(jsonObject);
+
+                rs1.close();
             }
             rs.close();
             statement.close();
+            statement1.close();
 
             // Log to localhost log
             request.getServletContext().log("getting " + jsonArray.size() + " results");
