@@ -48,7 +48,7 @@ public class SingleMovieServlet extends HttpServlet {
                     "GROUP BY movieId) as s \n" +
                     "on movies.id = s.movieId\n" +
                     "where movies.id = ?\n" +
-                    "ORDER BY ratings.rating DESC limit 20;";
+                    "ORDER BY ratings.rating DESC limit 20";
 
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setString(1, id);
