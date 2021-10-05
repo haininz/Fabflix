@@ -1,7 +1,7 @@
 # cs122b-fall21-team-25
 
-1. Project 1 Demo Url:
-   <br><br>
+1. Project 1 Demo Url: https://youtu.be/2rK--Cxij6U
+   <br>
    
 2. How to deploy application on Tomcat
     - install maven 
