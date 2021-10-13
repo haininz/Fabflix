@@ -94,17 +94,22 @@ public class FormServlet extends HttpServlet {
                 String m_stars = rs.getString("starList");
                 String m_rating = rs.getString("rating");
 
+                m_genres = m_genres.replace(" ", "");
                 String[] tempG = m_genres.split(",");
                 Arrays.sort(tempG);
+                System.out.println(Arrays.toString(tempG));
                 String temp_genres = "";
                 for(int z = 0; z < tempG.length && z < 3; z++){
-                    if(z == 2){
+                    if(z == 2 || tempG.length - 1 == z){
                         temp_genres = temp_genres + tempG[z];
+                        break;
                     }
                     else {
                         temp_genres = temp_genres + tempG[z] + ", ";
                     }
                 }
+                m_genres = temp_genres;
+                // m_genres = String.join(", ", tempG[0], tempG[1], tempG[2]);
 
                 String[] temp = m_stars.split(",");
                 Arrays.sort(temp);
