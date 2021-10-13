@@ -96,7 +96,15 @@ public class FormServlet extends HttpServlet {
 
                 String[] tempG = m_genres.split(",");
                 Arrays.sort(tempG);
-                m_genres = String.join(", ", tempG[0], tempG[1], tempG[2]);
+                String temp_genres = "";
+                for(int z = 0; z < tempG.length && z < 3; z++){
+                    if(z == 2){
+                        temp_genres = temp_genres + tempG[z];
+                    }
+                    else {
+                        temp_genres = temp_genres + tempG[z] + ", ";
+                    }
+                }
 
                 String[] temp = m_stars.split(",");
                 Arrays.sort(temp);
