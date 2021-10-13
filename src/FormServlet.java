@@ -26,7 +26,7 @@ public class FormServlet extends HttpServlet {
 
     public void init(ServletConfig config) {
         try {
-            dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedbexample");
+            dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedb");
         } catch (NamingException e) {
             e.printStackTrace();
         }
@@ -42,10 +42,10 @@ public class FormServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         // Building page head with title
-        out.println("<html><head><title>MovieDBExample: Found Records</title></head>");
+        out.println("<html><head><title>Movie: Found Records</title></head>");
 
         // Building page body
-        out.println("<body><h1>MovieDBExample: Found Records</h1>");
+        out.println("<body><h1>Movie: Found Records</h1>");
 
 
         try {
@@ -57,10 +57,12 @@ public class FormServlet extends HttpServlet {
             Statement statement = dbCon.createStatement();
 
             // Retrieve parameter "name" from the http request, which refers to the value of <input name="name"> in index.html
-            String name = request.getParameter("name");
+            String name = request.getParameter("star_name");
+
 
             // Generate a SQL query
-            String query = String.format("SELECT * from stars where name like '%s'", name);
+            String query = String.format("SELECT * from stars s, movies m, stars_in_movies sim " +
+                    "where s.name like '%s' and s.id = sim.starId and m.id = sim.movieId", name);
 
 
             // Log to localhost log
@@ -72,11 +74,12 @@ public class FormServlet extends HttpServlet {
             out.println("<table border>");
 
             // Iterate through each row of rs and create a table row <tr>
-            out.println("<tr><td>ID</td><td>Name</td></tr>");
+            out.println("<tr><td>Title</td><td>Year</td><td>Director</td></tr>");
             while (rs.next()) {
-                String m_ID = rs.getString("ID");
-                String m_Name = rs.getString("name");
-                out.println(String.format("<tr><td>%s</td><td>%s</td></tr>", m_ID, m_Name));
+                String m_title = rs.getString("title");
+                String m_year = rs.getString("year");
+                String m_director = rs.getString("director");
+                out.println(String.format("<tr><td>%s</td><td>%s</td><td>%s</td></tr>", m_title, m_year, m_director));
             }
             out.println("</table>");
 
