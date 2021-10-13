@@ -61,8 +61,18 @@ public class FormServlet extends HttpServlet {
 
 
             // Generate a SQL query
-            String query = String.format("SELECT * from stars s, movies m, stars_in_movies sim " +
-                    "where s.name like '%s' and s.id = sim.starId and m.id = sim.movieId", name);
+            String query = String.format("SELECT id, title, year, director, genres, starList, rating \n" +
+                    "from (SELECT m.* from stars s, movies m, stars_in_movies sim\n" +
+                    "where s.name like '%s' and s.id = sim.starId and m.id = sim.movieId) as movies\n" +
+                    "JOIN ratings on movies.id = ratings.movieId \n" +
+                    "JOIN (SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as genres \n" +
+                    "FROM (genres_in_movies JOIN genres on genres_in_movies.genreId = genres.id) \n" +
+                    "GROUP BY movieId) as g \n" +
+                    "on movies.id = g.movieId \n" +
+                    "JOIN (SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as starList \n" +
+                    "FROM (stars_in_movies JOIN stars on stars_in_movies.starId = stars.id) \n" +
+                    "GROUP BY movieId) as s \n" +
+                    "on movies.id = s.movieId;", name);
 
 
             // Log to localhost log
@@ -74,12 +84,16 @@ public class FormServlet extends HttpServlet {
             out.println("<table border>");
 
             // Iterate through each row of rs and create a table row <tr>
-            out.println("<tr><td>Title</td><td>Year</td><td>Director</td></tr>");
+            out.println("<tr><td>Title</td><td>Year</td><td>Director</td><td>Genres</td><td>Stars</td><td>Rating</td></tr>");
             while (rs.next()) {
                 String m_title = rs.getString("title");
                 String m_year = rs.getString("year");
                 String m_director = rs.getString("director");
-                out.println(String.format("<tr><td>%s</td><td>%s</td><td>%s</td></tr>", m_title, m_year, m_director));
+                String m_genres = rs.getString("genres");
+                String m_stars = rs.getString("starList");
+                String m_rating = rs.getString("rating");
+                out.println(String.format("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>",
+                        m_title, m_year, m_director, m_genres, m_stars, m_rating));
             }
             out.println("</table>");
 

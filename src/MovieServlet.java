@@ -45,7 +45,7 @@ public class MovieServlet extends HttpServlet {
 
             // Declare our statement
             Statement statement = conn.createStatement();
-            Statement movieToStar = conn.createStatement(); // used for find star info accoring to the movie
+            Statement movieToStar = conn.createStatement(); // used for find star info according to the movie
 
             String query;
             query = "SELECT id, title, year, director, Genres_List, Stars_List, rating \n" +
