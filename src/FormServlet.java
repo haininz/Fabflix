@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Arrays;
 
 /**
  * A servlet that takes input from a html <form> and talks to MySQL moviedbexample,
@@ -92,6 +93,15 @@ public class FormServlet extends HttpServlet {
                 String m_genres = rs.getString("genres");
                 String m_stars = rs.getString("starList");
                 String m_rating = rs.getString("rating");
+
+                String[] tempG = m_genres.split(",");
+                Arrays.sort(tempG);
+                m_genres = String.join(", ", tempG[0], tempG[1], tempG[2]);
+
+                String[] temp = m_stars.split(",");
+                Arrays.sort(temp);
+                m_stars = String.join(", ", temp[0], temp[1], temp[2]);
+
                 out.println(String.format("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>",
                         m_title, m_year, m_director, m_genres, m_stars, m_rating));
             }
