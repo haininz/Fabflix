@@ -1,3 +1,6 @@
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletConfig;
@@ -37,16 +40,18 @@ public class FormServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
-        response.setContentType("text/html");    // Response mime type
+        response.setContentType("application/json");    // Response mime type
 
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
 
+        /*
         // Building page head with title
         out.println("<html><head><title>Movie: Found Records</title></head>");
 
         // Building page body
         out.println("<body><h1>Movie: Found Records</h1>");
+         */
 
 
         try {
@@ -59,6 +64,7 @@ public class FormServlet extends HttpServlet {
 
             // Retrieve parameter "name" from the http request, which refers to the value of <input name="name"> in index.html
             String name = request.getParameter("star_name");
+            // System.out.println(name);
 
 
             // Generate a SQL query
@@ -81,11 +87,18 @@ public class FormServlet extends HttpServlet {
 
             // Perform the query
             ResultSet rs = statement.executeQuery(query);
+
+            System.out.println("-----lol");
+            /*
             // Create a html <table>
             out.println("<table border>");
 
             // Iterate through each row of rs and create a table row <tr>
             out.println("<tr><td>Title</td><td>Year</td><td>Director</td><td>Genres</td><td>Stars</td><td>Rating</td></tr>");
+             */
+
+            JsonArray jsonArray = new JsonArray();
+
             while (rs.next()) {
                 String m_title = rs.getString("title");
                 String m_year = rs.getString("year");
@@ -112,10 +125,22 @@ public class FormServlet extends HttpServlet {
                 Arrays.sort(temp);
                 m_stars = String.join(", ", temp[0], temp[1], temp[2]);
 
-                out.println(String.format("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>",
-                        m_title, m_year, m_director, m_genres, m_stars, m_rating));
+                // out.println(String.format("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>",
+                //        m_title, m_year, m_director, m_genres, m_stars, m_rating));
+                JsonObject jsonObject = new JsonObject();
+                // jsonObject.addProperty("movies_id", movies_id);
+                jsonObject.addProperty("movies_title", m_title);
+                jsonObject.addProperty("movies_year", m_year);
+                jsonObject.addProperty("movies_director", m_director);
+                jsonObject.addProperty("movies_genres", m_genres);
+                jsonObject.addProperty("movies_stars", m_stars);
+                jsonObject.addProperty("movies_rating", m_rating);
+
+                // jsonObject.addProperty("movies_stars_id", movies_stars_id);
+
+                jsonArray.add(jsonObject);
             }
-            out.println("</table>");
+            // out.println("</table>");
 
 
             // Close all structures
@@ -123,6 +148,10 @@ public class FormServlet extends HttpServlet {
             statement.close();
             dbCon.close();
 
+            request.getServletContext().log("getting " + jsonArray.size() + " results");
+            out.write(jsonArray.toString());
+            // System.out.println(jsonArray.toString());
+            response.setStatus(200);
 
 
         } catch (Exception e) {
