@@ -21,15 +21,18 @@
 </head>
 <body>
 
-<!--Project 2 new add-->
-<form ACTION="form" METHOD="GET">
-    Movie Title: <input TYPE="TEXT" name="movie_title"> (Use % to replace any strings. e.g. Arnold%)<br>
-    Movie Year: <input TYPE="TEXT" name="movie_year"><br>
-    Movie Director: <input TYPE="TEXT" name="movie_director"><br>
-    Star name: <input TYPE="TEXT" name="star_name"><br>
+<form id="search_form" METHOD="GET" action="#">
+    Movie Title: <label><input TYPE="TEXT" name="movie_title"> (Use % to replace any strings. e.g. Arnold%)</label><br>
+    Movie Year: <label><input TYPE="TEXT" name="movie_year"></label><br>
+    Movie Director: <label><input TYPE="TEXT" name="movie_director"></label><br>
+    Star name: <label><input TYPE="TEXT" name="star_name"></label><br>
     <input TYPE="SUBMIT" VALUE="Search Movie">
 </form>
-<br><br />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="searchForm.js"></script>
 
 <h1>Movies</h1>
 

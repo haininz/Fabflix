@@ -37,7 +37,7 @@ public class FormServlet extends HttpServlet {
     }
 
     // Use http GET
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
         response.setContentType("application/json");    // Response mime type
@@ -64,7 +64,7 @@ public class FormServlet extends HttpServlet {
 
             // Retrieve parameter "name" from the http request, which refers to the value of <input name="name"> in index.html
             String name = request.getParameter("star_name");
-            // System.out.println(name);
+//            System.out.println(name);
 
 
             // Generate a SQL query
@@ -100,41 +100,41 @@ public class FormServlet extends HttpServlet {
             JsonArray jsonArray = new JsonArray();
 
             while (rs.next()) {
-                String m_title = rs.getString("title");
-                String m_year = rs.getString("year");
-                String m_director = rs.getString("director");
-                String m_genres = rs.getString("genres");
-                String m_stars = rs.getString("starList");
-                String m_rating = rs.getString("rating");
+                String movies_title = rs.getString("title");
+                String movies_year = rs.getString("year");
+                String movies_director = rs.getString("director");
+                String movies_genres = rs.getString("genres");
+                String movies_stars = rs.getString("starList");
+                String movies_rating = rs.getString("rating");
 
-                String[] tempG = m_genres.split(", ");
-                Arrays.sort(tempG);
-                String temp_genres = "";
-                for(int z = 0; z < tempG.length && z < 3; z++){
-                    if(z == 2 || tempG.length - 1 == z){
-                        temp_genres = temp_genres + tempG[z];
-                        break;
-                    }
-                    else {
-                        temp_genres = temp_genres + tempG[z] + ", ";
-                    }
-                }
-                m_genres = temp_genres;
+//                String[] tempG = movies_genres.split(", ");
+//                Arrays.sort(tempG);
+//                String temp_genres = "";
+//                for(int z = 0; z < tempG.length && z < 3; z++){
+//                    if(z == 2 || tempG.length - 1 == z){
+//                        temp_genres = temp_genres + tempG[z];
+//                        break;
+//                    }
+//                    else {
+//                        temp_genres = temp_genres + tempG[z] + ", ";
+//                    }
+//                }
+//                movies_genres = temp_genres;
 
-                String[] temp = m_stars.split(", ");
+                String[] temp = movies_stars.split(", ");
                 Arrays.sort(temp);
-                m_stars = String.join(", ", temp[0], temp[1], temp[2]);
+                movies_stars = String.join(", ", temp[0], temp[1], temp[2]);
 
                 // out.println(String.format("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>",
-                //        m_title, m_year, m_director, m_genres, m_stars, m_rating));
+                //        movies_title, movies_year, movies_director, movies_genres, movies_stars, movies_rating));
                 JsonObject jsonObject = new JsonObject();
                 // jsonObject.addProperty("movies_id", movies_id);
-                jsonObject.addProperty("movies_title", m_title);
-                jsonObject.addProperty("movies_year", m_year);
-                jsonObject.addProperty("movies_director", m_director);
-                jsonObject.addProperty("movies_genres", m_genres);
-                jsonObject.addProperty("movies_stars", m_stars);
-                jsonObject.addProperty("movies_rating", m_rating);
+                jsonObject.addProperty("movies_title", movies_title);
+                jsonObject.addProperty("movies_year", movies_year);
+                jsonObject.addProperty("movies_director", movies_director);
+                jsonObject.addProperty("movies_genres", movies_genres);
+                jsonObject.addProperty("movies_stars", movies_stars);
+                jsonObject.addProperty("movies_rating", movies_rating);
 
                 // jsonObject.addProperty("movies_stars_id", movies_stars_id);
 
@@ -150,26 +150,21 @@ public class FormServlet extends HttpServlet {
 
             request.getServletContext().log("getting " + jsonArray.size() + " results");
             out.write(jsonArray.toString());
-            // System.out.println(jsonArray.toString());
+            System.out.println(jsonArray.toString());
             response.setStatus(200);
 
-
         } catch (Exception e) {
-            /*
-             * After you deploy the WAR file through tomcat manager webpage,
-             *   there's no console to see the print messages.
-             * Tomcat append all the print messages to the file: tomcat_directory/logs/catalina.out
-             *
-             * To view the last n lines (for example, 100 lines) of messages you can use:
-             *   tail -100 catalina.out
-             * This can help you debug your program after deploying it on AWS.
-             */
-            request.getServletContext().log("Error: ", e);
-
-            // Output Error Massage to html
-            out.println(String.format("<html><head><title>MovieDBExample: Error</title></head>\n<body><p>SQL error in doGet: %s</p></body></html>", e.getMessage()));
-            return;
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("errorMessage", e.getMessage());
+            out.write(jsonObject.toString());
+            response.setStatus(500);
         }
         out.close();
     }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        doGet(request, response);
+    }
+
 }
