@@ -6,20 +6,53 @@
     <meta charset="utf-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+        * {box-sizing: border-box}
+        body {font-family: Arial, Helvetica, sans-serif;}
 
+        .navbar {
+            width: 100%;
+            background-color: #554;
+            overflow: auto;
+        }
+
+        .navbar a {
+            float: left;
+            padding: 12px;
+            color: white;
+            text-decoration: none;
+            font-size: 17px;
+            width: 33%; /* Four links of equal widths */
+            text-align: center;
+        }
+
+        .navbar a:hover {
+            background-color: #000;
+        }
+
+        @media screen and (max-width: 500px) {
+            .navbar a {
+                float: none;
+                display: block;
+                width: 100%;
+                text-align: left;
+            }
+        }
+    </style>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
 
+
 <h1 align="center">Welcome to Fablix!</h1>
-<br>
-<a href="searchForm.html">Search</a>
-<br>
-<br>
-<br>
-<a href="browse.html">Browse</a>
+<div class="navbar">
+    <a href="index.html">Home</a>
+    <a href="searchForm.html">Search</a>
+    <a href="browse.html">Browse</a>
+</div>
+
 
 <!-- Load jQuery and Bootstrap JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

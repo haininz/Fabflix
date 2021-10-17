@@ -38,7 +38,8 @@ function handleResult(resultData) {
     rowHTML += "<p>Movie Title: " + resultData[0]["movies_title"] + "</p>" +
         "<p>Year: " + resultData[0]["movies_year"] + "</p>" +
         "<p>Director: " + resultData[0]["movies_director"] + "</p>" +
-        "<p>Genres: " + resultData[0]["movies_genres"] + "</p>";
+        "<p>Genres: " + resultData[0]["movies_genres"] + "</p>" +
+        "<p>Stars: " + "</p>";
 
     let actors = resultData[0]["movies_stars_id"].split("\n");
     console.log("========" + actors);
@@ -49,7 +50,7 @@ function handleResult(resultData) {
         rowHTML += '<a href="single-star.html?id=' + actor_id + '">'
             + actor_name + '</a >'; // FIXME
         if (j === actors.length - 2){
-            rowHTML += "</th>";
+            rowHTML += "</p>";
         }
         else {
             rowHTML += ", ";

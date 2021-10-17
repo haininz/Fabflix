@@ -6,16 +6,52 @@
     <meta charset="utf-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+        * {box-sizing: border-box}
+        body {font-family: Arial, Helvetica, sans-serif;}
+
+        .navbar {
+            width: 100%;
+            background-color: #554;
+            overflow: auto;
+        }
+
+        .navbar a {
+            float: left;
+            padding: 12px;
+            color: white;
+            text-decoration: none;
+            font-size: 17px;
+            width: 33%; /* Four links of equal widths */
+            text-align: center;
+        }
+
+        .navbar a:hover {
+            background-color: #000;
+        }
+
+        @media screen and (max-width: 500px) {
+            .navbar a {
+                float: none;
+                display: block;
+                width: 100%;
+                text-align: left;
+            }
+        }
+    </style>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
-<title>Movies List Browsing</title>
-<br><br/>
 
-<h1>Movies List</h1>
+<div class="navbar">
+    <a href="index.html">Home</a>
+    <a href="searchForm.html">Search</a>
+    <a href="browse.html">Browse</a>
+</div>
+<h2>Moving List</h2>
 <!-- Id "star_table" is useful for jQuery to find the html element with id, class here is mapping to Bootstrap defined class CSS -->
 <table class="table table-striped">
     <!-- Create a table header -->

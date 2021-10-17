@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Arrays;
 
 
 // Declaring a WebServlet called StarsServlet, which maps to url "/api/stars"
@@ -82,7 +83,7 @@ public class MovieServlet extends HttpServlet {
                         "join stars_in_movies on movies.id = stars_in_movies.movieId \n" +
                         "join stars on stars_in_movies.starId = stars.id\n" +
                         "where movies.id = " + "\"" + movies_id + "\"" + "\n" +
-                        "limit 3";
+                        "ORDER BY name limit 3";
 
                 ResultSet rs1 = movieToStar.executeQuery(query1);
                 while (rs1.next()){
@@ -90,6 +91,35 @@ public class MovieServlet extends HttpServlet {
                     String star_name = rs1.getString("name");
                     movies_stars_id += stars_id + "," + star_name + "\n";
                 }
+
+
+                String[] tempG = movies_genres.split(", ");
+                Arrays.sort(tempG);
+                String temp_genres = "";
+                for(int z = 0; z < tempG.length && z < 3; z++){
+                    if(z == 2 || tempG.length - 1 == z){
+                        temp_genres = temp_genres + tempG[z];
+                        break;
+                    }
+                    else {
+                        temp_genres = temp_genres + tempG[z] + ", ";
+                    }
+                }
+                movies_genres = temp_genres;
+
+                String[] tempS = movies_stars.split(", ");
+                Arrays.sort(tempS);
+                String temp_stars = "";
+                for(int z = 0; z < tempS.length && z < 3; z++){
+                    if(z == 2 || tempS.length - 1 == z){
+                        temp_stars = temp_stars + tempS[z];
+                        break;
+                    }
+                    else {
+                        temp_stars = temp_stars + tempS[z] + ", ";
+                    }
+                }
+                movies_stars = temp_stars;
 
 
                 // Create a JsonObject based on the data we retrieve from rs

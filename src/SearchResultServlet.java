@@ -50,6 +50,7 @@ public class SearchResultServlet extends HttpServlet {
 
             // Declare a new statement
             Statement statement = dbCon.createStatement();
+            Statement movieToStar = dbCon.createStatement();
 
             // Retrieve parameter "name" from the http request, which refers to the value of <input name="name"> in index.html
             String name = request.getParameter("star_name");
@@ -79,17 +80,11 @@ public class SearchResultServlet extends HttpServlet {
             ResultSet rs = statement.executeQuery(query);
 
             System.out.println("-----lol");
-            /*
-            // Create a html <table>
-            out.println("<table border>");
-
-            // Iterate through each row of rs and create a table row <tr>
-            out.println("<tr><td>Title</td><td>Year</td><td>Director</td><td>Genres</td><td>Stars</td><td>Rating</td></tr>");
-             */
 
             JsonArray jsonArray = new JsonArray();
 
             while (rs.next()) {
+                String movies_id = rs.getString("id");
                 String movies_title = rs.getString("title");
                 String movies_year = rs.getString("year");
                 String movies_director = rs.getString("director");
@@ -97,28 +92,51 @@ public class SearchResultServlet extends HttpServlet {
                 String movies_stars = rs.getString("starList");
                 String movies_rating = rs.getString("rating");
 
-//                String[] tempG = movies_genres.split(", ");
-//                Arrays.sort(tempG);
-//                String temp_genres = "";
-//                for(int z = 0; z < tempG.length && z < 3; z++){
-//                    if(z == 2 || tempG.length - 1 == z){
-//                        temp_genres = temp_genres + tempG[z];
-//                        break;
-//                    }
-//                    else {
-//                        temp_genres = temp_genres + tempG[z] + ", ";
-//                    }
-//                }
-//                movies_genres = temp_genres;
+                String movies_stars_id = new String("");
+                String query1 = "select stars.id, stars.name from movies \n" +
+                        "join stars_in_movies on movies.id = stars_in_movies.movieId \n" +
+                        "join stars on stars_in_movies.starId = stars.id\n" +
+                        "where movies.id = " + "\"" + movies_id + "\"" + "\n" +
+                        "ORDER BY name limit 3";
 
-                String[] temp = movies_stars.split(", ");
-                Arrays.sort(temp);
-                movies_stars = String.join(", ", temp[0], temp[1], temp[2]);
+                ResultSet rs1 = movieToStar.executeQuery(query1);
+                while (rs1.next()){
+                    String stars_id = rs1.getString("id");
+                    String star_name = rs1.getString("name");
+                    movies_stars_id += stars_id + "," + star_name + "\n";
+                }
 
-                // out.println(String.format("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>",
-                //        movies_title, movies_year, movies_director, movies_genres, movies_stars, movies_rating));
+
+                String[] tempG = movies_genres.split(", ");
+                Arrays.sort(tempG);
+                String temp_genres = "";
+                for(int z = 0; z < tempG.length && z < 3; z++){
+                    if(z == 2 || tempG.length - 1 == z){
+                        temp_genres = temp_genres + tempG[z];
+                        break;
+                    }
+                    else {
+                        temp_genres = temp_genres + tempG[z] + ", ";
+                    }
+                }
+                movies_genres = temp_genres;
+
+                String[] tempS = movies_stars.split(", ");
+                Arrays.sort(tempS);
+                String temp_stars = "";
+                for(int z = 0; z < tempS.length && z < 3; z++){
+                    if(z == 2 || tempS.length - 1 == z){
+                        temp_stars = temp_stars + tempS[z];
+                        break;
+                    }
+                    else {
+                        temp_stars = temp_stars + tempS[z] + ", ";
+                   }
+                }
+                movies_stars = temp_stars;
+
                 JsonObject jsonObject = new JsonObject();
-                // jsonObject.addProperty("movies_id", movies_id);
+                jsonObject.addProperty("movies_id", movies_id);
                 jsonObject.addProperty("movies_title", movies_title);
                 jsonObject.addProperty("movies_year", movies_year);
                 jsonObject.addProperty("movies_director", movies_director);
@@ -126,7 +144,7 @@ public class SearchResultServlet extends HttpServlet {
                 jsonObject.addProperty("movies_stars", movies_stars);
                 jsonObject.addProperty("movies_rating", movies_rating);
 
-                // jsonObject.addProperty("movies_stars_id", movies_stars_id);
+                jsonObject.addProperty("movies_stars_id", movies_stars_id);
 
                 jsonArray.add(jsonObject);
             }
@@ -140,7 +158,7 @@ public class SearchResultServlet extends HttpServlet {
 
             request.getServletContext().log("getting " + jsonArray.size() + " results");
             out.write(jsonArray.toString());
-            System.out.println(jsonArray.toString());
+            System.out.println("jsonArray.toString() --->" + jsonArray.toString());
             response.setStatus(200);
 
         } catch (Exception e) {
