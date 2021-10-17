@@ -16,15 +16,19 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-    <title>Search Movies List</title>
 </head>
 <body>
-
+<title>Search Movies List</title>
 <br><br/>
+<form id="search_form" METHOD="GET" action="#">
+    Movie Title: <label><input TYPE="TEXT" name="movie_title"> (Use % to replace any strings. e.g. Arnold%)</label><br>
+    Movie Year: <label><input TYPE="TEXT" name="movie_year"></label><br>
+    Movie Director: <label><input TYPE="TEXT" name="movie_director"></label><br>
+    Star name: <label><input TYPE="TEXT" name="star_name"></label><br>
+    <input id = "search_button" TYPE="SUBMIT" VALUE="Search Movie">
+</form>
 
 <h1>Movies</h1>
-
 <!-- Id "star_table" is useful for jQuery to find the html element with id, class here is mapping to Bootstrap defined class CSS -->
 <table id=search_movie_table class="table table-striped">
     <!-- Create a table header -->
