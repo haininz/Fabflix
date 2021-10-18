@@ -147,6 +147,7 @@ public class SearchResultServlet extends HttpServlet {
                 jsonObject.addProperty("movies_stars_id", movies_stars_id);
 
                 jsonArray.add(jsonObject);
+                rs1.close();
             }
             // out.println("</table>");
 
@@ -154,6 +155,7 @@ public class SearchResultServlet extends HttpServlet {
             // Close all structures
             rs.close();
             statement.close();
+            movieToStar.close();
             dbCon.close();
 
             request.getServletContext().log("getting " + jsonArray.size() + " results");

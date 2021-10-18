@@ -18,9 +18,10 @@ function getParameterByName(target) {
 
 function handleSearchResult(resultData) {
 
-    let moviesTableBodyElement = jQuery("#search_movieList_table_body");
-    let rowHTML = "";
+    let moviesTableBodyElement = jQuery("#search_result_table_body");
+
     for (let i = 0; i < resultData.length; i++) {
+        let rowHTML = "";
         rowHTML += "<tr>";
         rowHTML += "<th>" + '<a href="single-movie.html?id=' + resultData[i]["movies_id"] + '">'
             + resultData[i]["movies_title"] + '</a >' + "</th>";

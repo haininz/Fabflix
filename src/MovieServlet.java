@@ -76,8 +76,8 @@ public class MovieServlet extends HttpServlet {
 
                 String movies_stars_id = new String("");
 
-                String[] temp = movies_stars.split(",");
-                movies_stars = String.join(", ", temp[0], temp[1], temp[2]);
+//                String[] temp = movies_stars.split(",");
+//                movies_stars = String.join(", ", temp[0], temp[1], temp[2]);
 
                 String query1 = "select stars.id, stars.name from movies \n" +
                         "join stars_in_movies on movies.id = stars_in_movies.movieId \n" +
