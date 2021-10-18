@@ -44,7 +44,6 @@ public class SearchResultServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-
             // Create a new connection to database
             Connection dbCon = dataSource.getConnection();
 
@@ -52,24 +51,26 @@ public class SearchResultServlet extends HttpServlet {
             Statement statement = dbCon.createStatement();
             Statement movieToStar = dbCon.createStatement();
 
-            // Retrieve parameter "name" from the http request, which refers to the value of <input name="name"> in index.html
             String name = request.getParameter("star_name");
-//            System.out.println(name);
+            String title = request.getParameter("movie_title");
+            String year = request.getParameter("movie_year");
+            String director = request.getParameter("movie_director");
 
 
-            // Generate a SQL query
-            String query = String.format("SELECT DISTINCT id, title, year, director, genres, starList, rating \n" +
+            String query = String.format("SELECT DISTINCT id, title, year, director, genres, starList, rating\n" +
                     "from (SELECT m.* from stars s, movies m, stars_in_movies sim\n" +
-                    "where s.name like '%s%s' and s.id = sim.starId and m.id = sim.movieId) as movies\n" +
-                    "JOIN ratings on movies.id = ratings.movieId \n" +
-                    "JOIN (SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as genres \n" +
-                    "FROM (genres_in_movies JOIN genres on genres_in_movies.genreId = genres.id) \n" +
-                    "GROUP BY movieId) as g \n" +
-                    "on movies.id = g.movieId \n" +
-                    "JOIN (SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as starList \n" +
-                    "FROM (stars_in_movies JOIN stars on stars_in_movies.starId = stars.id) \n" +
-                    "GROUP BY movieId) as s \n" +
-                    "on movies.id = s.movieId;", name, "%");
+                    "where s.name like %s and m.year = %s and m.title like %s and m.director like %s\n" +
+                    "and s.id = sim.starId and m.id = sim.movieId) as movies\n" +
+                    "JOIN ratings on movies.id = ratings.movieId\n" +
+                    "JOIN (SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as genres\n" +
+                    "FROM (genres_in_movies JOIN genres on genres_in_movies.genreId = genres.id)\n" +
+                    "GROUP BY movieId) as g\n" +
+                    "on movies.id = g.movieId\n" +
+                    "JOIN (SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as starList\n" +
+                    "FROM (stars_in_movies JOIN stars on stars_in_movies.starId = stars.id)\n" +
+                    "GROUP BY movieId) as s\n" +
+                    "on movies.id = s.movieId",
+                    "\"" + name + "%\"", year, "\"" + title + "%\"", "\"" + director + "%\"");
             System.out.println("QUERY: " + query);
 
 
@@ -78,8 +79,6 @@ public class SearchResultServlet extends HttpServlet {
 
             // Perform the query
             ResultSet rs = statement.executeQuery(query);
-
-            System.out.println("-----lol");
 
             JsonArray jsonArray = new JsonArray();
 

@@ -76,8 +76,8 @@ public class MovieServlet extends HttpServlet {
                             "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
                             "GROUP BY movieId) as slist \n" +
                             "on movies.id = slist.movieId\n" +
-                            "where title LIKE %s\n" +
-                            "ORDER BY ratings.rating DESC", "\"" + "[^a-z0-9A-Z]%" + "\"");
+                            "where title not like %s\n" +
+                            "ORDER BY ratings.rating DESC", "\"" + "[a-z0-9A-Z]%" + "\"");
                 }
                 else {
                     query = String.format("SELECT id, title, year, director, Genres_List, Stars_List, rating\n" +

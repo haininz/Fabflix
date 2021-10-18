@@ -51,8 +51,6 @@ public class LoginServlet extends HttpServlet {
 
 
             if (rs.next()) {
-                // Login success:
-                System.out.println("yes");
                 // set this user into the session
                 request.getSession().setAttribute("user", new User(username));
 
@@ -66,11 +64,12 @@ public class LoginServlet extends HttpServlet {
                 // Log to localhost log
                 request.getServletContext().log("Login failed");
                 // sample error messages. in practice, it is not a good idea to tell user which one is incorrect/not exist.
-                if (!username.equals("anteater")) {
-                    responseJsonObject.addProperty("message", "user " + username + " doesn't exist");
-                } else {
-                    responseJsonObject.addProperty("message", "incorrect password");
-                }
+//                if (!username.equals("anteater")) {
+//                    responseJsonObject.addProperty("message", "user " + username + " doesn't exist");
+//                } else {
+//                    responseJsonObject.addProperty("message", "incorrect password");
+//                }
+                responseJsonObject.addProperty("message", "Login failed: incorrect user name or password");
             }
             response.getWriter().write(responseJsonObject.toString());
 
