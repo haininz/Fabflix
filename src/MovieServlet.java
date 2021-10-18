@@ -48,16 +48,56 @@ public class MovieServlet extends HttpServlet {
             Statement statement = conn.createStatement();
             Statement movieToStar = conn.createStatement(); // used for find star info according to the movie
 
-            String query;
-            query = "SELECT id, title, year, director, Genres_List, Stars_List, rating \n" +
-                    "from movies JOIN ratings on movies.id = ratings.movieId JOIN \n" +
-                    "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List \n" +
-                    "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id) \n" +
-                    "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN \n" +
-                    "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List \n" +
-                    "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id) \n" +
-                    "GROUP BY movieId) as slist on movies.id = slist.movieId \n" +
-                    "ORDER BY ratings.rating DESC limit 20";
+            String title = request.getParameter("title");
+            String genre = request.getParameter("genre");
+
+            String query = new String("");
+            if (title.equals("")){
+                query = String.format("SELECT id, title, year, director, Genres_List, Stars_List, rating\n" +
+                        "from movies JOIN ratings on movies.id = ratings.movieId JOIN\n" +
+                        "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List\n" +
+                        "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id)\n" +
+                        "WHERE genres.name = %s\n" +
+                        "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN\n" +
+                        "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
+                        "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
+                        "GROUP BY movieId) as slist \n" +
+                        "on movies.id = slist.movieId\n" +
+                        "ORDER BY ratings.rating DESC", "\"" + genre + "\"");
+            }
+            else if (genre.equals("")){
+                if (title.equals("*")){
+                    query = String.format("SELECT id, title, year, director, Genres_List, Stars_List, rating\n" +
+                            "from movies JOIN ratings on movies.id = ratings.movieId JOIN\n" +
+                            "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List\n" +
+                            "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id)\n" +
+                            "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN\n" +
+                            "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
+                            "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
+                            "GROUP BY movieId) as slist \n" +
+                            "on movies.id = slist.movieId\n" +
+                            "where title LIKE %s\n" +
+                            "ORDER BY ratings.rating DESC", "\"" + "[^a-z0-9A-Z]%" + "\"");
+                }
+                else {
+                    query = String.format("SELECT id, title, year, director, Genres_List, Stars_List, rating\n" +
+                            "from movies JOIN ratings on movies.id = ratings.movieId JOIN\n" +
+                            "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List\n" +
+                            "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id)\n" +
+                            "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN\n" +
+                            "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
+                            "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
+                            "GROUP BY movieId) as slist \n" +
+                            "on movies.id = slist.movieId\n" +
+                            "where title like %s%s\n" +
+                            "ORDER BY ratings.rating DESC;", "\"" + title, "%"+ "\"");
+                }
+            }
+            else {
+                System.out.println("Get by title/genre------------>Input Error");
+            }
+
+            System.out.println("Query: " + query);
 
             // Perform the query
             ResultSet rs = statement.executeQuery(query);
