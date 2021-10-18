@@ -70,7 +70,7 @@ public class SearchResultServlet extends HttpServlet {
                     "FROM (stars_in_movies JOIN stars on stars_in_movies.starId = stars.id)\n" +
                     "GROUP BY movieId) as s\n" +
                     "on movies.id = s.movieId",
-                    "\"" + name + "%\"", year, "\"" + title + "%\"", "\"" + director + "%\"");
+                    "\"%" + name + "%\"", year, "\"%" + title + "%\"", "\"%" + director + "%\"");
             System.out.println("QUERY: " + query);
 
 
@@ -159,7 +159,7 @@ public class SearchResultServlet extends HttpServlet {
 
             request.getServletContext().log("getting " + jsonArray.size() + " results");
             out.write(jsonArray.toString());
-            System.out.println("jsonArray.toString() --->" + jsonArray.toString());
+//            System.out.println("jsonArray.toString() --->" + jsonArray.toString());
             response.setStatus(200);
 
         } catch (Exception e) {
