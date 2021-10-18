@@ -1,3 +1,8 @@
+function setCart(movie_id, movie_title){
+
+    alert("Movie added to cart");
+}
+
 /**
  * Handles the data returned by the API, read the jsonObject and populate data into html elements
  * @param resultData jsonObject
@@ -54,6 +59,7 @@ function handleMovieResult(resultData) {
 
 
         rowHTML += "<th>" + resultData[i]["movies_rating"] + "</th>" // rating;
+        rowHTML += '<th>' + '<input type="button" onClick="setCart(\'' + resultData[i]["movie_id"] + '\',\'' + resultData[i]["movie_title"] + '\')" VALUE="Add to Cart">' + '</th>';
         rowHTML += "</tr>";
 
         // Append the row created to the table body, which will refresh the page
