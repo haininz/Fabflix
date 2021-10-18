@@ -20,6 +20,8 @@ function handleSearchResult(resultData) {
 
     let moviesTableBodyElement = jQuery("#search_result_table_body");
 
+    console.log("size in the selected movie --->" + resultData.length );
+
     for (let i = 0; i < resultData.length; i++) {
         let rowHTML = "";
         rowHTML += "<tr>";
@@ -30,14 +32,16 @@ function handleSearchResult(resultData) {
         rowHTML += "<th>" + resultData[i]["movies_genres"] + "</th>" + "<th>" ;
 
         let actors = resultData[i]["movies_stars_id"].split("\n");
+
         for (let j = 0; j < 3; j++) {
             let actor_split = actors[j].split(",");
             let actor_id = actor_split[0];
             let actor_name = actor_split[1];
             rowHTML += '<a href="single-star.html?id=' + actor_id + '">'
                 + actor_name + '</a >'; // FIXME
-            if (j === 2){
+            if (j === 2 || j === (actors.length/2)){
                 rowHTML += "</th>";
+                break;
             }
             else {
                 rowHTML += ", ";

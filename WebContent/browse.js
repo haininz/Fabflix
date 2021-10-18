@@ -27,8 +27,9 @@ function handleMovieResult(resultData) {
             let actor_name = actor_split[1];
             rowHTML += '<a href="single-star.html?id=' + actor_id + '">'
                 + actor_name + '</a >'; // FIXME
-            if (j === 2){
+            if (j === 2 || j === (actors.length/2)){
                 rowHTML += "</th>";
+                break;
             }
             else {
                 rowHTML += ", ";

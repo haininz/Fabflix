@@ -58,7 +58,7 @@ public class SearchResultServlet extends HttpServlet {
 
 
             // Generate a SQL query
-            String query = String.format("SELECT id, title, year, director, genres, starList, rating \n" +
+            String query = String.format("SELECT DISTINCT id, title, year, director, genres, starList, rating \n" +
                     "from (SELECT m.* from stars s, movies m, stars_in_movies sim\n" +
                     "where s.name like '%s%s' and s.id = sim.starId and m.id = sim.movieId) as movies\n" +
                     "JOIN ratings on movies.id = ratings.movieId \n" +
