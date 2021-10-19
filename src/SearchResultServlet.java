@@ -56,10 +56,23 @@ public class SearchResultServlet extends HttpServlet {
             String year = request.getParameter("movie_year");
             String director = request.getParameter("movie_director");
 
+            String whereClause = "where ";
+            if (!name.equals("")){
+                whereClause += "s.name like " + "\"%" + name + "%\" ";
+            }
+            if (!year.equals("")){
+                whereClause += "and m.year = " + year + " ";
+            }
+            if (!title.equals("")){
+                whereClause += "and m.title like " + "\"%" + title + "%\" ";
+            }
+            if (!director.equals("")){
+                whereClause += "and m.director like " + "\"%" + director + "%\" ";
+            }
 
-            String query = String.format("SELECT DISTINCT id, title, year, director, genres, starList, rating\n" +
+            String query = "SELECT DISTINCT id, title, year, director, genres, starList, rating\n" +
                     "from (SELECT m.* from stars s, movies m, stars_in_movies sim\n" +
-                    "where s.name like %s and m.year = %s and m.title like %s and m.director like %s\n" +
+                    whereClause +
                     "and s.id = sim.starId and m.id = sim.movieId) as movies\n" +
                     "JOIN ratings on movies.id = ratings.movieId\n" +
                     "JOIN (SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as genres\n" +
@@ -69,8 +82,7 @@ public class SearchResultServlet extends HttpServlet {
                     "JOIN (SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as starList\n" +
                     "FROM (stars_in_movies JOIN stars on stars_in_movies.starId = stars.id)\n" +
                     "GROUP BY movieId) as s\n" +
-                    "on movies.id = s.movieId",
-                    "\"%" + name + "%\"", year, "\"%" + title + "%\"", "\"%" + director + "%\"");
+                    "on movies.id = s.movieId";
             System.out.println("QUERY: " + query);
 
 
