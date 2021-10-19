@@ -1,4 +1,7 @@
-// let search_form = $("#search_form");
+function setCart(movie_id, movie_title){
+
+    alert("Movie added to cart");
+}
 
 function getParameterByName(target) {
     // Get request URL
@@ -48,6 +51,7 @@ function handleSearchResult(resultData) {
             }
         }
         rowHTML += "<th>" + resultData[i]["movies_rating"] + "</th>" // rating;
+        rowHTML += '<th>' + '<input type="button" onClick="setCart(\'' + resultData[i]["movie_id"] + '\',\'' + resultData[i]["movie_title"] + '\')" VALUE="Add to Cart">' + '</th>';
         rowHTML += "</tr>";
         console.log(rowHTML);
         moviesTableBodyElement.append(rowHTML);
