@@ -97,7 +97,6 @@ public class MovieServlet extends HttpServlet {
                 System.out.println("Get by title/genre------------>Input Error");
             }
 
-            System.out.println("Query: " + query);
 
             // Perform the query
             ResultSet rs = statement.executeQuery(query);

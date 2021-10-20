@@ -57,17 +57,31 @@ public class SearchResultServlet extends HttpServlet {
             String director = request.getParameter("movie_director");
 
             String whereClause = "where ";
+            boolean hasPrevious = false;
+
             if (!name.equals("")){
+                hasPrevious = true;
                 whereClause += "s.name like " + "\"%" + name + "%\" ";
             }
             if (!year.equals("")){
-                whereClause += "and m.year = " + year + " ";
+                if (hasPrevious){
+                    whereClause += "and ";
+                }
+                hasPrevious = true;
+                whereClause += "m.year = " + year + " ";
             }
             if (!title.equals("")){
-                whereClause += "and m.title like " + "\"%" + title + "%\" ";
+                if (hasPrevious){
+                    whereClause += "and ";
+                }
+                hasPrevious = true;
+                whereClause += "m.title like " + "\"%" + title + "%\" ";
             }
             if (!director.equals("")){
-                whereClause += "and m.director like " + "\"%" + director + "%\" ";
+                if (hasPrevious){
+                    whereClause += "and ";
+                }
+                whereClause += "m.director like " + "\"%" + director + "%\" ";
             }
 
             String query = "SELECT DISTINCT id, title, year, director, genres, starList, rating\n" +
@@ -83,7 +97,6 @@ public class SearchResultServlet extends HttpServlet {
                     "FROM (stars_in_movies JOIN stars on stars_in_movies.starId = stars.id)\n" +
                     "GROUP BY movieId) as s\n" +
                     "on movies.id = s.movieId";
-            System.out.println("QUERY: " + query);
 
 
             // Log to localhost log

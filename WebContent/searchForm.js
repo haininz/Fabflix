@@ -3,7 +3,7 @@ function setCart(movie_id, movie_title){
     jQuery.ajax({
         dataType: "json",  // Setting return data type
         method: "GET",// Setting request method
-        url: "cart?movie_title=" + movie_title + "&movie_id=" + movie_id,
+        url: "checkout?title=" + movie_title + "&id=" + movie_id + "&show=false",
         // success: (resultData) => handleSearchResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
     });
 }
@@ -77,8 +77,8 @@ console.log("======name: " + star_name);
 jQuery.ajax({
     dataType: "json",  // Setting return data type
     method: "GET",// Setting request method
-    url: "result?movie_title=" +movie_title +"&movie_year=" +movie_year +"&movie_director="
-        +movie_director +"&star_name=" +star_name,
+    url: "result?movie_title=" + movie_title + "&movie_year=" + movie_year + "&movie_director="
+        + movie_director + "&star_name=" + star_name,
     success: (resultData) => handleSearchResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
 });
 
