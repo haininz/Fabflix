@@ -119,11 +119,11 @@ public class MovieServlet extends HttpServlet {
 //                String[] temp = movies_stars.split(",");
 //                movies_stars = String.join(", ", temp[0], temp[1], temp[2]);
 
-                String query1 = "select stars.id, stars.name from movies \n" +
+                String query1 = String.format("select stars.id, stars.name from movies \n" +
                         "join stars_in_movies on movies.id = stars_in_movies.movieId \n" +
                         "join stars on stars_in_movies.starId = stars.id\n" +
-                        "where movies.id = " + "\"" + movies_id + "\"" + "\n" +
-                        "ORDER BY name limit 3";
+                        "where movies.id = %s\n" +
+                        "ORDER BY name limit 3", "\"" + movies_id + "\"");
 
                 ResultSet rs1 = movieToStar.executeQuery(query1);
                 while (rs1.next()){

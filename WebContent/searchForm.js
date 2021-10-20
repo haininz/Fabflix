@@ -1,6 +1,11 @@
 function setCart(movie_id, movie_title){
-
     alert("Movie added to cart");
+    jQuery.ajax({
+        dataType: "json",  // Setting return data type
+        method: "GET",// Setting request method
+        url: "cart?movie_title=" + movie_title + "&movie_id=" + movie_id,
+        // success: (resultData) => handleSearchResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
+    });
 }
 
 function getParameterByName(target) {
@@ -51,9 +56,10 @@ function handleSearchResult(resultData) {
             }
         }
         rowHTML += "<th>" + resultData[i]["movies_rating"] + "</th>" // rating;
-        rowHTML += '<th>' + '<input type="button" onClick="setCart(\'' + resultData[i]["movie_id"] + '\',\'' + resultData[i]["movie_title"] + '\')" VALUE="Add to Cart">' + '</th>';
+        rowHTML += '<th>' + '<input type="button" onClick="setCart(\'' + resultData[i]["movies_id"] + '\',\'' + resultData[i]["movies_title"] + '\')" VALUE="Add to Cart">' + '</th>';
         rowHTML += "</tr>";
-        console.log(rowHTML);
+        console.log("=========" + resultData[i]["movies_id"]);
+        console.log("=========" + resultData[i]["movies_title"]);
         moviesTableBodyElement.append(rowHTML);
     }
 }
