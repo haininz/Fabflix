@@ -38,6 +38,14 @@
                 text-align: left;
             }
         }
+
+        footer{text-align:center;}
+        footer h4{
+            display: inline;
+            margin-right: 30px;
+            margin-left:30px;
+        }
+
     </style>
 
     <!-- Bootstrap CSS -->
@@ -76,6 +84,21 @@
     <!-- Again, id "movieList_table_body" is useful for jQuery to find this html element -->
     <tbody id=movieList_table_body></tbody>
 </table>
+
+
+<label for="number_page">Choose the number of movies per page: </label>
+<select name="number_page" id="number_page">
+    <option value="10per">10</option>
+    <option value="25per">25</option>
+    <option value="50per">50</option>
+    <option value="100per">100</option>
+</select>
+
+<br>
+<footer>
+<a href="#" class="previous">&laquo; Previous</a>
+<a href="#" class="next">Next &raquo;</a>
+</footer>
 
 <!-- Load jQuery and Bootstrap JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
