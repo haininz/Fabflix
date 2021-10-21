@@ -112,6 +112,7 @@ public class CheckOutServlet extends HttpServlet {
 
                 JsonArray previousItemsJsonArray = new JsonArray();
 //            previousItems.forEach(previousItemsJsonArray::add);
+                int totalPrice = 0;
                 for (ArrayList<String> movie : previousItems){
                     responseJsonObject.addProperty("id", movie.get(0));
                     responseJsonObject.addProperty("title", movie.get(1));
@@ -119,7 +120,12 @@ public class CheckOutServlet extends HttpServlet {
                     responseJsonObject.addProperty("price", movie.get(3));
                     previousItemsJsonArray.add(responseJsonObject);
                     responseJsonObject = new JsonObject();
+                    totalPrice += Integer.parseInt(movie.get(3));
                 }
+                responseJsonObject.addProperty("title", "Total");
+                responseJsonObject.addProperty("quantity", "-");
+                responseJsonObject.addProperty("price", String.valueOf(totalPrice));
+                previousItemsJsonArray.add(responseJsonObject);
                 System.out.println("Json array: " + previousItemsJsonArray.toString());
                 out.write(previousItemsJsonArray.toString());
             }
