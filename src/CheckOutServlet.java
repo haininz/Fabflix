@@ -62,6 +62,7 @@ public class CheckOutServlet extends HttpServlet {
             String id = request.getParameter("id");
             String title = request.getParameter("title");
             String show = request.getParameter("show");
+            String isRemove = request.getParameter("isRemove");
 
             boolean modify = true;
             if (show.equals("true")){
@@ -70,7 +71,23 @@ public class CheckOutServlet extends HttpServlet {
 
             ArrayList<ArrayList<String>> previousItems = (ArrayList<ArrayList<String>>) session.getAttribute("previousItems");
             ArrayList<String> temp = new ArrayList<>();
-            if (previousItems == null) {
+
+
+            if(isRemove != null && previousItems != null){ // remove
+//                System.out.println("removing movieId : " + id);
+//                System.out.println("removing movie title : " + title);
+//                System.out.println("removing isRemove : " + isRemove);
+//                System.out.println("removing show : " + show);
+                synchronized (previousItems) {
+                    for(int i = 0; i < previousItems.size(); i++) {
+                        ArrayList<String> tempCheck = previousItems.get(i);
+                        if (tempCheck.get(0).equals(id)) {
+                            previousItems.remove(i);
+                        }
+                    }
+                }
+            }
+            else if (previousItems == null) {
                 previousItems = new ArrayList<>();
                 if (modify){
                     temp.add(id);

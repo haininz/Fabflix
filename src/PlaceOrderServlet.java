@@ -8,12 +8,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -67,6 +69,12 @@ public class PlaceOrderServlet extends HttpServlet {
             rs.next();
             String num_person = rs.getString("person");
 
+
+            HttpSession session = request.getSession();
+            ArrayList<ArrayList<String>> previousItems = (ArrayList<ArrayList<String>>) session.getAttribute("previousItems");
+            System.out.println("-------- Array List ----------"  + previousItems);
+
+
             JsonObject jsonObject = new JsonObject();
             if(Integer.parseInt(num_person) == 0){
                 System.out.println("no such person -> payment fail");
@@ -75,6 +83,7 @@ public class PlaceOrderServlet extends HttpServlet {
             else{
                 System.out.println("payment success");
                 jsonObject.addProperty("findPerson","success");
+                previousItems.clear(); // clear all information once purchased
             }
 
 
