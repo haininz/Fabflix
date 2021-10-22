@@ -56,12 +56,27 @@ public class MovieServlet extends HttpServlet {
             String genre = request.getParameter("genre");
             String number_page = request.getParameter("number_page");
             String jump = request.getParameter("jump");
+            String sortBase = request.getParameter("sort_base");
+
             String offset = new String("");
+            String orderBy = new String("");
+            if (sortBase.equals("trasc")) {
+                orderBy = "ORDER BY movies.title ASC, ratings.rating ASC";
+            }
+            else if (sortBase.equals("trdesc")) {
+                orderBy = "ORDER BY movies.title DESC, ratings.rating DESC";
+            }
+            else if (sortBase.equals("rtasc")) {
+                orderBy = "ORDER BY ratings.rating ASC, movies.title ASC";
+            }
+            else if (sortBase.equals("rtdesc")) {
+                orderBy = "ORDER BY ratings.rating DESC, movies.title DESC";
+            }
 
             System.out.println("jump: " + jump);
 
             ArrayList<String> previousBrowseParams = (ArrayList<String>) session.getAttribute("previousBrowseParams");
-            // previousBrowseParams: {title, genre, number_page, current_page}
+            // previousBrowseParams: {title, genre, number_of_movies_per_page, current_page_number, sort_requirement}
             if (title != null && genre != null){
                 if (previousBrowseParams == null){
                     previousBrowseParams = new ArrayList<>();
@@ -69,6 +84,7 @@ public class MovieServlet extends HttpServlet {
                     previousBrowseParams.add(genre);
                     previousBrowseParams.add(number_page);
                     previousBrowseParams.add(String.valueOf(1));
+                    previousBrowseParams.add(orderBy);
                     session.setAttribute("previousBrowseParams", previousBrowseParams);
                     System.out.println("previousParams list in if: " + previousBrowseParams.toString());
                 }
@@ -78,9 +94,19 @@ public class MovieServlet extends HttpServlet {
                         if (jump.equals("next")){
 //                            System.out.println("page number: " + String.valueOf(Integer.parseInt(previousBrowseParams.get(3)) + 1));
 //                            Integer.parseInt("#pages: " + String.valueOf(Integer.parseInt(number_page)));
-                            offset = String.valueOf((Integer.parseInt(previousBrowseParams.get(3)) + 1) * Integer.parseInt(previousBrowseParams.get(2)));
+                            offset = String.valueOf(Integer.parseInt(previousBrowseParams.get(3)) * Integer.parseInt(previousBrowseParams.get(2)));
                             System.out.println("offset: " + offset);
                             previousBrowseParams.set(3, String.valueOf(Integer.parseInt(previousBrowseParams.get(3)) + 1));
+                        }
+                        else if (jump.equals("previous")){
+                            if (Integer.parseInt(previousBrowseParams.get(3)) > 1){
+                                offset = String.valueOf((Integer.parseInt(previousBrowseParams.get(3)) - 2) * Integer.parseInt(previousBrowseParams.get(2)));
+                                System.out.println("offset: " + offset);
+                                previousBrowseParams.set(3, String.valueOf(Integer.parseInt(previousBrowseParams.get(3)) - 1));
+                            }
+                            else {
+                                offset = "0";
+                            }
                         }
 //                        String temp_title = previousBrowseParams.get(0);
 //                        String temp_genre = previousBrowseParams.get(1);
@@ -88,6 +114,7 @@ public class MovieServlet extends HttpServlet {
                             previousBrowseParams.set(0, title);
                             previousBrowseParams.set(1, genre);
                             previousBrowseParams.set(2, number_page);
+                            previousBrowseParams.set(4, orderBy);
                         }
 
 //                        title = temp_title;
@@ -102,19 +129,23 @@ public class MovieServlet extends HttpServlet {
             String tempTitle = new String("");
             String tempGenre = new String("");
             String tempNumPage = new String("");
+            String tempSort = new String("");
             if (!offset.equals("")){
                 tempTitle = previousBrowseParams.get(0);
                 tempGenre = previousBrowseParams.get(1);
                 tempNumPage = previousBrowseParams.get(2);
+                tempSort = previousBrowseParams.get(4);
             }
             else {
                 tempTitle = title;
                 tempGenre = genre;
                 tempNumPage = number_page;
+                tempSort = orderBy;
             }
             System.out.println("tempTitle: " + tempTitle);
             System.out.println("tempGenre: " + tempGenre);
             System.out.println("tempNumPage: " + tempNumPage);
+            System.out.println("tempSort: " + tempSort);
 
 
             if (tempTitle.equals("")){
@@ -128,8 +159,8 @@ public class MovieServlet extends HttpServlet {
                                 "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
                                 "GROUP BY movieId) as slist \n" +
                                 "on movies.id = slist.movieId\n" +
-                                "ORDER BY ratings.rating DESC\n" + "limit %s",
-                        "\"" + tempGenre + "\"", tempNumPage);
+                                "%s\nlimit %s",
+                        "\"" + tempGenre + "\"", tempSort, tempNumPage);
             }
             else if (tempGenre.equals("")){
                 if (tempTitle.equals("*")){
@@ -143,8 +174,8 @@ public class MovieServlet extends HttpServlet {
                                     "GROUP BY movieId) as slist \n" +
                                     "on movies.id = slist.movieId\n" +
                                     "where title not like %s\n" +
-                                    "ORDER BY ratings.rating DESC\n" + "limit %s",
-                            "\"" + "[a-z0-9A-Z]%" + "\"", tempNumPage);
+                                    "%s\nlimit %s",
+                            "\"" + "[a-z0-9A-Z]%" + "\"", tempSort, tempNumPage);
                 }
                 else {
                     query = String.format("SELECT id, title, year, director, Genres_List, Stars_List, rating\n" +
@@ -157,8 +188,8 @@ public class MovieServlet extends HttpServlet {
                                     "GROUP BY movieId) as slist \n" +
                                     "on movies.id = slist.movieId\n" +
                                     "where title like %s%s\n" +
-                                    "ORDER BY ratings.rating DESC\n" + "limit %s",
-                            "\"" + tempTitle, "%"+ "\"", tempNumPage);
+                                    "%s\nlimit %s",
+                            "\"" + tempTitle, "%"+ "\"", tempSort, tempNumPage);
                 }
             }
             else {

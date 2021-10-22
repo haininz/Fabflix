@@ -85,10 +85,38 @@ function handleMovieResult(resultData) {
 
 let title = getParameterByName("title");
 let genre = getParameterByName("genre");
-var number_page = document.getElementById("number_page");
+let number_page = document.getElementById("number_page");
+let sort_base = document.getElementById("sort");
 
 console.log("======Title: " + title);
 console.log("======Genre: " + genre);
+
+function handleSortChange(resultData) {
+    sort_base = document.getElementById("sort");
+    console.log("Sort base: " + sort_base.value);
+    if (sort_base.value === "trasc") {
+        console.log("in trasc");
+        document.getElementById("sort").selectedIndex = 0;
+    }
+    else if (sort_base.value === "trdesc") {
+        console.log("in trdesc");
+        document.getElementById("sort").selectedIndex = 1;
+    }
+    else if (sort_base.value === "rtasc") {
+        console.log("in rtasc");
+        document.getElementById("sort").selectedIndex = 2;
+    }
+    else {
+        console.log("in rtdesc");
+        document.getElementById("sort").selectedIndex = 3;
+    }
+    jQuery.ajax({
+        dataType: "json", // Setting return data type
+        method: "GET", // Setting request method
+        url: "movies?title=" + title + "&genre=" + genre + "&number_page=" + number_page.value + "&jump=&sort_base=" + sort_base.value, // Setting request url, which is mapped by StarsServlet in Stars.java
+        success: (resultData) => handleMovieResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
+    });
+}
 
 function handlePageChange(resultData) {
     number_page = document.getElementById("number_page");
@@ -109,20 +137,20 @@ function handlePageChange(resultData) {
         document.getElementById("number_page").selectedIndex = 3;
     }
 
-    console.log("======Num page: " + number_page.value)
     jQuery.ajax({
         dataType: "json", // Setting return data type
         method: "GET", // Setting request method
-        url: "movies?title=" + title + "&genre=" + genre + "&number_page=" + number_page.value + "&jump=", // Setting request url, which is mapped by StarsServlet in Stars.java
+        url: "movies?title=" + title + "&genre=" + genre + "&number_page=" + number_page.value + "&jump=&sort_base=" + sort_base.value, // Setting request url, which is mapped by StarsServlet in Stars.java
         success: (resultData) => handleMovieResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
     });
 }
+
 
 function handlePreviousButton() {
     jQuery.ajax({
         dataType: "json",
         method: "GET",
-        url: "movies?title=&genre=&number_page=&jump=previous",
+        url: "movies?title=&genre=&number_page=&jump=previous&sort_base=",
         success: (resultData) => handleMovieResult(resultData)
     });
 }
@@ -131,7 +159,7 @@ function handleNextButton() {
     jQuery.ajax({
         dataType: "json",
         method: "GET",
-        url: "movies?title=&genre=&number_page=&jump=next",
+        url: "movies?title=&genre=&number_page=&jump=next&sort_base=",
         success: (resultData) => handleMovieResult(resultData)
     });
 }
@@ -141,7 +169,7 @@ function handleNextButton() {
 jQuery.ajax({
     dataType: "json", // Setting return data type
     method: "GET", // Setting request method
-    url: "movies?title=" + title + "&genre=" + genre + "&number_page=" + number_page.value + "&jump=", // Setting request url, which is mapped by StarsServlet in Stars.java
+    url: "movies?title=" + title + "&genre=" + genre + "&number_page=" + number_page.value + "&jump=&sort_base=" + sort_base.value, // Setting request url, which is mapped by StarsServlet in Stars.java
     success: (resultData) => handleMovieResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 });
 
