@@ -48,6 +48,7 @@ function getParameterByName(target) {
 
 function handleCartResult(resultData){
     let cartTableBodyElement = jQuery("#cart_table_body");
+    checkEmpty = resultData[0]["title"];
     console.log("Handling cart checkout")
     for (let i = 0; i < resultData.length; i++) {
         let rowHTML = "";
@@ -69,9 +70,23 @@ function handleCartResult(resultData){
     }
 }
 
+function paymentClick(){
+    if(checkEmpty === "Total"){
+        alert("Your cart is empty!")
+    }
+    else {
+        window.location.replace("payment.html");
+    }
+    //console.log("checkEmpty in button:" + checkEmpty )
+
+}
+
 let show = getParameterByName("show");
 let movies_id = getParameterByName("movies_id");
 let movies_title = getParameterByName("movies_title");
+let checkEmpty = null;
+console.log("checkEmpty: " + checkEmpty)
+
 console.log("Show options from html: " + show);
 
 $.ajax({

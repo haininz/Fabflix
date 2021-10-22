@@ -69,11 +69,31 @@ public class PlaceOrderServlet extends HttpServlet {
             rs.next();
             String num_person = rs.getString("person");
 
+            String lastRecord_query = "select * from sales ORDER BY id DESC LIMIT 1";
+            ResultSet lastRecord_rs = statement.executeQuery(lastRecord_query);
+            lastRecord_rs.next();
+            String lastRecord_id = lastRecord_rs.getString("id");
+
+            System.out.println("lastRecord_id : " + lastRecord_id);
+
+
+            String findUser_query = "SELECT * FROM creditcards AS c "
+                    + "WHERE c.id = " + "\"" + card_number + "\"" + "AND c.firstName = " + "\"" + first_name + "\""
+                    + " AND c.lastName = " + "\"" + last_name + "\"" + " AND c.expiration = " + "\"" + exp_data + "\"" + ";";
+            ResultSet findUser_rs = statement.executeQuery(findUser_query);
+            findUser_rs.next();
+            String findUser_id = findUser_rs.getString("id");
+            // int user_id = Integer.parseInt(findUser_id);
+            System.out.println("findUser_id : " + findUser_id);
+
+            String findCustoermID_query = "select *  from customers where ccId =" + card_number + ";";
+            ResultSet findCustoermID_rs = statement.executeQuery(findCustoermID_query);
+            findCustoermID_rs.next();
+            String findCustoermID = findCustoermID_rs.getString("id");
+
 
             HttpSession session = request.getSession();
             ArrayList<ArrayList<String>> previousItems = (ArrayList<ArrayList<String>>) session.getAttribute("previousItems");
-            System.out.println("-------- Array List ----------"  + previousItems);
-
 
             JsonObject jsonObject = new JsonObject();
             if(Integer.parseInt(num_person) == 0){
@@ -83,16 +103,32 @@ public class PlaceOrderServlet extends HttpServlet {
             else{
                 System.out.println("payment success");
                 jsonObject.addProperty("findPerson","success");
+
+
+                // insert back to mysql
+                String saleDate = java.time.LocalDate.now().toString();
+
+                for(int i = 0; i < previousItems.size(); i++){
+                    ArrayList<String> iterItem = previousItems.get(i);
+                    int tempSize = Integer.parseInt(iterItem.get(2));
+                    for(int j = 0; j < tempSize; j++){
+                        int sales_id = Integer.parseInt(lastRecord_id);
+                        lastRecord_id = String.valueOf(sales_id+1);
+
+                        System.out.println("-----***-----");
+                        System.out.println("need to insert!");
+                        String insert_query = "INSERT INTO sales VALUES(" + lastRecord_id + ", " + findCustoermID
+                                + ", '" + iterItem.get(0) + "', '" + saleDate + "');";
+                        System.out.println("insert query:" + insert_query);
+                        statement.executeUpdate(insert_query);
+                    }
+                }
+
                 previousItems.clear(); // clear all information once purchased
             }
 
 
-//            System.out.println("searchResult.html?movie_title="+movie_title+"&movie_year="+movie_year
-//                    +"&movie_director="+movie_director+"&star_name="+star_name);
-
             out.write(jsonObject.toString());
-            // response.sendRedirect("result.html??first_name=" +first_name +"&last_name=" +last_name +"&card_number="+card_number +"&exp_data=" +exp_data);
-            // response.sendRedirect("payment.html");
             response.setStatus(200);
 
         } catch (Exception e) {
