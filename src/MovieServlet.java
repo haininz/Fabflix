@@ -108,17 +108,12 @@ public class MovieServlet extends HttpServlet {
                                 offset = "0";
                             }
                         }
-//                        String temp_title = previousBrowseParams.get(0);
-//                        String temp_genre = previousBrowseParams.get(1);
                         else {
                             previousBrowseParams.set(0, title);
                             previousBrowseParams.set(1, genre);
                             previousBrowseParams.set(2, number_page);
                             previousBrowseParams.set(4, orderBy);
                         }
-
-//                        title = temp_title;
-//                        genre = temp_genre;
                         System.out.println("previousParams list in else: " + previousBrowseParams.toString());
                     }
                 }

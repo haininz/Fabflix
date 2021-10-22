@@ -83,12 +83,9 @@
     <option value="100">100</option>
 </select>
 
-<!-- Id "star_table" is useful for jQuery to find the html element with id, class here is mapping to Bootstrap defined class CSS -->
 <table class="table table-striped">
-    <!-- Create a table header -->
     <thead>
     <tr>
-        <!-- Titles of each column-->
         <th>Title</th>
         <th>Year</th>
         <th>Director</th>
@@ -98,26 +95,12 @@
         <th></th>
     </tr>
     </thead>
-    <!-- Table body is left empty here, will be populated with the data retrieved with index.js -->
-    <!-- Again, id "movieList_table_body" is useful for jQuery to find this html element -->
     <tbody id=movieList_table_body></tbody>
 </table>
 
 
-
-<!--<button data-toggle="dropdown">Choose the number of movies per page:</button>-->
-<!--<ul class="dropdown-menu" role="menu">-->
-<!--    <li><button type="page_10" onclick="page_10()">10</button></li>-->
-<!--    <li><button type="page_25" onclick="page_25()">25</button></li>-->
-<!--    <li><button type="page_50" onclick="page_50()">50</button></li>-->
-<!--    <li><button type="page_100" onclick="page_100()">100</button></li>-->
-<!--</ul>-->
-
-
 <br>
 <footer>
-<!--<a href="#" class="previous">&laquo; Previous</a>-->
-<!--<a href="#" class="next">Next &raquo;</a>-->
     <button onclick="handlePreviousButton()"><< Previous</button>
     <button onclick="handleNextButton()">Next >></button>
 </footer>

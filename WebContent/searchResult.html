@@ -71,18 +71,25 @@
 <!--</ul>-->
 <h2>Search Result</h2>
 
-<label for="howTosort">How to sort the database</label>
-<select name="howTosort" id="howTosort">
-    <option value="descendSort">Descend</option>
-    <option value="ascendSort">Ascend</option>
+<label for="sort">How to sort the database</label>
+<select name="sort" id="sort" onchange="handleSortChange(self)">
+    <option value="trasc">title > rating, asc</option>
+    <option value="trdesc">title > rating, desc</option>
+    <option value="rtasc">rating > title, asc</option>
+    <option value="rtdesc">rating > title, desc</option>
 </select>
 
-<!-- Id "star_table" is useful for jQuery to find the html element with id, class here is mapping to Bootstrap defined class CSS -->
-<table id=search_movie_table class="table table-striped">
-    <!-- Create a table header -->
+<label for="number_page">Choose the number of movies per page: </label>
+<select name="number_page" id="number_page" onchange="handlePageChange(self)">
+    <option value="10">10</option>
+    <option value="25">25</option>
+    <option value="50">50</option>
+    <option value="100">100</option>
+</select>
+
+<table class="table table-striped">
     <thead>
     <tr>
-        <!-- Titles of each column-->
         <th>Title</th>
         <th>Year</th>
         <th>Director</th>
@@ -92,24 +99,14 @@
         <th></th>
     </tr>
     </thead>
-    <!-- Table body is left empty here, will be populated with the data retrieved with index.js -->
-    <!-- Again, id "movieList_table_body" is useful for jQuery to find this html element -->
     <tbody id=search_result_table_body></tbody>
 </table>
 
 
-<label for="number_page">Choose the number of movies per page: </label>
-<select name="number_page" id="number_page">
-    <option value="10">10</option>
-    <option value="25">25</option>
-    <option value="50">50</option>
-    <option value="100">100</option>
-</select>
-
 <br>
 <footer>
-    <a href="#" class="previous"><< Previous</a>
-    <a href="#" class="next">Next >></a>
+    <button onclick="handlePreviousButton()"><< Previous</button>
+    <button onclick="handleNextButton()">Next >></button>
 </footer>
 
 <!-- Load jQuery and Bootstrap JS -->
