@@ -68,7 +68,7 @@ function handleMovieResult(resultData) {
         rowHTML += "</tr>";
 
         // Append the row created to the table body, which will refresh the page
-        console.log(rowHTML);
+        // console.log(rowHTML);
         moviesTableBodyElement.append(rowHTML);
     }
 }
@@ -80,15 +80,28 @@ function handleMovieResult(resultData) {
 
 let title = getParameterByName("title");
 let genre = getParameterByName("genre");
+var number_page = document.getElementById("number_page");
 
 console.log("======Title: " + title);
 console.log("======Genre: " + genre);
+console.log("======Num page: " + number_page.value)
+
+function handlePageChange(resultData) {
+    number_page = document.getElementById("number_page");
+    jQuery.ajax({
+        dataType: "json", // Setting return data type
+        method: "GET", // Setting request method
+        url: "movies?title=" + title + "&genre=" + genre + "&number_page=" + number_page.value, // Setting request url, which is mapped by StarsServlet in Stars.java
+        success: (resultData) => handleMovieResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
+    });
+}
+
 
 // Makes the HTTP GET request and registers on success callback function handleStarResult
 jQuery.ajax({
     dataType: "json", // Setting return data type
     method: "GET", // Setting request method
-    url: "movies?title=" + title + "&genre=" + genre, // Setting request url, which is mapped by StarsServlet in Stars.java
+    url: "movies?title=" + title + "&genre=" + genre + "&number_page=" + number_page.value, // Setting request url, which is mapped by StarsServlet in Stars.java
     success: (resultData) => handleMovieResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 });
 

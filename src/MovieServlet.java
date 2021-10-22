@@ -8,12 +8,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -41,6 +43,8 @@ public class MovieServlet extends HttpServlet {
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
 
+        HttpSession session = request.getSession();
+
         // Get a connection from dataSource and let resource manager close the connection after usage.
         try (Connection conn = dataSource.getConnection()) {
 
@@ -50,6 +54,31 @@ public class MovieServlet extends HttpServlet {
 
             String title = request.getParameter("title");
             String genre = request.getParameter("genre");
+            String number_page = request.getParameter("number_page");
+
+            ArrayList<String> previousBrowseParams = (ArrayList<String>) session.getAttribute("previousBrowseParams");
+            if (title != null && genre != null){
+                if (previousBrowseParams == null){
+                    previousBrowseParams = new ArrayList<>();
+                    previousBrowseParams.add(title);
+                    previousBrowseParams.add(genre);
+                    previousBrowseParams.add(number_page);
+                    session.setAttribute("previousParams", previousBrowseParams);
+                    System.out.println("previousParams list in if: " + previousBrowseParams.toString());
+                }
+                else {
+                    synchronized (previousBrowseParams){
+//                        String temp_title = previousBrowseParams.get(0);
+//                        String temp_genre = previousBrowseParams.get(1);
+                        previousBrowseParams.set(0, title);
+                        previousBrowseParams.set(1, genre);
+                        previousBrowseParams.set(2, number_page);
+//                        title = temp_title;
+//                        genre = temp_genre;
+                        System.out.println("previousParams list in else: " + previousBrowseParams.toString());
+                    }
+                }
+            }
 
             String query = new String("");
             if (title.equals("")){
@@ -63,7 +92,7 @@ public class MovieServlet extends HttpServlet {
                         "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
                         "GROUP BY movieId) as slist \n" +
                         "on movies.id = slist.movieId\n" +
-                        "ORDER BY ratings.rating DESC", "\"" + genre + "\"");
+                        "ORDER BY ratings.rating DESC\n" + "limit %s", "\"" + genre + "\"", number_page);
             }
             else if (genre.equals("")){
                 if (title.equals("*")){
@@ -77,7 +106,7 @@ public class MovieServlet extends HttpServlet {
                             "GROUP BY movieId) as slist \n" +
                             "on movies.id = slist.movieId\n" +
                             "where title not like %s\n" +
-                            "ORDER BY ratings.rating DESC", "\"" + "[a-z0-9A-Z]%" + "\"");
+                            "ORDER BY ratings.rating DESC\n" + "limit %s", "\"" + "[a-z0-9A-Z]%" + "\"", number_page);
                 }
                 else {
                     query = String.format("SELECT id, title, year, director, Genres_List, Stars_List, rating\n" +
@@ -90,8 +119,9 @@ public class MovieServlet extends HttpServlet {
                             "GROUP BY movieId) as slist \n" +
                             "on movies.id = slist.movieId\n" +
                             "where title like %s%s\n" +
-                            "ORDER BY ratings.rating DESC;", "\"" + title, "%"+ "\"");
+                            "ORDER BY ratings.rating DESC\n" + "limit %s", "\"" + title, "%"+ "\"", number_page);
                 }
+                System.out.println("QUERY from movieservlet: " + query);
             }
             else {
                 System.out.println("Get by title/genre------------>Input Error");
