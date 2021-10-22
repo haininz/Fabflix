@@ -102,7 +102,7 @@
 <!--    <li><button type="page_100" onclick="page_100()">100</button></li>-->
 <!--</ul>-->
 <label for="number_page">Choose the number of movies per page: </label>
-<select name="number_page" id="number_page">
+<select name="number_page" id="number_page" onchange="handlePageChange(self)">
     <option value="10">10</option>
     <option value="25">25</option>
     <option value="50">50</option>
