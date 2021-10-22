@@ -56,6 +56,9 @@ public class MovieServlet extends HttpServlet {
             String genre = request.getParameter("genre");
             String number_page = request.getParameter("number_page");
             String jump = request.getParameter("jump");
+            String offset = new String("");
+
+            System.out.println("jump: " + jump);
 
             ArrayList<String> previousBrowseParams = (ArrayList<String>) session.getAttribute("previousBrowseParams");
             // previousBrowseParams: {title, genre, number_page, current_page}
@@ -65,16 +68,28 @@ public class MovieServlet extends HttpServlet {
                     previousBrowseParams.add(title);
                     previousBrowseParams.add(genre);
                     previousBrowseParams.add(number_page);
-                    session.setAttribute("previousParams", previousBrowseParams);
+                    previousBrowseParams.add(String.valueOf(1));
+                    session.setAttribute("previousBrowseParams", previousBrowseParams);
                     System.out.println("previousParams list in if: " + previousBrowseParams.toString());
                 }
                 else {
                     synchronized (previousBrowseParams){
+                        System.out.println("previousParams list in else original: " + previousBrowseParams.toString());
+                        if (jump.equals("next")){
+//                            System.out.println("page number: " + String.valueOf(Integer.parseInt(previousBrowseParams.get(3)) + 1));
+//                            Integer.parseInt("#pages: " + String.valueOf(Integer.parseInt(number_page)));
+                            offset = String.valueOf((Integer.parseInt(previousBrowseParams.get(3)) + 1) * Integer.parseInt(previousBrowseParams.get(2)));
+                            System.out.println("offset: " + offset);
+                            previousBrowseParams.set(3, String.valueOf(Integer.parseInt(previousBrowseParams.get(3)) + 1));
+                        }
 //                        String temp_title = previousBrowseParams.get(0);
 //                        String temp_genre = previousBrowseParams.get(1);
-                        previousBrowseParams.set(0, title);
-                        previousBrowseParams.set(1, genre);
-                        previousBrowseParams.set(2, number_page);
+                        else {
+                            previousBrowseParams.set(0, title);
+                            previousBrowseParams.set(1, genre);
+                            previousBrowseParams.set(2, number_page);
+                        }
+
 //                        title = temp_title;
 //                        genre = temp_genre;
                         System.out.println("previousParams list in else: " + previousBrowseParams.toString());
@@ -83,52 +98,77 @@ public class MovieServlet extends HttpServlet {
             }
 
             String query = new String("");
-            if (title.equals("")){
-                query = String.format("SELECT id, title, year, director, Genres_List, Stars_List, rating\n" +
-                        "from movies JOIN ratings on movies.id = ratings.movieId JOIN\n" +
-                        "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List\n" +
-                        "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id)\n" +
-                        "WHERE genres.name = %s\n" +
-                        "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN\n" +
-                        "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
-                        "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
-                        "GROUP BY movieId) as slist \n" +
-                        "on movies.id = slist.movieId\n" +
-                        "ORDER BY ratings.rating DESC\n" + "limit %s", "\"" + genre + "\"", number_page);
+
+            String tempTitle = new String("");
+            String tempGenre = new String("");
+            String tempNumPage = new String("");
+            if (!offset.equals("")){
+                tempTitle = previousBrowseParams.get(0);
+                tempGenre = previousBrowseParams.get(1);
+                tempNumPage = previousBrowseParams.get(2);
             }
-            else if (genre.equals("")){
-                if (title.equals("*")){
+            else {
+                tempTitle = title;
+                tempGenre = genre;
+                tempNumPage = number_page;
+            }
+            System.out.println("tempTitle: " + tempTitle);
+            System.out.println("tempGenre: " + tempGenre);
+            System.out.println("tempNumPage: " + tempNumPage);
+
+
+            if (tempTitle.equals("")){
+                query = String.format("SELECT id, title, year, director, Genres_List, Stars_List, rating\n" +
+                                "from movies JOIN ratings on movies.id = ratings.movieId JOIN\n" +
+                                "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List\n" +
+                                "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id)\n" +
+                                "WHERE genres.name = %s\n" +
+                                "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN\n" +
+                                "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
+                                "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
+                                "GROUP BY movieId) as slist \n" +
+                                "on movies.id = slist.movieId\n" +
+                                "ORDER BY ratings.rating DESC\n" + "limit %s",
+                        "\"" + tempGenre + "\"", tempNumPage);
+            }
+            else if (tempGenre.equals("")){
+                if (tempTitle.equals("*")){
                     query = String.format("SELECT id, title, year, director, Genres_List, Stars_List, rating\n" +
-                            "from movies JOIN ratings on movies.id = ratings.movieId JOIN\n" +
-                            "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List\n" +
-                            "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id)\n" +
-                            "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN\n" +
-                            "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
-                            "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
-                            "GROUP BY movieId) as slist \n" +
-                            "on movies.id = slist.movieId\n" +
-                            "where title not like %s\n" +
-                            "ORDER BY ratings.rating DESC\n" + "limit %s", "\"" + "[a-z0-9A-Z]%" + "\"", number_page);
+                                    "from movies JOIN ratings on movies.id = ratings.movieId JOIN\n" +
+                                    "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List\n" +
+                                    "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id)\n" +
+                                    "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN\n" +
+                                    "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
+                                    "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
+                                    "GROUP BY movieId) as slist \n" +
+                                    "on movies.id = slist.movieId\n" +
+                                    "where title not like %s\n" +
+                                    "ORDER BY ratings.rating DESC\n" + "limit %s",
+                            "\"" + "[a-z0-9A-Z]%" + "\"", tempNumPage);
                 }
                 else {
                     query = String.format("SELECT id, title, year, director, Genres_List, Stars_List, rating\n" +
-                            "from movies JOIN ratings on movies.id = ratings.movieId JOIN\n" +
-                            "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List\n" +
-                            "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id)\n" +
-                            "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN\n" +
-                            "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
-                            "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
-                            "GROUP BY movieId) as slist \n" +
-                            "on movies.id = slist.movieId\n" +
-                            "where title like %s%s\n" +
-                            "ORDER BY ratings.rating DESC\n" + "limit %s", "\"" + title, "%"+ "\"", number_page);
+                                    "from movies JOIN ratings on movies.id = ratings.movieId JOIN\n" +
+                                    "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List\n" +
+                                    "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id)\n" +
+                                    "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN\n" +
+                                    "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
+                                    "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
+                                    "GROUP BY movieId) as slist \n" +
+                                    "on movies.id = slist.movieId\n" +
+                                    "where title like %s%s\n" +
+                                    "ORDER BY ratings.rating DESC\n" + "limit %s",
+                            "\"" + tempTitle, "%"+ "\"", tempNumPage);
                 }
-                System.out.println("QUERY from movieservlet: " + query);
             }
             else {
                 System.out.println("Get by title/genre------------>Input Error");
             }
 
+            if (!offset.equals("")){
+                query += " offset " + offset;
+            }
+            System.out.println("QUERY from movieservlet: " + query);
 
             // Perform the query
             ResultSet rs = statement.executeQuery(query);
