@@ -30,10 +30,13 @@ function getParameterByName(target) {
 
 function handleMovieResult(resultData) {
     console.log("handleMovieResult: populating star table from resultData");
+    $("#movieList_table_body").empty();
 
     // Populate the star table
     // Find the empty table body by id "star_table_body"
     let moviesTableBodyElement = jQuery("#movieList_table_body");
+
+    console.log("Before input: " + moviesTableBodyElement);
 
 
     // Iterate through resultData, no more than 10 entries
@@ -69,7 +72,7 @@ function handleMovieResult(resultData) {
         rowHTML += "</tr>";
 
         // Append the row created to the table body, which will refresh the page
-        // console.log(rowHTML);
+        console.log("row in brows.js: " + rowHTML);
         moviesTableBodyElement.append(rowHTML);
 
     }
@@ -90,15 +93,19 @@ console.log("======Genre: " + genre);
 function handlePageChange(resultData) {
     number_page = document.getElementById("number_page");
     if (number_page.value === "10") {
+        console.log("in 10");
         document.getElementById("number_page").selectedIndex = 0;
     }
     else if (number_page.value === "25") {
+        console.log("in 25");
         document.getElementById("number_page").selectedIndex = 1;
     }
     else if (number_page.value === "50") {
+        console.log("in 50");
         document.getElementById("number_page").selectedIndex = 2;
     }
     else {
+        console.log("in 100");
         document.getElementById("number_page").selectedIndex = 3;
     }
 
