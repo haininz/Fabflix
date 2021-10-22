@@ -26,6 +26,7 @@ function getParameterByName(target) {
 
 function handleSearchResult(resultData) {
 
+    $("#search_result_table_body").empty();
     let moviesTableBodyElement = jQuery("#search_result_table_body");
 
     console.log("size in the selected movie --->" + resultData.length );
@@ -58,8 +59,9 @@ function handleSearchResult(resultData) {
         rowHTML += "<th>" + resultData[i]["movies_rating"] + "</th>" // rating;
         rowHTML += '<th>' + '<input type="button" onClick="setCart(\'' + resultData[i]["movies_id"] + '\',\'' + resultData[i]["movies_title"] + '\')" VALUE="Add to Cart">' + '</th>';
         rowHTML += "</tr>";
-        console.log("=========" + resultData[i]["movies_id"]);
-        console.log("=========" + resultData[i]["movies_title"]);
+
+        console.log("handleSearchResultNEW: " + rowHTML);
+
         moviesTableBodyElement.append(rowHTML);
     }
 }
@@ -68,56 +70,93 @@ let movie_title = getParameterByName("movie_title");
 let movie_year = getParameterByName("movie_year");
 let movie_director = getParameterByName("movie_director");
 let star_name = getParameterByName("star_name");
+let number_page = document.getElementById("number_page");
+let sort_base = document.getElementById("sort");
 
 console.log("======title: " + movie_title);
 console.log("======year: " + movie_year);
 console.log("======director: " + movie_director);
 console.log("======name: " + star_name);
 
+function handleSortChange(resultData) {
+    sort_base = document.getElementById("sort");
+    console.log("Sort base: " + sort_base.value);
+    if (sort_base.value === "trasc") {
+        console.log("in trasc");
+        document.getElementById("sort").selectedIndex = 0;
+    }
+    else if (sort_base.value === "trdesc") {
+        console.log("in trdesc");
+        document.getElementById("sort").selectedIndex = 1;
+    }
+    else if (sort_base.value === "rtasc") {
+        console.log("in rtasc");
+        document.getElementById("sort").selectedIndex = 2;
+    }
+    else {
+        console.log("in rtdesc");
+        document.getElementById("sort").selectedIndex = 3;
+    }
+    jQuery.ajax({
+        dataType: "json", // Setting return data type
+        method: "GET", // Setting request method
+        url: "result?movie_title=" + movie_title + "&movie_year=" + movie_year + "&movie_director="
+            + movie_director + "&star_name=" + star_name + "&jump=&number_page=" + number_page.value + "&sort_base=" + sort_base.value, // Setting request url, which is mapped by StarsServlet in Stars.java
+        success: (resultData) => handleSearchResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
+    });
+}
+
+function handlePageChange(resultData) {
+    number_page = document.getElementById("number_page");
+    if (number_page.value === "10") {
+        console.log("in 10");
+        document.getElementById("number_page").selectedIndex = 0;
+    }
+    else if (number_page.value === "25") {
+        console.log("in 25");
+        document.getElementById("number_page").selectedIndex = 1;
+    }
+    else if (number_page.value === "50") {
+        console.log("in 50");
+        document.getElementById("number_page").selectedIndex = 2;
+    }
+    else {
+        console.log("in 100");
+        document.getElementById("number_page").selectedIndex = 3;
+    }
+
+    jQuery.ajax({
+        dataType: "json", // Setting return data type
+        method: "GET", // Setting request method
+        url: "result?movie_title=" + movie_title + "&movie_year=" + movie_year + "&movie_director="
+            + movie_director + "&star_name=" + star_name + "&jump=&number_page=" + number_page.value + "&sort_base=" + sort_base.value, // Setting request url, which is mapped by StarsServlet in Stars.java
+        success: (resultData) => handleSearchResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
+    });
+}
+
+
+function handlePreviousButton() {
+    jQuery.ajax({
+        dataType: "json",
+        method: "GET",
+        url: "result?movie_title=&movie_year=&movie_director=&star_name=&number_page=&jump=previous&sort_base=",
+        success: (resultData) => handleSearchResult(resultData)
+    });
+}
+
+function handleNextButton() {
+    jQuery.ajax({
+        dataType: "json",
+        method: "GET",
+        url: "result?movie_title=&movie_year=&movie_director=&star_name=&number_page=&jump=next&sort_base=",
+        success: (resultData) => handleSearchResult(resultData)
+    });
+}
+
 jQuery.ajax({
     dataType: "json",  // Setting return data type
     method: "GET",// Setting request method
     url: "result?movie_title=" + movie_title + "&movie_year=" + movie_year + "&movie_director="
-        + movie_director + "&star_name=" + star_name,
+        + movie_director + "&star_name=" + star_name + "&jump=&number_page=" + number_page.value + "&sort_base=" + sort_base.value,
     success: (resultData) => handleSearchResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
 });
-
-/**
- * Once this .js is loaded, following scripts will be executed by the browser
- */
-// let movieTitle = getParameterByName('movie_title');
-// let movieYear = getParameterByName('movie_year');
-// let movieDirector = getParameterByName('movie_director');
-// let starName = getParameterByName('star_name');
-// console.log("---------------------------------------movieTitle:" + movieTitle +"----------------------------------------movieTitle:" + movieYear
-// + "----------movieDirector:" + movieDirector + "----------starName:" + starName)
-
-// Makes the HTTP GET request and registers on success callback function handleStarResult
-// jQuery.ajax({
-//     dataType: "json", // Setting return data type
-//     method: "GET", // Setting request method
-//     url: "form?movie_title=" + movieTitle + "&movie_year=" + movieYear + "&movie_director=" + movieDirector + "&star_name=" + starName, // Setting request url, which is mapped by StarsServlet in Stars.java
-//     success: (resultData) => handleMovieResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
-// });
-
-// function submitSearchForm(formSubmitEvent) {
-//     console.log("submit search form");
-//     /**
-//      * When users click the submit button, the browser will not direct
-//      * users to the url defined in HTML form. Instead, it will call this
-//      * event handler when the event is triggered.
-//      */
-//     formSubmitEvent.preventDefault();
-//
-//     $.ajax(
-//         "form", {
-//             method: "GET",
-//             // Serialize the login form to the data sent by POST request
-//             data: search_form.serialize(),
-//             success: (resultData) => handleSearchResult(resultData)
-//         }
-//     );
-// }
-//
-// // Bind the submit action of the form to a handler function
-// search_form.submit(submitSearchForm);
