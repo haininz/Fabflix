@@ -63,6 +63,7 @@ public class CheckOutServlet extends HttpServlet {
             String title = request.getParameter("title");
             String show = request.getParameter("show");
             String isRemove = request.getParameter("isRemove");
+            String isDecrease = request.getParameter("isDecrease");
 
             boolean modify = true;
             if (show.equals("true")){
@@ -115,6 +116,21 @@ public class CheckOutServlet extends HttpServlet {
                                     movie.set(2, String.valueOf(quantity));
                                     movie.set(3, String.valueOf(quantity * 15));
                                 }
+                            }
+                        }
+                    }
+
+                    if(isDecrease != null){
+                        for (int i = 0; i < previousItems.size(); i++) {
+                            ArrayList<String> tempCheck = previousItems.get(i);
+                            if (tempCheck.get(0).equals(id)) {
+                                int quantity = Integer.parseInt(tempCheck.get(2)) - 1;
+                                if(quantity == 0){
+                                    previousItems.remove(i);
+                                    break;
+                                }
+                                tempCheck.set(2, String.valueOf(quantity));
+                                tempCheck.set(3, String.valueOf(quantity * 15));
                             }
                         }
                     }

@@ -1,5 +1,4 @@
 function addItem(movie_id, movie_title){
-    alert("add item");
     window.location.reload();
     jQuery.ajax({
         dataType: "json",  // Setting return data type
@@ -10,18 +9,16 @@ function addItem(movie_id, movie_title){
 }
 
 function decreaseItem(movie_id, movie_title){
-    alert("delete item");
     window.location.reload();
     jQuery.ajax({
         dataType: "json",  // Setting return data type
         method: "GET",// Setting request method
-        url: "checkout?title=" + movie_title + "&id=" + movie_id +  "&show=false",
+        url: "checkout?title=" + movie_title + "&id=" + movie_id +  "&show=true"+"&isDecrease=true",
         success: (resultData) => handleCartResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
     });
 }
 
 function deleteItem(movie_id, movie_title){
-    alert("remove item");
     window.location.reload();
     jQuery.ajax({
         dataType: "json",  // Setting return data type

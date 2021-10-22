@@ -80,22 +80,31 @@ function handleMovieResult(resultData) {
 
 let title = getParameterByName("title");
 let genre = getParameterByName("genre");
-var number_page = document.getElementById("number_page");
+ let number_page = document.getElementById("tenBtn");
+// let temp_page = 0;
 
 console.log("======Title: " + title);
 console.log("======Genre: " + genre);
-console.log("======Num page: " + number_page.value)
+console.log("======Num page: " + number_page)
 
-function handlePageChange(resultData) {
-    number_page = document.getElementById("number_page");
-    console.log("======New Num page: " + number_page.value)
-    jQuery.ajax({
-        dataType: "json", // Setting return data type
-        method: "GET", // Setting request method
-        url: "movies?title=" + title + "&genre=" + genre + "&number_page=" + number_page.value + "&jump=", // Setting request url, which is mapped by StarsServlet in Stars.java
-        success: (resultData) => handleMovieResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
-    });
-}
+// function handlePageChange() {
+//     console.log("number_page: " + number_page.value);
+//     // console.log("resultData: " + resultData);
+//     temp_page = number_page.value;
+//     console.log("temp_page: " + temp_page);
+//     $('#number_page').val(temp_page);
+//
+//
+//
+//
+//     console.log("======New Num page: " + number_page.value)
+//     jQuery.ajax({
+//         dataType: "json", // Setting return data type
+//         method: "GET", // Setting request method
+//         url: "movies?title=" + title + "&genre=" + genre + "&number_page=" + temp_page, // Setting request url, which is mapped by StarsServlet in Stars.java
+//         success: (resultData) => handleMovieResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
+//     });
+// }
 
 function handlePreviousButton() {
     jQuery.ajax({
@@ -120,7 +129,8 @@ function handleNextButton() {
 jQuery.ajax({
     dataType: "json", // Setting return data type
     method: "GET", // Setting request method
-    url: "movies?title=" + title + "&genre=" + genre + "&number_page=" + number_page.value + "&jump=", // Setting request url, which is mapped by StarsServlet in Stars.java
+    // url: "movies?title=" + title + "&genre=" + genre + "&number_page=" + number_page.value + "&jump=", // Setting request url, which is mapped by StarsServlet in Stars.java
+    url: "movies?title=" + title + "&genre=" + genre + "&number_page=10"  + "&jump=",
     success: (resultData) => handleMovieResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 });
 
