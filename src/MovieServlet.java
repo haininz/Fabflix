@@ -55,8 +55,10 @@ public class MovieServlet extends HttpServlet {
             String title = request.getParameter("title");
             String genre = request.getParameter("genre");
             String number_page = request.getParameter("number_page");
+            String jump = request.getParameter("jump");
 
             ArrayList<String> previousBrowseParams = (ArrayList<String>) session.getAttribute("previousBrowseParams");
+            // previousBrowseParams: {title, genre, number_page, current_page}
             if (title != null && genre != null){
                 if (previousBrowseParams == null){
                     previousBrowseParams = new ArrayList<>();
