@@ -77,6 +77,12 @@ public class MovieServlet extends HttpServlet {
 
             ArrayList<String> previousBrowseParams = (ArrayList<String>) session.getAttribute("previousBrowseParams");
             // previousBrowseParams: {title, genre, number_of_movies_per_page, current_page_number, sort_requirement}
+
+            ArrayList<String> previousSearchParams = (ArrayList<String>) session.getAttribute("previousSearchParams");
+            if (previousSearchParams != null){
+                previousSearchParams.set(7, "none");
+            }
+
             if (title != null && genre != null){
                 if (previousBrowseParams == null){
                     previousBrowseParams = new ArrayList<>();
@@ -85,11 +91,13 @@ public class MovieServlet extends HttpServlet {
                     previousBrowseParams.add(number_page);
                     previousBrowseParams.add(String.valueOf(1));
                     previousBrowseParams.add(orderBy);
+                    previousBrowseParams.add("browse");
                     session.setAttribute("previousBrowseParams", previousBrowseParams);
                     System.out.println("previousParams list in if: " + previousBrowseParams.toString());
                 }
                 else {
                     synchronized (previousBrowseParams){
+                        previousBrowseParams.set(5, "browse");
                         System.out.println("previousParams list in else original: " + previousBrowseParams.toString());
                         if (jump.equals("next")){
 //                            System.out.println("page number: " + String.valueOf(Integer.parseInt(previousBrowseParams.get(3)) + 1));
