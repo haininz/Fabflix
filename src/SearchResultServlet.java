@@ -82,6 +82,12 @@ public class SearchResultServlet extends HttpServlet {
 
             ArrayList<String> previousSearchParams = (ArrayList<String>) session.getAttribute("previousSearchParams");
             // previousSearchParams: {name, title, year, director, number_of_movies_per_page, current_page_number, sort_requirement}
+
+            ArrayList<String> previousBrowseParams = (ArrayList<String>) session.getAttribute("previousBrowseParams");
+            if (previousBrowseParams != null){
+                previousBrowseParams.set(5, "none");
+            }
+
             if (title != null && name != null && year != null && director != null){
                 if (previousSearchParams == null){
                     previousSearchParams = new ArrayList<>();
@@ -92,11 +98,13 @@ public class SearchResultServlet extends HttpServlet {
                     previousSearchParams.add(number_page);
                     previousSearchParams.add(String.valueOf(1));
                     previousSearchParams.add(orderBy);
+                    previousSearchParams.add("search");
                     session.setAttribute("previousSearchParams", previousSearchParams);
                     System.out.println("previousParams list in if: " + previousSearchParams.toString());
                 }
                 else {
                     synchronized (previousSearchParams){
+                        previousSearchParams.set(7, "search");
                         System.out.println("previousParams list in else original: " + previousSearchParams.toString());
                         if (jump.equals("next")){
 //                            System.out.println("page number: " + String.valueOf(Integer.parseInt(previousSearchParams.get(3)) + 1));

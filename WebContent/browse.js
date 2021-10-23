@@ -86,29 +86,31 @@ function handleMovieResult(resultData) {
 let title = getParameterByName("title");
 let genre = getParameterByName("genre");
 let number_page = document.getElementById("number_page");
-let sort_base = document.getElementById("sort");
+let sort_base = document.getElementById("sort_base");
 
 console.log("======Title: " + title);
 console.log("======Genre: " + genre);
+console.log("======Number_page: " + number_page.value);
+console.log("======Sort: " + sort_base.value)
 
 function handleSortChange(resultData) {
-    sort_base = document.getElementById("sort");
+    sort_base = document.getElementById("sort_base");
     console.log("Sort base: " + sort_base.value);
     if (sort_base.value === "trasc") {
         console.log("in trasc");
-        document.getElementById("sort").selectedIndex = 0;
+        document.getElementById("sort_base").selectedIndex = 0;
     }
     else if (sort_base.value === "trdesc") {
         console.log("in trdesc");
-        document.getElementById("sort").selectedIndex = 1;
+        document.getElementById("sort_base").selectedIndex = 1;
     }
     else if (sort_base.value === "rtasc") {
         console.log("in rtasc");
-        document.getElementById("sort").selectedIndex = 2;
+        document.getElementById("sort_base").selectedIndex = 2;
     }
     else {
         console.log("in rtdesc");
-        document.getElementById("sort").selectedIndex = 3;
+        document.getElementById("sort_base").selectedIndex = 3;
     }
     jQuery.ajax({
         dataType: "json", // Setting return data type
