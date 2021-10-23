@@ -96,21 +96,37 @@ console.log("======Sort: " + sort_base.value)
 function handleSortChange(resultData) {
     sort_base = document.getElementById("sort_base");
     console.log("Sort base: " + sort_base.value);
-    if (sort_base.value === "trasc") {
-        console.log("in trasc");
+    if (sort_base.value === "trascasc") {
+        console.log("in trascasc");
         document.getElementById("sort_base").selectedIndex = 0;
     }
-    else if (sort_base.value === "trdesc") {
-        console.log("in trdesc");
+    else if (sort_base.value === "trdescdesc") {
+        console.log("in trdescdesc");
         document.getElementById("sort_base").selectedIndex = 1;
     }
-    else if (sort_base.value === "rtasc") {
-        console.log("in rtasc");
+    else if (sort_base.value === "rtascasc") {
+        console.log("in rtascasc");
         document.getElementById("sort_base").selectedIndex = 2;
     }
-    else {
-        console.log("in rtdesc");
+    else if (sort_base.value === "rtdescdesc"){
+        console.log("in rtdescdesc");
         document.getElementById("sort_base").selectedIndex = 3;
+    }
+    else if (sort_base.value === "trascdesc") {
+        console.log("in trascdesc");
+        document.getElementById("sort_base").selectedIndex = 4;
+    }
+    else if (sort_base.value === "trdescasc") {
+        console.log("in trdescasc");
+        document.getElementById("sort_base").selectedIndex = 5;
+    }
+    else if (sort_base.value === "rtascdesc") {
+        console.log("in rtascdesc");
+        document.getElementById("sort_base").selectedIndex = 6;
+    }
+    else {
+        console.log("in rtdescasc");
+        document.getElementById("sort_base").selectedIndex = 7;
     }
     jQuery.ajax({
         dataType: "json", // Setting return data type

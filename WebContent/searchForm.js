@@ -60,7 +60,6 @@ function handleSearchResult(resultData) {
         rowHTML += '<th>' + '<input type="button" onClick="addToCart(\'' + resultData[i]["movies_id"] + '\',\'' + resultData[i]["movies_title"] + '\')" VALUE="Add to Cart">' + '</th>';
         rowHTML += "</tr>";
 
-        console.log("handleSearchResultNEW: " + rowHTML);
 
         moviesTableBodyElement.append(rowHTML);
     }
@@ -71,7 +70,7 @@ let movie_year = getParameterByName("movie_year");
 let movie_director = getParameterByName("movie_director");
 let star_name = getParameterByName("star_name");
 let number_page = document.getElementById("number_page");
-let sort_base = document.getElementById("sort");
+let sort_base = document.getElementById("sort_base");
 
 console.log("======title: " + movie_title);
 console.log("======year: " + movie_year);
@@ -79,23 +78,39 @@ console.log("======director: " + movie_director);
 console.log("======name: " + star_name);
 
 function handleSortChange(resultData) {
-    sort_base = document.getElementById("sort");
+    sort_base = document.getElementById("sort_base");
     console.log("Sort base: " + sort_base.value);
-    if (sort_base.value === "trasc") {
-        console.log("in trasc");
-        document.getElementById("sort").selectedIndex = 0;
+    if (sort_base.value === "trascasc") {
+        console.log("in trascasc");
+        document.getElementById("sort_base").selectedIndex = 0;
     }
-    else if (sort_base.value === "trdesc") {
-        console.log("in trdesc");
-        document.getElementById("sort").selectedIndex = 1;
+    else if (sort_base.value === "trdescdesc") {
+        console.log("in trdescdesc");
+        document.getElementById("sort_base").selectedIndex = 1;
     }
-    else if (sort_base.value === "rtasc") {
-        console.log("in rtasc");
-        document.getElementById("sort").selectedIndex = 2;
+    else if (sort_base.value === "rtascasc") {
+        console.log("in rtascasc");
+        document.getElementById("sort_base").selectedIndex = 2;
+    }
+    else if (sort_base.value === "rtdescdesc"){
+        console.log("in rtdescdesc");
+        document.getElementById("sort_base").selectedIndex = 3;
+    }
+    else if (sort_base.value === "trascdesc") {
+        console.log("in trascdesc");
+        document.getElementById("sort_base").selectedIndex = 4;
+    }
+    else if (sort_base.value === "trdescasc") {
+        console.log("in trdescasc");
+        document.getElementById("sort_base").selectedIndex = 5;
+    }
+    else if (sort_base.value === "rtascdesc") {
+        console.log("in rtascdesc");
+        document.getElementById("sort_base").selectedIndex = 6;
     }
     else {
-        console.log("in rtdesc");
-        document.getElementById("sort").selectedIndex = 3;
+        console.log("in rtdescasc");
+        document.getElementById("sort_base").selectedIndex = 7;
     }
     jQuery.ajax({
         dataType: "json", // Setting return data type

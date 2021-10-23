@@ -71,12 +71,16 @@
 <!--</ul>-->
 <h2>Search Result</h2>
 
-<label for="sort">How to sort the database</label>
-<select name="sort" id="sort" onchange="handleSortChange(self)">
-    <option value="trasc">title > rating, asc</option>
-    <option value="trdesc">title > rating, desc</option>
-    <option value="rtasc">rating > title, asc</option>
-    <option value="rtdesc">rating > title, desc</option>
+<label for="sort_base">How to sort the database</label>
+<select name="sort_base" id="sort_base" onchange="handleSortChange(self)">
+    <option value="trascasc">title > rating, asc, asc</option>
+    <option value="trdescdesc">title > rating, desc, desc</option>
+    <option value="rtascasc">rating > title, asc, asc</option>
+    <option value="rtdescdesc">rating > title, desc, desc</option>
+    <option value="trascdesc">title > rating, asc, desc</option>
+    <option value="trdescasc">title > rating, desc, asc</option>
+    <option value="rtascdesc">rating > title, asc, desc</option>
+    <option value="rtdescasc">rating > title, desc, asc</option>
 </select>
 
 <label for="number_page">Choose the number of movies per page: </label>

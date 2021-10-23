@@ -60,17 +60,29 @@ public class MovieServlet extends HttpServlet {
 
             String offset = new String("");
             String orderBy = new String("");
-            if (sortBase.equals("trasc")) {
+            if (sortBase.equals("trascasc")) {
                 orderBy = "ORDER BY movies.title ASC, ratings.rating ASC";
             }
-            else if (sortBase.equals("trdesc")) {
+            else if (sortBase.equals("trdescdesc")) {
                 orderBy = "ORDER BY movies.title DESC, ratings.rating DESC";
             }
-            else if (sortBase.equals("rtasc")) {
+            else if (sortBase.equals("rtascasc")) {
                 orderBy = "ORDER BY ratings.rating ASC, movies.title ASC";
             }
-            else if (sortBase.equals("rtdesc")) {
+            else if (sortBase.equals("rtdescdesc")) {
                 orderBy = "ORDER BY ratings.rating DESC, movies.title DESC";
+            }
+            else if (sortBase.equals("trascdesc")) {
+                orderBy = "ORDER BY movies.title ASC, ratings.rating DESC";
+            }
+            else if (sortBase.equals("trdescasc")) {
+                orderBy = "ORDER BY movies.title DESC, ratings.rating ASC";
+            }
+            else if (sortBase.equals("rtascdesc")) {
+                orderBy = "ORDER BY ratings.rating ASC, movies.title DESC";
+            }
+            else if (sortBase.equals("rtdescasc")) {
+                orderBy = "ORDER BY ratings.rating DESC, movies.title ASC";
             }
 
             System.out.println("jump: " + jump);
@@ -99,21 +111,80 @@ public class MovieServlet extends HttpServlet {
                     synchronized (previousBrowseParams){
                         previousBrowseParams.set(5, "browse");
                         System.out.println("previousParams list in else original: " + previousBrowseParams.toString());
-                        if (jump.equals("next")){
-//                            System.out.println("page number: " + String.valueOf(Integer.parseInt(previousBrowseParams.get(3)) + 1));
-//                            Integer.parseInt("#pages: " + String.valueOf(Integer.parseInt(number_page)));
-                            offset = String.valueOf(Integer.parseInt(previousBrowseParams.get(3)) * Integer.parseInt(previousBrowseParams.get(2)));
-                            System.out.println("offset: " + offset);
-                            previousBrowseParams.set(3, String.valueOf(Integer.parseInt(previousBrowseParams.get(3)) + 1));
-                        }
-                        else if (jump.equals("previous")){
-                            if (Integer.parseInt(previousBrowseParams.get(3)) > 1){
-                                offset = String.valueOf((Integer.parseInt(previousBrowseParams.get(3)) - 2) * Integer.parseInt(previousBrowseParams.get(2)));
-                                System.out.println("offset: " + offset);
-                                previousBrowseParams.set(3, String.valueOf(Integer.parseInt(previousBrowseParams.get(3)) - 1));
+                        if (jump.equals("next") || jump.equals("previous")) {
+                            Statement tempStatement = conn.createStatement();
+                            String tempTitle = previousBrowseParams.get(0);
+                            String tempGenre = previousBrowseParams.get(1);
+                            String tempQuery = new String("");
+                            if (tempTitle.equals("")){
+                                tempQuery = String.format("SELECT count(id)\n" +
+                                                "from movies JOIN ratings on movies.id = ratings.movieId JOIN\n" +
+                                                "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List\n" +
+                                                "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id)\n" +
+                                                "WHERE genres.name = %s\n" +
+                                                "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN\n" +
+                                                "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
+                                                "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
+                                                "GROUP BY movieId) as slist \n" +
+                                                "on movies.id = slist.movieId\n",
+                                        "\"" + tempGenre + "\"");
                             }
-                            else {
-                                offset = "0";
+                            else if (tempGenre.equals("")){
+                                if (tempTitle.equals("*")){
+                                    tempQuery = String.format("SELECT count(id)\n" +
+                                                    "from movies JOIN ratings on movies.id = ratings.movieId JOIN\n" +
+                                                    "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List\n" +
+                                                    "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id)\n" +
+                                                    "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN\n" +
+                                                    "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
+                                                    "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
+                                                    "GROUP BY movieId) as slist \n" +
+                                                    "on movies.id = slist.movieId\n" +
+                                                    "where title not regexp %s\n",
+                                            "\"" + "^[a-zA-Z0-9]" + "\"");
+                                }
+                                else {
+                                    tempQuery = String.format("SELECT count(id)\n" +
+                                                    "from movies JOIN ratings on movies.id = ratings.movieId JOIN\n" +
+                                                    "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List\n" +
+                                                    "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id)\n" +
+                                                    "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN\n" +
+                                                    "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
+                                                    "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
+                                                    "GROUP BY movieId) as slist \n" +
+                                                    "on movies.id = slist.movieId\n" +
+                                                    "where title like %s%s\n",
+                                            "\"" + tempTitle, "%"+ "\"");
+                                }
+                            }
+                            ResultSet rsTemp = tempStatement.executeQuery(tempQuery);
+                            int num = 0;
+                            while (rsTemp.next()) {
+                                num = Integer.parseInt(rsTemp.getString("count(id)"));
+                                System.out.println("COUNT: " + num);
+                            }
+                            tempStatement.close();
+                            rsTemp.close();
+                            if (jump.equals("next")){
+                                int threshold = num / Integer.parseInt(previousBrowseParams.get(2)) + 1;
+                                if (Integer.parseInt(previousBrowseParams.get(3)) < threshold){
+                                    offset = String.valueOf(Integer.parseInt(previousBrowseParams.get(3)) * Integer.parseInt(previousBrowseParams.get(2)));
+                                    System.out.println("offset: " + offset);
+                                    previousBrowseParams.set(3, String.valueOf(Integer.parseInt(previousBrowseParams.get(3)) + 1));
+                                }
+                                else {
+                                    offset = String.valueOf(Integer.parseInt(previousBrowseParams.get(2)) * (threshold - 1));
+                                }
+                            }
+                            else if (jump.equals("previous")){
+                                if (Integer.parseInt(previousBrowseParams.get(3)) > 1){
+                                    offset = String.valueOf((Integer.parseInt(previousBrowseParams.get(3)) - 2) * Integer.parseInt(previousBrowseParams.get(2)));
+                                    System.out.println("offset: " + offset);
+                                    previousBrowseParams.set(3, String.valueOf(Integer.parseInt(previousBrowseParams.get(3)) - 1));
+                                }
+                                else {
+                                    offset = "0";
+                                }
                             }
                         }
                         else {
