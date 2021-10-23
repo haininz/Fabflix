@@ -115,8 +115,8 @@ public class PlaceOrderServlet extends HttpServlet {
                         int sales_id = Integer.parseInt(lastRecord_id);
                         lastRecord_id = String.valueOf(sales_id+1);
 
-                        System.out.println("-----***-----");
-                        System.out.println("need to insert!");
+                        // System.out.println("-----***-----");
+                        // System.out.println("need to insert!");
                         String insert_query = "INSERT INTO sales VALUES(" + lastRecord_id + ", " + findCustoermID
                                 + ", '" + iterItem.get(0) + "', '" + saleDate + "');";
                         System.out.println("insert query:" + insert_query);
