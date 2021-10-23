@@ -65,17 +65,29 @@ public class SearchResultServlet extends HttpServlet {
 
             String offset = new String("");
             String orderBy = new String("");
-            if (sortBase.equals("trasc")) {
+            if (sortBase.equals("trascasc")) {
                 orderBy = "ORDER BY movies.title ASC, ratings.rating ASC";
             }
-            else if (sortBase.equals("trdesc")) {
+            else if (sortBase.equals("trdescdesc")) {
                 orderBy = "ORDER BY movies.title DESC, ratings.rating DESC";
             }
-            else if (sortBase.equals("rtasc")) {
+            else if (sortBase.equals("rtascasc")) {
                 orderBy = "ORDER BY ratings.rating ASC, movies.title ASC";
             }
-            else if (sortBase.equals("rtdesc")) {
+            else if (sortBase.equals("rtdescdesc")) {
                 orderBy = "ORDER BY ratings.rating DESC, movies.title DESC";
+            }
+            else if (sortBase.equals("trascdesc")) {
+                orderBy = "ORDER BY movies.title ASC, ratings.rating DESC";
+            }
+            else if (sortBase.equals("trdescasc")) {
+                orderBy = "ORDER BY movies.title DESC, ratings.rating ASC";
+            }
+            else if (sortBase.equals("rtascdesc")) {
+                orderBy = "ORDER BY ratings.rating ASC, movies.title DESC";
+            }
+            else if (sortBase.equals("rtdescasc")) {
+                orderBy = "ORDER BY ratings.rating DESC, movies.title ASC";
             }
 
             System.out.println("jump: " + jump);
@@ -106,21 +118,84 @@ public class SearchResultServlet extends HttpServlet {
                     synchronized (previousSearchParams){
                         previousSearchParams.set(7, "search");
                         System.out.println("previousParams list in else original: " + previousSearchParams.toString());
-                        if (jump.equals("next")){
-//                            System.out.println("page number: " + String.valueOf(Integer.parseInt(previousSearchParams.get(3)) + 1));
-//                            Integer.parseInt("#pages: " + String.valueOf(Integer.parseInt(number_page)));
-                            offset = String.valueOf(Integer.parseInt(previousSearchParams.get(5)) * Integer.parseInt(previousSearchParams.get(4)));
-                            System.out.println("offset: " + offset);
-                            previousSearchParams.set(5, String.valueOf(Integer.parseInt(previousSearchParams.get(5)) + 1));
-                        }
-                        else if (jump.equals("previous")){
-                            if (Integer.parseInt(previousSearchParams.get(5)) > 1){
-                                offset = String.valueOf((Integer.parseInt(previousSearchParams.get(5)) - 2) * Integer.parseInt(previousSearchParams.get(4)));
-                                System.out.println("offset: " + offset);
-                                previousSearchParams.set(5, String.valueOf(Integer.parseInt(previousSearchParams.get(5)) - 1));
+                        if (jump.equals("next") || jump.equals("previous")){
+                            Statement tempStatement = dbCon.createStatement();
+                            String tempName = previousSearchParams.get(0);
+                            String tempTitle = previousSearchParams.get(1);
+                            String tempYear= previousSearchParams.get(2);
+                            String tempDirector = previousSearchParams.get(3);
+                            String tempQuery = new String("");
+
+                            String whereClause = "where ";
+                            boolean hasPrevious = false;
+
+                            if (!tempName.equals("")){
+                                hasPrevious = true;
+                                whereClause += "s.name like " + "\"%" + tempName + "%\" ";
                             }
-                            else {
-                                offset = "0";
+                            if (!tempYear.equals("")){
+                                if (hasPrevious){
+                                    whereClause += "and ";
+                                }
+                                hasPrevious = true;
+                                whereClause += "m.year = " + tempYear + " ";
+                            }
+                            if (!tempTitle.equals("")){
+                                if (hasPrevious){
+                                    whereClause += "and ";
+                                }
+                                hasPrevious = true;
+                                whereClause += "m.title like " + "\"%" + tempTitle + "%\" ";
+                            }
+                            if (!tempDirector.equals("")){
+                                if (hasPrevious){
+                                    whereClause += "and ";
+                                }
+                                whereClause += "m.director like " + "\"%" + tempDirector + "%\" ";
+                            }
+
+                            tempQuery = String.format("SELECT DISTINCT count(id)\n" +
+                                    "from (SELECT m.* from stars s, movies m, stars_in_movies sim\n%s\n" +
+                                    "and s.id = sim.starId and m.id = sim.movieId) as movies\n" +
+                                    "JOIN ratings on movies.id = ratings.movieId\n" +
+                                    "JOIN (SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as genres\n" +
+                                    "FROM (genres_in_movies JOIN genres on genres_in_movies.genreId = genres.id)\n" +
+                                    "GROUP BY movieId) as g\n" +
+                                    "on movies.id = g.movieId\n" +
+                                    "JOIN (SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as starList\n" +
+                                    "FROM (stars_in_movies JOIN stars on stars_in_movies.starId = stars.id)\n" +
+                                    "GROUP BY movieId) as s\n" +
+                                    "on movies.id = s.movieId\n", whereClause);
+
+                            ResultSet rsTemp = tempStatement.executeQuery(tempQuery);
+                            int num = 0;
+                            while (rsTemp.next()) {
+                                num = Integer.parseInt(rsTemp.getString("count(id)"));
+                                System.out.println("COUNT: " + num);
+                            }
+                            tempStatement.close();
+                            rsTemp.close();
+
+                            if (jump.equals("next")){
+                                int threshold = num / Integer.parseInt(previousSearchParams.get(4)) + 1;
+                                if (Integer.parseInt(previousSearchParams.get(5)) < threshold) {
+                                    offset = String.valueOf(Integer.parseInt(previousSearchParams.get(5)) * Integer.parseInt(previousSearchParams.get(4)));
+                                    System.out.println("offset: " + offset);
+                                    previousSearchParams.set(5, String.valueOf(Integer.parseInt(previousSearchParams.get(5)) + 1));
+                                }
+                                else {
+                                    offset = String.valueOf(Integer.parseInt(previousSearchParams.get(4)) * (threshold - 1));
+                                }
+                            }
+                            else if (jump.equals("previous")){
+                                if (Integer.parseInt(previousSearchParams.get(5)) > 1){
+                                    offset = String.valueOf((Integer.parseInt(previousSearchParams.get(5)) - 2) * Integer.parseInt(previousSearchParams.get(4)));
+                                    System.out.println("offset: " + offset);
+                                    previousSearchParams.set(5, String.valueOf(Integer.parseInt(previousSearchParams.get(5)) - 1));
+                                }
+                                else {
+                                    offset = "0";
+                                }
                             }
                         }
                         else {
