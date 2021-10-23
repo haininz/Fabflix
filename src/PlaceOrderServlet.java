@@ -86,16 +86,20 @@ public class PlaceOrderServlet extends HttpServlet {
             // int user_id = Integer.parseInt(findUser_id);
             System.out.println("findUser_id : " + findUser_id);
 
+
             String findCustoermID_query = "select *  from customers where ccId =" + card_number + ";";
             ResultSet findCustoermID_rs = statement.executeQuery(findCustoermID_query);
             findCustoermID_rs.next();
             String findCustoermID = findCustoermID_rs.getString("id");
 
 
+
             HttpSession session = request.getSession();
             ArrayList<ArrayList<String>> previousItems = (ArrayList<ArrayList<String>>) session.getAttribute("previousItems");
 
             JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("sale_id", String.valueOf(Integer.parseInt(lastRecord_id) + 1));
+
             if(Integer.parseInt(num_person) == 0){
                 System.out.println("no such person -> payment fail");
                 jsonObject.addProperty("findPerson","failure");
@@ -118,7 +122,7 @@ public class PlaceOrderServlet extends HttpServlet {
                         // System.out.println("-----***-----");
                         // System.out.println("need to insert!");
                         String insert_query = "INSERT INTO sales VALUES(" + lastRecord_id + ", " + findCustoermID
-                                + ", '" + iterItem.get(0) + "', '" + saleDate + "');";
+                                + ", '" + iterItem.get(0) + "', '" + saleDate + "')";
                         System.out.println("insert query:" + insert_query);
                         statement.executeUpdate(insert_query);
                     }

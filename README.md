@@ -1,7 +1,7 @@
 # cs122b-fall21-team-25
 
 1. Project 1 Demo Url: https://youtu.be/YwcTtcIKyZw
-   <br>
+   <br><br>
    
 2. How to deploy application on Tomcat
     - install maven 
@@ -11,22 +11,28 @@
     - run war file on tomcat manager page
       <br><br>
       
-3. Each member's contribution:
+3. Substring matching design:
+   <br>
+   So basically, we use % to match an arbitrary number of characters for MySQL in our substring match function. 
+   For searching the movie title, director, and star name, we use two % to include the substring that users input in 
+   our search query.  It will search the data to find which contains the substring part and return. But for the 
+   searching the year, we don't use this method because it must be a specific number.
+
+
+4. Each member's contribution:
       <br><br>
-   
-    - Haoxin Lin: 
-        - Set up the environment 
-        - Worked on index page and MovieServlet
-        - Worked on single star page and SingleStarServlet
-        - Developed the link from single star to movies list
-        - Developed the link from single star to single movie 
-        - Developed the link to go back moves list page
-          <br><br>
-          
-    - Haining Zhou:
-        - Created mysql table
-        - Worked on index page and MovieServlet
-        - Worked on single movie page and SingleMovieServlet
-        - Developed the link from movies list to single movie  
-        - Developed the link from single movie to single stars
-        - Developed the link to go back moves list page
+
+   - Haoxin Lin:
+     - Implemented login page
+     - Implemented main page
+     - Implemented shopping cart page
+     - Implemented payment page
+     - Implemented place order action
+     <br><br>
+
+   - Haining Zhou:
+     - Implemented searching
+     - Implemented browsing
+     - Implemented movie list page
+     - Implemented single pages
+     - Implemented jump functionality

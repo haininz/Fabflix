@@ -154,7 +154,7 @@ public class SearchResultServlet extends HttpServlet {
                                 whereClause += "m.director like " + "\"%" + tempDirector + "%\" ";
                             }
 
-                            tempQuery = String.format("SELECT DISTINCT count(id)\n" +
+                            tempQuery = String.format("SELECT count(distinct(id))\n" +
                                     "from (SELECT m.* from stars s, movies m, stars_in_movies sim\n%s\n" +
                                     "and s.id = sim.starId and m.id = sim.movieId) as movies\n" +
                                     "JOIN ratings on movies.id = ratings.movieId\n" +
@@ -167,10 +167,11 @@ public class SearchResultServlet extends HttpServlet {
                                     "GROUP BY movieId) as s\n" +
                                     "on movies.id = s.movieId\n", whereClause);
 
+                            System.out.println("TEMP QUERY: " + tempQuery);
                             ResultSet rsTemp = tempStatement.executeQuery(tempQuery);
                             int num = 0;
                             while (rsTemp.next()) {
-                                num = Integer.parseInt(rsTemp.getString("count(id)"));
+                                num = Integer.parseInt(rsTemp.getString("count(distinct(id))"));
                                 System.out.println("COUNT: " + num);
                             }
                             tempStatement.close();
@@ -178,6 +179,8 @@ public class SearchResultServlet extends HttpServlet {
 
                             if (jump.equals("next")){
                                 int threshold = num / Integer.parseInt(previousSearchParams.get(4)) + 1;
+                                System.out.println("THRESHOLD: " + threshold);
+                                System.out.println("CURRENT PAGE NUMBER: " + previousSearchParams.get(5));
                                 if (Integer.parseInt(previousSearchParams.get(5)) < threshold) {
                                     offset = String.valueOf(Integer.parseInt(previousSearchParams.get(5)) * Integer.parseInt(previousSearchParams.get(4)));
                                     System.out.println("offset: " + offset);

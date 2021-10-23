@@ -22,7 +22,8 @@ function handlePaymentResult(resultData) {
 
 
     if (resultJson["findPerson"] === "success"){
-        console.log("handle payment response");
+        window.localStorage.setItem("sale_id", resultJson["sale_id"]);
+        // console.log(window.localStorage.getItem("sale_id"));
         window.location.replace("result.html");
     }
     else{
@@ -39,7 +40,11 @@ function submitPaymentForm(formSubmitEvent) {
             method: "POST",
             // Serialize the login form to the data sent by POST request
             data: placeorder_form.serialize(),
-            success: handlePaymentResult
+            success: handlePaymentResult,
+            error: function (data) {
+                alert("Wrong information! Please enter again!");
+                console.log("Items: " + window.localStorage.getItem("items"));
+            }
         }
     );
 }
@@ -51,9 +56,10 @@ let last_name = getParameterByName("last_name");
 let card_number = getParameterByName("card_number");
 let exp_data = getParameterByName("exp_data");
 
+
 jQuery.ajax({
     dataType: "json",  // Setting return data type
     method: "GET",// Setting request method
     url: "placeorder",
-    success: (resultData) =>{} // Setting callback function to handle data returned successfully by the SingleStarServlet
+    success: (resultData) => {} // Setting callback function to handle data returned successfully by the SingleStarServlet
 });

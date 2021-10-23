@@ -49,13 +49,15 @@ function getParameterByName(target) {
 function handleCartResult(resultData){
     let cartTableBodyElement = jQuery("#cart_table_body");
     checkEmpty = resultData[0]["title"];
-    console.log("Handling cart checkout")
+    console.log("Handling cart checkout");
+    let items = "";
     for (let i = 0; i < resultData.length; i++) {
         let rowHTML = "";
         rowHTML += "<tr>";
         rowHTML += "<th>" + resultData[i]["title"]+ "</th>";
         rowHTML += "<th>" + resultData[i]["quantity"] + "</th>";
-        rowHTML += "<th>" + resultData[i]["price"]+ "</th>";
+        rowHTML += "<th>" + resultData[i]["price"] + "</th>";
+        items += resultData[i]["title"] + "," + resultData[i]["quantity"] + "," + resultData[i]["price"] + ";";
         if(i === resultData.length - 1){
             rowHTML += '<th>'+'</th>';
             rowHTML += '<th>'+'</th>';
@@ -68,6 +70,7 @@ function handleCartResult(resultData){
         rowHTML += "</tr>";
         cartTableBodyElement.append(rowHTML);
     }
+    window.localStorage.setItem("items", items);
 }
 
 function paymentClick(){
