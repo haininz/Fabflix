@@ -1,5 +1,6 @@
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import java.util.HashMap;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -13,6 +14,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Arrays;
+import java.util.Set;
 
 @WebServlet(name = "SingleMovieServlet", urlPatterns = "/api/single-movie")
 public class SingleMovieServlet extends HttpServlet {
@@ -83,6 +86,57 @@ public class SingleMovieServlet extends HttpServlet {
                 }
 
                 // System.out.println(movies_stars_id);
+
+                String[] tempG = movies_genres.split(", ");
+                String temp_genres = "";
+                for(int z = 0; z < tempG.length && z < 3; z++){
+                    if(z == 2 || tempG.length - 1 == z){
+                        temp_genres = temp_genres + tempG[z];
+                        break;
+                    }
+                    else {
+                        temp_genres = temp_genres + tempG[z] + ", ";
+                    }
+                }
+                movies_genres = temp_genres;
+
+                System.out.println("movies_genres before " + movies_genres);
+                if(movies_genres.equals("")){
+                    movies_genres = "N/A";
+                }
+                System.out.println("movies_genres after " + movies_genres);
+
+                HashMap<String, Integer> starM = new HashMap<>();
+                String[] tempS = movies_stars.split(", ");
+                Statement statement2 = conn.createStatement();
+                for(String x : tempS){
+                    String movieofStar_query = "select count(*) as num from stars s, stars_in_movies sim, movies m " +
+                            "where s.id = sim.starId and sim.movieId = m.id and s.name =" + "\"" + x + "\""+ ";";
+                    ResultSet movieofStar = statement2.executeQuery(movieofStar_query);
+                    movieofStar.next();
+                    String movieofStar_num = movieofStar.getString("num");
+                    starM.put(x, Integer.parseInt(movieofStar_num));
+                    movieofStar.close();
+                }
+                statement2.close();
+                Set set = starM.keySet();
+                Object[] arr=set.toArray();
+                Arrays.sort(arr);
+                String temp_stars = "";
+                int z = 0;
+                for(Object key:arr){
+                    System.out.println(key + " " + starM.get(key));
+                        if(z == 2 || tempS.length - 1 == z){
+                            temp_stars = temp_stars + key;
+                            break;
+                        }
+                        else {
+                            temp_stars = temp_stars + key + ", ";
+                        }
+
+                }
+                movies_stars = temp_stars;
+
 
                 // Create a JsonObject based on the data we retrieve from rs
                 JsonObject jsonObject = new JsonObject();

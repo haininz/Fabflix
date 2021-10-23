@@ -37,7 +37,6 @@ function getParameterByName(target) {
 function handleResult(resultData) {
 
     console.log("handleResult: populating movies info from resultData");
-
     // populate the star info h3
     // find the empty h3 body by id "star_info"
     let starInfoElement = jQuery("#movie_info");
@@ -45,9 +44,33 @@ function handleResult(resultData) {
     let rowHTML = "";
     rowHTML += "<p>Movie Title: " + resultData[0]["movies_title"] + "</p>" +
         "<p>Year: " + resultData[0]["movies_year"] + "</p>" +
-        "<p>Director: " + resultData[0]["movies_director"] + "</p>" +
-        "<p>Genres: " + resultData[0]["movies_genres"] + "</p>" +
-        "<p>Stars: " + "</p>";
+        "<p>Director: " + resultData[0]["movies_director"] + "</p>"+
+        "<p>Genres: </p>";
+
+        let genresList = resultData[0]["movies_genres"].split(", ");
+        console.log("========genresList " + genresList);
+        // if(genresList.length - 1 === 0){
+        //     rowHTML += '<a href="browse.html?sort_base=trasc&number_page=10&jump=&title=&genre=' + genresList[0] + '">'
+        //         + genresList[0] + '</a >'  + "</p>"; // FIXME
+        // }
+        // else {
+            for(let z = 0; z < genresList.length; z++ ){
+                rowHTML += '<a href="browse.html?sort_base=trasc&number_page=10&jump=&title=&genre=' + genresList[z] + '">'
+                    + genresList[z] + '</a >'; // FIXME
+                console.log("genresList[z] -->" + genresList[z]);
+                if (z === genresList.length - 1){
+                    rowHTML += "</p>";
+                }
+                else {
+                    rowHTML += ", ";
+                }
+            }
+        //}
+
+
+    rowHTML += "<p>Stars: " + "</p>"
+
+
 
     let actors = resultData[0]["movies_stars_id"].split("\n");
     console.log("========" + actors);
