@@ -1,4 +1,4 @@
-function setCart(movie_id, movie_title){
+function addToCart(movie_id, movie_title){
     alert("Movie added to cart");
     jQuery.ajax({
         dataType: "json",  // Setting return data type
@@ -57,7 +57,7 @@ function handleSearchResult(resultData) {
             }
         }
         rowHTML += "<th>" + resultData[i]["movies_rating"] + "</th>" // rating;
-        rowHTML += '<th>' + '<input type="button" onClick="setCart(\'' + resultData[i]["movies_id"] + '\',\'' + resultData[i]["movies_title"] + '\')" VALUE="Add to Cart">' + '</th>';
+        rowHTML += '<th>' + '<input type="button" onClick="addToCart(\'' + resultData[i]["movies_id"] + '\',\'' + resultData[i]["movies_title"] + '\')" VALUE="Add to Cart">' + '</th>';
         rowHTML += "</tr>";
 
         console.log("handleSearchResultNEW: " + rowHTML);

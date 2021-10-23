@@ -1,4 +1,12 @@
-
+function addToCart(movie_id, movie_title){
+    alert("Movie added to cart");
+    jQuery.ajax({
+        dataType: "json",  // Setting return data type
+        method: "GET",// Setting request method
+        url: "checkout?title=" + movie_title + "&id=" + movie_id + "&show=false",
+        // success: (resultData) => handleSearchResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
+    });
+}
 
 /**
  * Retrieve parameter from request URL, matching by parameter name
@@ -58,7 +66,7 @@ function handleResult(resultData) {
     }
 
     rowHTML += "<p>Rating: " + resultData[0]["movies_rating"] + "</p>";
-
+    rowHTML += '<p>' + '<input type="button" onClick="addToCart(\'' + resultData[0]["movies_id"] + '\',\'' + resultData[0]["movies_title"] + '\')" VALUE="Add to Cart">' + '</p>';
 
     starInfoElement.append(rowHTML);
 
