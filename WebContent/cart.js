@@ -57,7 +57,7 @@ function handleCartResult(resultData){
         rowHTML += "<th>" + resultData[i]["title"]+ "</th>";
         rowHTML += "<th>" + resultData[i]["quantity"] + "</th>";
         rowHTML += "<th>" + resultData[i]["price"] + "</th>";
-        items += resultData[i]["title"] + "," + resultData[i]["quantity"] + "," + resultData[i]["price"] + ";";
+        items += resultData[i]["title"] + "?" + resultData[i]["quantity"] + "?" + resultData[i]["price"] + ";";
         if(i === resultData.length - 1){
             rowHTML += '<th>'+'</th>';
             rowHTML += '<th>'+'</th>';

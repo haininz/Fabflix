@@ -11,7 +11,7 @@ let items = window.localStorage.getItem("items").split(";");
 for (let i = 0; i < items.length; i++) {
 
     console.log("item: " + items[i]);
-    let temp = items[i].split(",");
+    let temp = items[i].split("?");
     console.log("temp: " + temp.toString());
     if (temp[1] !== "-"){
         for (let j = 0; j < parseInt(temp[1]); j++) {
