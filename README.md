@@ -1,6 +1,6 @@
 # cs122b-fall21-team-25
 
-1. Project 1 Demo Url: https://youtu.be/YwcTtcIKyZw
+1. Project 2 Demo Url: https://youtu.be/rUBsMfOPdy0
    <br><br>
    
 2. How to deploy application on Tomcat
