@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class DashboardServlet extends HttpServlet {
     }
 
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
         PrintWriter out = response.getWriter();
@@ -50,86 +51,54 @@ public class DashboardServlet extends HttpServlet {
             Connection dbCon = dataSource.getConnection();
 
             // Declare a new statement
-            Statement statement = dbCon.createStatement();
+            PreparedStatement preparedStatement = null;
 
             // Retrieve parameter "name" from the http request, which refers to the value of <input name="name"> in index.html
-            String first_name = request.getParameter("first_name");
-            String last_name = request.getParameter("last_name");
-            String card_number = request.getParameter("card_number");
-            String exp_data = request.getParameter("exp_data");
+            String movie_title = request.getParameter("movie_title");
+            String movie_year = request.getParameter("movie_year");
+            String movie_director = request.getParameter("movie_director");
+            String star_name = request.getParameter("star_name");
+            String movie_genre = request.getParameter("movie_genre");
+            String star_birth = request.getParameter("star_birth");
+            String insert_type = request.getParameter("insertType");
 
-            System.out.println("expiration data: " + exp_data);
+            System.out.println("insert movie_title: " + movie_title );
+            System.out.println("insert movie_year: " + movie_year);
+            System.out.println("insert movie_director: " + movie_director);
+            System.out.println("insert star_name: " + star_name);
+            System.out.println("insert movie_genre: " + movie_genre);
+            System.out.println("insert star_birth: " + star_birth);
 
-            String query = "SELECT COUNT(*) AS person "
-                    + "FROM creditcards AS c "
-                    + "WHERE c.id = " + "\"" + card_number + "\"" + "AND c.firstName = " + "\"" + first_name + "\""
-                    + " AND c.lastName = " + "\"" + last_name + "\"" + " AND c.expiration = " + "\"" + exp_data + "\"" + ";";
+            // insert a star
+            String dropStar_query= "delete from stars where name = ?";
+            preparedStatement = dbCon.prepareStatement(dropStar_query);
+            preparedStatement.setString(1, star_name);
+            System.out.println("dropStar_query: " + preparedStatement);
+            preparedStatement.executeUpdate();
 
-            ResultSet rs = statement.executeQuery(query);
-            rs.next();
-            String num_person = rs.getString("person");
-
-            String lastRecord_query = "select * from sales ORDER BY id DESC LIMIT 1";
-            ResultSet lastRecord_rs = statement.executeQuery(lastRecord_query);
-            lastRecord_rs.next();
-            String lastRecord_id = lastRecord_rs.getString("id");
-
-            System.out.println("lastRecord_id : " + lastRecord_id);
-
-
-            String findUser_query = "SELECT * FROM creditcards AS c "
-                    + "WHERE c.id = " + "\"" + card_number + "\"" + "AND c.firstName = " + "\"" + first_name + "\""
-                    + " AND c.lastName = " + "\"" + last_name + "\"" + " AND c.expiration = " + "\"" + exp_data + "\"" + ";";
-            ResultSet findUser_rs = statement.executeQuery(findUser_query);
-            findUser_rs.next();
-            String findUser_id = findUser_rs.getString("id");
-            // int user_id = Integer.parseInt(findUser_id);
-            System.out.println("findUser_id : " + findUser_id);
-
-
-            String findCustoermID_query = "select *  from customers where ccId =" + card_number + ";";
-            ResultSet findCustoermID_rs = statement.executeQuery(findCustoermID_query);
-            findCustoermID_rs.next();
-            String findCustoermID = findCustoermID_rs.getString("id");
+            String lastStarID_query = "select * from stars ORDER BY id DESC LIMIT 1";
+            preparedStatement = dbCon.prepareStatement(lastStarID_query);
+            ResultSet lastStarID_rs = preparedStatement.executeQuery();
+            lastStarID_rs.next();
+            String lastStarRecord_id = lastStarID_rs.getString("id");
+            // System.out.println("lastStarRecord_id : " + preparedStatement);
+            String nm = lastStarRecord_id.substring(0,2);
+            int starID = Integer.parseInt(lastStarRecord_id.substring(2));
+            System.out.println("starID : " + starID);
+            String newStarID = nm + String.valueOf(starID + 1);
+            System.out.println("newStarID : " + newStarID);
 
 
 
-            HttpSession session = request.getSession();
-            ArrayList<ArrayList<String>> previousItems = (ArrayList<ArrayList<String>>) session.getAttribute("previousItems");
+            String insertStar_query = "INSERT INTO stars VALUES('" + newStarID + "', '" + star_name
+                    + "', " + star_birth + ")";
+            System.out.println("insert star query:" + insertStar_query);
+            preparedStatement = dbCon.prepareStatement(insertStar_query);
+            preparedStatement.executeUpdate();
+
 
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("sale_id", String.valueOf(Integer.parseInt(lastRecord_id) + 1));
-
-            if(Integer.parseInt(num_person) == 0){
-                System.out.println("no such person -> payment fail");
-                jsonObject.addProperty("findPerson","failure");
-            }
-            else{
-                System.out.println("payment success");
-                jsonObject.addProperty("findPerson","success");
-
-
-                // insert back to mysql
-                String saleDate = java.time.LocalDate.now().toString();
-
-                for(int i = 0; i < previousItems.size(); i++){
-                    ArrayList<String> iterItem = previousItems.get(i);
-                    int tempSize = Integer.parseInt(iterItem.get(2));
-                    for(int j = 0; j < tempSize; j++){
-                        int sales_id = Integer.parseInt(lastRecord_id);
-                        lastRecord_id = String.valueOf(sales_id+1);
-
-                        // System.out.println("-----***-----");
-                        // System.out.println("need to insert!");
-                        String insert_query = "INSERT INTO sales VALUES(" + lastRecord_id + ", " + findCustoermID
-                                + ", '" + iterItem.get(0) + "', '" + saleDate + "')";
-                        System.out.println("insert query:" + insert_query);
-                        statement.executeUpdate(insert_query);
-                    }
-                }
-
-                previousItems.clear(); // clear all information once purchased
-            }
+            jsonObject.addProperty("insert_status", "success");
 
 
             out.write(jsonObject.toString());
@@ -145,7 +114,7 @@ public class DashboardServlet extends HttpServlet {
         out.close();
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         PrintWriter out = response.getWriter();
         JsonObject jsonObject = new JsonObject();

@@ -59,8 +59,8 @@ let movie_title = getParameterByName("movie_title");
 let movie_year = getParameterByName("movie_year");
 let movie_director = getParameterByName("movie_director");
 let star_name = getParameterByName("star_name");
-let star_birth = document.getElementById("star_birth");
-let movie_genre = document.getElementById("movie_genre");
+let star_birth = getParameterByName("star_birth");
+let movie_genre = getParameterByName("movie_genre");
 let insertType = null;
 
 console.log("======title: " + movie_title);
@@ -70,10 +70,12 @@ console.log("======name: " + star_name);
 console.log("======birth: " + star_birth);
 console.log("======genre: " + movie_genre);
 
+let insertStar_form = $("#insertStar_form");
+insertStar_form.submit(handleInsertStar);
 
-function handleInsertStar(){
+function handleInsertStar(resultData){
     insertType = "insertStar";
-
+    console.log("insertType: " + insertType);
 
     jQuery.ajax({
         dataType: "json", // Setting return data type
@@ -87,7 +89,7 @@ function handleInsertStar(){
 }
 
 
-function handleInsertMovie(){
+function handleInsertMovie(resultData){
     insertType = "insertMovie";
 
     jQuery.ajax({

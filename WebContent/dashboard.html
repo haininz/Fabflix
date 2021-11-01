@@ -49,29 +49,29 @@
 <h1 align="center">Employee Management System</h1>
 
 
-<form id="insertStar_form" METHOD="GET" action="form">
+<form id="insertStar_form" METHOD="GET" >
     <h3>Insert Star</h3>
     Star Name: <label><input TYPE="TEXT" name="star_name"></label><br>
     Star Birth: <label><input TYPE="TEXT" name="star_birth"></label><br>
-    <input id = "saveStar_button" TYPE="SUBMIT" VALUE="Insert A Star" onclick="handleInsertStar()">
+    <input id = "saveStar_button" TYPE="SUBMIT" VALUE="Insert A Star">
 </form>
 
 <br>
 
-<form id="insertMoive_form" METHOD="GET" action="form">
+<form id="insertMoive_form" METHOD="GET">
     <h3>Insert Movie</h3>
     Movie Title: <label><input TYPE="TEXT" name="movie_title"></label><br>
     Year: <label><input TYPE="TEXT" name="movie_year"></label><br>
     Movie Director: <label><input TYPE="TEXT" name="movie_director"></label><br>
     Star name: <label><input TYPE="TEXT" name="star_name"></label><br>
     Genre: <label><input TYPE="TEXT" name="movie_genre"></label><br>
-    <input id = "saveMovie_button" TYPE="SUBMIT" VALUE="Insert A Movie" onclick="handleInsertMovie()">
+    <input id = "saveMovie_button" TYPE="SUBMIT" VALUE="Insert A Movie" onclick="handleInsertMovie(self)">
 </form>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <!-- include our own JS file -->
-<script src="./dashboard.js"></script>
+<script src="dashboard.js"></script>
 
 </body>
 </html>
