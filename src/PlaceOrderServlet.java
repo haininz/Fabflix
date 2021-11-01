@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class PlaceOrderServlet extends HttpServlet {
             Connection dbCon = dataSource.getConnection();
 
             // Declare a new statement
-            Statement statement = dbCon.createStatement();
+//            Statement statement = dbCon.createStatement();
 
             // Retrieve parameter "name" from the http request, which refers to the value of <input name="name"> in index.html
             String first_name = request.getParameter("first_name");
@@ -63,14 +64,24 @@ public class PlaceOrderServlet extends HttpServlet {
             String query = "SELECT COUNT(*) AS person "
                     + "FROM creditcards AS c "
                     + "WHERE c.id = " + "\"" + card_number + "\"" + "AND c.firstName = " + "\"" + first_name + "\""
-                    + " AND c.lastName = " + "\"" + last_name + "\"" + " AND c.expiration = " + "\"" + exp_data + "\"" + ";";
+                    + " AND c.lastName = " + "\"" + last_name + "\"" + " AND c.expiration = " + "\"" + exp_data + "\"";
 
-            ResultSet rs = statement.executeQuery(query);
+//            String query = "SELECT COUNT(*) AS person FROM creditcards AS c "
+//                    + "WHERE c.id = ? AND c.firstName = ? AND c.lastName = ? AND c.expiration = ?";
+
+            PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+//            preparedStatement.setString(1, card_number);
+//            preparedStatement.setString(2, first_name);
+//            preparedStatement.setString(3, last_name);
+//            preparedStatement.setString(4, exp_data);
+
+            ResultSet rs = preparedStatement.executeQuery();
             rs.next();
             String num_person = rs.getString("person");
 
             String lastRecord_query = "select * from sales ORDER BY id DESC LIMIT 1";
-            ResultSet lastRecord_rs = statement.executeQuery(lastRecord_query);
+            preparedStatement = dbCon.prepareStatement(lastRecord_query);
+            ResultSet lastRecord_rs = preparedStatement.executeQuery();
             lastRecord_rs.next();
             String lastRecord_id = lastRecord_rs.getString("id");
 
@@ -79,16 +90,18 @@ public class PlaceOrderServlet extends HttpServlet {
 
             String findUser_query = "SELECT * FROM creditcards AS c "
                     + "WHERE c.id = " + "\"" + card_number + "\"" + "AND c.firstName = " + "\"" + first_name + "\""
-                    + " AND c.lastName = " + "\"" + last_name + "\"" + " AND c.expiration = " + "\"" + exp_data + "\"" + ";";
-            ResultSet findUser_rs = statement.executeQuery(findUser_query);
+                    + " AND c.lastName = " + "\"" + last_name + "\"" + " AND c.expiration = " + "\"" + exp_data + "\"";
+            preparedStatement = dbCon.prepareStatement(findUser_query);
+            ResultSet findUser_rs = preparedStatement.executeQuery();
             findUser_rs.next();
             String findUser_id = findUser_rs.getString("id");
             // int user_id = Integer.parseInt(findUser_id);
             System.out.println("findUser_id : " + findUser_id);
 
 
-            String findCustoermID_query = "select *  from customers where ccId =" + card_number + ";";
-            ResultSet findCustoermID_rs = statement.executeQuery(findCustoermID_query);
+            String findCustoermID_query = "select *  from customers where ccId = " + card_number;
+            preparedStatement = dbCon.prepareStatement(findCustoermID_query);
+            ResultSet findCustoermID_rs = preparedStatement.executeQuery();
             findCustoermID_rs.next();
             String findCustoermID = findCustoermID_rs.getString("id");
 
@@ -100,7 +113,7 @@ public class PlaceOrderServlet extends HttpServlet {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("sale_id", String.valueOf(Integer.parseInt(lastRecord_id) + 1));
 
-            if(Integer.parseInt(num_person) == 0){
+            if (Integer.parseInt(num_person) == 0){
                 System.out.println("no such person -> payment fail");
                 jsonObject.addProperty("findPerson","failure");
             }
@@ -124,14 +137,15 @@ public class PlaceOrderServlet extends HttpServlet {
                         String insert_query = "INSERT INTO sales VALUES(" + lastRecord_id + ", " + findCustoermID
                                 + ", '" + iterItem.get(0) + "', '" + saleDate + "')";
                         System.out.println("insert query:" + insert_query);
-                        statement.executeUpdate(insert_query);
+                        preparedStatement = dbCon.prepareStatement(insert_query);
+                        preparedStatement.executeUpdate();
                     }
                 }
 
                 previousItems.clear(); // clear all information once purchased
             }
 
-
+            preparedStatement.close();
             out.write(jsonObject.toString());
             response.setStatus(200);
 

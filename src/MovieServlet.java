@@ -53,8 +53,9 @@ public class MovieServlet extends HttpServlet {
 //            Statement statement = conn.createStatement();
 //            Statement movieToStar = conn.createStatement(); // used for find star info according to the movie
 
-            PreparedStatement preparedStatement1 = null;
-            PreparedStatement preparedStatement2 = null;
+            PreparedStatement preparedStatement = null;
+//            PreparedStatement preparedStatement1 = null;
+//            PreparedStatement preparedStatement2 = null;
 
 
 
@@ -119,7 +120,7 @@ public class MovieServlet extends HttpServlet {
                         previousBrowseParams.set(5, "browse");
                         System.out.println("previousParams list in else original: " + previousBrowseParams.toString());
                         if (jump.equals("next") || jump.equals("previous")) {
-                            PreparedStatement preparedStatement = null;
+//                            PreparedStatement preparedStatement = null;
 //                            Statement tempStatement = conn.createStatement();
                             String tempTitle = previousBrowseParams.get(0);
                             String tempGenre = previousBrowseParams.get(1);
@@ -171,13 +172,13 @@ public class MovieServlet extends HttpServlet {
                                     preparedStatement.setString(1, tempTitle + "%");
                                 }
                             }
-                            ResultSet rsTemp = preparedStatement.executeQuery(); //FIXME
+                            ResultSet rsTemp = preparedStatement.executeQuery();
                             int num = 0;
                             while (rsTemp.next()) {
                                 num = Integer.parseInt(rsTemp.getString("count(id)"));
                                 System.out.println("COUNT: " + num);
                             }
-                            preparedStatement.close();
+//                            preparedStatement.close();
 //                            tempStatement.close();
                             rsTemp.close();
                             if (jump.equals("next")){
@@ -252,10 +253,10 @@ public class MovieServlet extends HttpServlet {
                 if (!offset.equals("")){
                     query += " offset " + offset;
                 }
-                preparedStatement1 = conn.prepareStatement(query);
-                preparedStatement1.setString(1, tempGenre);
+                preparedStatement = conn.prepareStatement(query);
+                preparedStatement.setString(1, tempGenre);
 //                preparedStatement1.setString(2, tempSort);
-                preparedStatement1.setInt(2, Integer.parseInt(tempNumPage));
+                preparedStatement.setInt(2, Integer.parseInt(tempNumPage));
 //                preparedStatement1.setString(3, tempNumPage);
             }
             else if (tempGenre.equals("")){
@@ -274,9 +275,9 @@ public class MovieServlet extends HttpServlet {
                     if (!offset.equals("")){
                         query += " offset " + offset;
                     }
-                    preparedStatement1 = conn.prepareStatement(query);
-                    preparedStatement1.setString(1, "^[a-zA-Z0-9]");
-                    preparedStatement1.setInt(2, Integer.parseInt(tempNumPage));
+                    preparedStatement = conn.prepareStatement(query);
+                    preparedStatement.setString(1, "^[a-zA-Z0-9]");
+                    preparedStatement.setInt(2, Integer.parseInt(tempNumPage));
                 }
                 else {
                     query = "SELECT id, title, year, director, Genres_List, Stars_List, rating\n" +
@@ -293,9 +294,9 @@ public class MovieServlet extends HttpServlet {
                     if (!offset.equals("")){
                         query += " offset " + offset;
                     }
-                    preparedStatement1 = conn.prepareStatement(query);
-                    preparedStatement1.setString(1, tempTitle + "%");
-                    preparedStatement1.setInt(2, Integer.parseInt(tempNumPage));
+                    preparedStatement = conn.prepareStatement(query);
+                    preparedStatement.setString(1, tempTitle + "%");
+                    preparedStatement.setInt(2, Integer.parseInt(tempNumPage));
                 }
             }
             else {
@@ -307,12 +308,12 @@ public class MovieServlet extends HttpServlet {
 //            }
             System.out.println("QUERY from movieservlet: \n" + query);
 
-            System.out.println("Prepared: " + preparedStatement1.toString());
+            System.out.println("Prepared: \n" + preparedStatement.toString());
 
 
             // Perform the query
 //            ResultSet rs = statement.executeQuery(query);
-            ResultSet rs = preparedStatement1.executeQuery();
+            ResultSet rs = preparedStatement.executeQuery();
 
             JsonArray jsonArray = new JsonArray();
 
@@ -336,11 +337,11 @@ public class MovieServlet extends HttpServlet {
                         "join stars on stars_in_movies.starId = stars.id\n" +
                         "where movies.id = ?\n" +
                         "ORDER BY name limit 3";
-                preparedStatement2 = conn.prepareStatement(query1);
-                preparedStatement2.setString(1, movies_id);
+                preparedStatement = conn.prepareStatement(query1);
+                preparedStatement.setString(1, movies_id);
 
 //                ResultSet rs1 = movieToStar.executeQuery(query1);
-                ResultSet rs1 = preparedStatement2.executeQuery();
+                ResultSet rs1 = preparedStatement.executeQuery();
                 while (rs1.next()){
                     String stars_id = rs1.getString("id");
                     String star_name = rs1.getString("name");
@@ -394,8 +395,9 @@ public class MovieServlet extends HttpServlet {
                 rs1.close();
             }
             rs.close();
-            preparedStatement1.close();
-            preparedStatement2.close();
+            preparedStatement.close();
+//            preparedStatement1.close();
+//            preparedStatement2.close();
 //            statement.close();
 //            movieToStar.close();
 

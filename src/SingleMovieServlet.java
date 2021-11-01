@@ -56,7 +56,7 @@ public class SingleMovieServlet extends HttpServlet {
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setString(1, id);
 
-            Statement statement1 = conn.createStatement();
+//            Statement statement1 = conn.createStatement();
 
             ResultSet rs = statement.executeQuery();
 
@@ -78,7 +78,9 @@ public class SingleMovieServlet extends HttpServlet {
                         "join stars on stars_in_movies.starId = stars.id\n" +
                         "where movies.id = " + "\"" + movies_id + "\"";
 
-                ResultSet rs1 = statement1.executeQuery(query1);
+                statement = conn.prepareStatement(query1);
+                ResultSet rs1 = statement.executeQuery();
+//                ResultSet rs1 = statement1.executeQuery(query1);
                 while (rs1.next()){
                     String stars_id = rs1.getString("id");
                     String star_name = rs1.getString("name");
@@ -108,17 +110,20 @@ public class SingleMovieServlet extends HttpServlet {
 
                 HashMap<String, Integer> starM = new HashMap<>();
                 String[] tempS = movies_stars.split(", ");
-                Statement statement2 = conn.createStatement();
+//                Statement statement2 = conn.createStatement();
                 for(String x : tempS){
                     String movieofStar_query = "select count(*) as num from stars s, stars_in_movies sim, movies m " +
-                            "where s.id = sim.starId and sim.movieId = m.id and s.name =" + "\"" + x + "\""+ ";";
-                    ResultSet movieofStar = statement2.executeQuery(movieofStar_query);
+                            "where s.id = sim.starId and sim.movieId = m.id and s.name =?";
+                    statement = conn.prepareStatement(movieofStar_query);
+                    statement.setString(1, x);
+                    ResultSet movieofStar = statement.executeQuery();
+//                    ResultSet movieofStar = statement2.executeQuery(movieofStar_query);
                     movieofStar.next();
                     String movieofStar_num = movieofStar.getString("num");
                     starM.put(x, Integer.parseInt(movieofStar_num));
                     movieofStar.close();
                 }
-                statement2.close();
+//                statement2.close();
                 Set set = starM.keySet();
                 Object[] arr=set.toArray();
                 Arrays.sort(arr);
@@ -156,7 +161,7 @@ public class SingleMovieServlet extends HttpServlet {
             }
             rs.close();
             statement.close();
-            statement1.close();
+//            statement1.close();
 
             // Log to localhost log
             request.getServletContext().log("getting " + jsonArray.size() + " results");
