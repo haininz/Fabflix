@@ -1,4 +1,5 @@
 import com.google.gson.JsonObject;
+import org.jasypt.util.password.StrongPasswordEncryptor;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -12,6 +13,7 @@ import javax.swing.plaf.nimbus.State;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -32,50 +34,72 @@ public class LoginServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        JsonObject responseJsonObject = new JsonObject();
+        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+        try {
+            RecaptchaVerifyUtils.verify(gRecaptchaResponse);
+        } catch (Exception e) {
+            responseJsonObject.addProperty("status", "fail");
+            responseJsonObject.addProperty("message", "Please verify reCAPTCHA first!");
+            response.getWriter().write(responseJsonObject.toString());
+            return;
+        }
+
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
         /* This example only allows username/password to be test/test
         /  in the real project, you should talk to the database to verify username/password
         */
-        JsonObject responseJsonObject = new JsonObject();
 
         PrintWriter out = response.getWriter();
 
         try (Connection conn = dataSource.getConnection()) {
 
-            Statement statement = conn.createStatement();
-            String query = "SELECT * FROM customers WHERE email = " + "\"" + username + "\""
-                    + "and password = " + "\"" + password + "\"";
-            ResultSet rs = statement.executeQuery(query);
+            String query = "SELECT * FROM customers WHERE email = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(query);
+            preparedStatement.setString(1, username);
+//            preparedStatement.setString(2, password);
 
+//            Statement statement = conn.createStatement();
+//            String query = "SELECT * FROM customers WHERE email = " + "\"" + username + "\""
+//                    + "and password = " + "\"" + password + "\"";
+//            ResultSet rs = statement.executeQuery(query);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            boolean success = false;
 
             if (rs.next()) {
                 // set this user into the session
-                request.getSession().setAttribute("user", new User(username));
+                String encryptedPassword = rs.getString("password");
 
-                responseJsonObject.addProperty("status", "success");
-                responseJsonObject.addProperty("message", "success");
+                // use the same encryptor to compare the user input password with encrypted password stored in DB
+                success = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
 
-            } else {
-                System.out.println("no");
-                // Login fail
-                responseJsonObject.addProperty("status", "fail");
-                // Log to localhost log
-                request.getServletContext().log("Login failed");
-                // sample error messages. in practice, it is not a good idea to tell user which one is incorrect/not exist.
-//                if (!username.equals("anteater")) {
-//                    responseJsonObject.addProperty("message", "user " + username + " doesn't exist");
-//                } else {
-//                    responseJsonObject.addProperty("message", "incorrect password");
-//                }
-                responseJsonObject.addProperty("message", "Login failed: incorrect user name or password");
+                if (success){
+                    request.getSession().setAttribute("user", new User(username));
+
+                    responseJsonObject.addProperty("status", "success");
+                    responseJsonObject.addProperty("message", "success");
+                }
+                else {
+                    System.out.println("no");
+                    // Login fail
+                    responseJsonObject.addProperty("status", "fail");
+                    // Log to localhost log
+                    request.getServletContext().log("Login failed");
+                    // sample error messages. in practice, it is not a good idea to tell user which one is incorrect/not exist.
+
+                    responseJsonObject.addProperty("message", "Login failed: incorrect user name or password");
+                }
+
+
             }
             response.getWriter().write(responseJsonObject.toString());
 
 
             rs.close();
-            statement.close();
+            preparedStatement.close();
 
         } catch (Exception e) {
             System.out.println("exception");
