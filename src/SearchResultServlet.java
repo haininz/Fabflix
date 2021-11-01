@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -52,8 +53,10 @@ public class SearchResultServlet extends HttpServlet {
             Connection dbCon = dataSource.getConnection();
 
             // Declare a new statement
-            Statement statement = dbCon.createStatement();
-            Statement movieToStar = dbCon.createStatement();
+//            Statement statement = dbCon.createStatement();
+//            Statement movieToStar = dbCon.createStatement();
+
+            PreparedStatement preparedStatement = null;
 
             String name = request.getParameter("star_name");
             String title = request.getParameter("movie_title");
@@ -119,7 +122,7 @@ public class SearchResultServlet extends HttpServlet {
                         previousSearchParams.set(7, "search");
                         System.out.println("previousParams list in else original: " + previousSearchParams.toString());
                         if (jump.equals("next") || jump.equals("previous")){
-                            Statement tempStatement = dbCon.createStatement();
+//                            Statement tempStatement = dbCon.createStatement();
                             String tempName = previousSearchParams.get(0);
                             String tempTitle = previousSearchParams.get(1);
                             String tempYear= previousSearchParams.get(2);
@@ -154,8 +157,8 @@ public class SearchResultServlet extends HttpServlet {
                                 whereClause += "m.director like " + "\"%" + tempDirector + "%\" ";
                             }
 
-                            tempQuery = String.format("SELECT count(distinct(id))\n" +
-                                    "from (SELECT m.* from stars s, movies m, stars_in_movies sim\n%s\n" +
+                            tempQuery = "SELECT count(distinct(id))\n" +
+                                    "from (SELECT m.* from stars s, movies m, stars_in_movies sim\n"+ whereClause +"\n" +
                                     "and s.id = sim.starId and m.id = sim.movieId) as movies\n" +
                                     "JOIN ratings on movies.id = ratings.movieId\n" +
                                     "JOIN (SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as genres\n" +
@@ -165,16 +168,17 @@ public class SearchResultServlet extends HttpServlet {
                                     "JOIN (SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as starList\n" +
                                     "FROM (stars_in_movies JOIN stars on stars_in_movies.starId = stars.id)\n" +
                                     "GROUP BY movieId) as s\n" +
-                                    "on movies.id = s.movieId\n", whereClause);
+                                    "on movies.id = s.movieId\n";
 
-                            System.out.println("TEMP QUERY: " + tempQuery);
-                            ResultSet rsTemp = tempStatement.executeQuery(tempQuery);
+                            preparedStatement = dbCon.prepareStatement(tempQuery);
+
+                            ResultSet rsTemp = preparedStatement.executeQuery();
                             int num = 0;
                             while (rsTemp.next()) {
                                 num = Integer.parseInt(rsTemp.getString("count(distinct(id))"));
                                 System.out.println("COUNT: " + num);
                             }
-                            tempStatement.close();
+//                            tempStatement.close();
                             rsTemp.close();
 
                             if (jump.equals("next")){
@@ -273,8 +277,8 @@ public class SearchResultServlet extends HttpServlet {
                 whereClause += "m.director like " + "\"%" + tempDirector + "%\" ";
             }
 
-            String query = String.format("SELECT DISTINCT id, title, year, director, genres, starList, rating\n" +
-                    "from (SELECT m.* from stars s, movies m, stars_in_movies sim\n%s\n" +
+            String query = "SELECT DISTINCT id, title, year, director, genres, starList, rating\n" +
+                    "from (SELECT m.* from stars s, movies m, stars_in_movies sim\n"+ whereClause +"\n" +
                     "and s.id = sim.starId and m.id = sim.movieId) as movies\n" +
                     "JOIN ratings on movies.id = ratings.movieId\n" +
                     "JOIN (SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as genres\n" +
@@ -284,19 +288,20 @@ public class SearchResultServlet extends HttpServlet {
                     "JOIN (SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as starList\n" +
                     "FROM (stars_in_movies JOIN stars on stars_in_movies.starId = stars.id)\n" +
                     "GROUP BY movieId) as s\n" +
-                    "on movies.id = s.movieId\n%s\nlimit %s", whereClause, tempSort, tempNumPage);
+                    "on movies.id = s.movieId\n" + tempSort + "\nlimit " + tempNumPage;
 
             if (!offset.equals("")){
                 query += " offset " + offset;
             }
-            System.out.println("QUERY from movieservlet: " + query);
+            preparedStatement = dbCon.prepareStatement(query);
+            System.out.println("QUERY from searchservlet: \n" + query);
 
 
             // Log to localhost log
             request.getServletContext().log("query：" + query);
 
             // Perform the query
-            ResultSet rs = statement.executeQuery(query);
+            ResultSet rs = preparedStatement.executeQuery();
 
             JsonArray jsonArray = new JsonArray();
 
@@ -316,7 +321,9 @@ public class SearchResultServlet extends HttpServlet {
                         "where movies.id = " + "\"" + movies_id + "\"" + "\n" +
                         "ORDER BY name limit 3";
 
-                ResultSet rs1 = movieToStar.executeQuery(query1);
+                preparedStatement = dbCon.prepareStatement(query1);
+
+                ResultSet rs1 = preparedStatement.executeQuery();
                 while (rs1.next()){
                     String stars_id = rs1.getString("id");
                     String star_name = rs1.getString("name");
@@ -371,8 +378,9 @@ public class SearchResultServlet extends HttpServlet {
 
             // Close all structures
             rs.close();
-            statement.close();
-            movieToStar.close();
+            preparedStatement.close();
+//            statement.close();
+//            movieToStar.close();
             dbCon.close();
 
             request.getServletContext().log("getting " + jsonArray.size() + " results");
