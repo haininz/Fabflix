@@ -81,4 +81,3 @@ CREATE TABLE IF NOT EXISTS employees(
     fullname VARCHAR(100) NOT NULL
 );
 
-INSERT INTO employees VALUES('classta@email.edu', 'classta', 'TA CS122B');

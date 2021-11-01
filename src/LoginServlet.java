@@ -74,19 +74,39 @@ public class LoginServlet extends HttpServlet {
             ResultSet rs_customer = preparedStatement_customer.executeQuery();
 
             boolean success = false;
+            boolean isExist = false;
 
-            if (rs_employee.next()) {
-                // set this user into the session
-                String encryptedPassword = rs_employee.getString("password");
+            // set this user into the session
+            String encryptedPassword = null;
+            String login_person = null;
+
+            if(rs_employee.next()){
+                // System.out.println("lol ----> ");
+                isExist = true;
+                encryptedPassword = rs_employee.getString("password");
+                login_person = "employee";
+            }
+            else if(rs_customer.next()){
+                // System.out.println("lol <---- ");
+                isExist = true;
+                encryptedPassword = rs_customer.getString("password");
+                login_person = "customer";
+            }
+
+            if (isExist) {
 
                 // use the same encryptor to compare the user input password with encrypted password stored in DB
                 success = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
+//                System.out.println("password ---> " + password );
+//                System.out.println("encryptedPassword ---> " + encryptedPassword);
+//                System.out.println("success ---> " + success);
 
                 if (success){
                     request.getSession().setAttribute("user", new User(username));
 
                     responseJsonObject.addProperty("status", "success");
                     responseJsonObject.addProperty("message", "success");
+                    responseJsonObject.addProperty("login_person", login_person);
                 }
                 else {
                     System.out.println("no");

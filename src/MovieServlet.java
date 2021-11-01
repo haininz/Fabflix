@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -49,8 +50,13 @@ public class MovieServlet extends HttpServlet {
         try (Connection conn = dataSource.getConnection()) {
 
             // Declare our statement
-            Statement statement = conn.createStatement();
-            Statement movieToStar = conn.createStatement(); // used for find star info according to the movie
+//            Statement statement = conn.createStatement();
+//            Statement movieToStar = conn.createStatement(); // used for find star info according to the movie
+
+            PreparedStatement preparedStatement1 = null;
+            PreparedStatement preparedStatement2 = null;
+
+
 
             String title = request.getParameter("title");
             String genre = request.getParameter("genre");
@@ -85,7 +91,8 @@ public class MovieServlet extends HttpServlet {
                 orderBy = "ORDER BY ratings.rating DESC, movies.title ASC";
             }
 
-            System.out.println("jump: " + jump);
+
+
 
             ArrayList<String> previousBrowseParams = (ArrayList<String>) session.getAttribute("previousBrowseParams");
             // previousBrowseParams: {title, genre, number_of_movies_per_page, current_page_number, sort_requirement}
@@ -112,58 +119,66 @@ public class MovieServlet extends HttpServlet {
                         previousBrowseParams.set(5, "browse");
                         System.out.println("previousParams list in else original: " + previousBrowseParams.toString());
                         if (jump.equals("next") || jump.equals("previous")) {
-                            Statement tempStatement = conn.createStatement();
+                            PreparedStatement preparedStatement = null;
+//                            Statement tempStatement = conn.createStatement();
                             String tempTitle = previousBrowseParams.get(0);
                             String tempGenre = previousBrowseParams.get(1);
                             String tempQuery = new String("");
                             if (tempTitle.equals("")){
-                                tempQuery = String.format("SELECT count(id)\n" +
-                                                "from movies JOIN ratings on movies.id = ratings.movieId JOIN\n" +
-                                                "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List\n" +
-                                                "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id)\n" +
-                                                "WHERE genres.name = %s\n" +
-                                                "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN\n" +
-                                                "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
-                                                "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
-                                                "GROUP BY movieId) as slist \n" +
-                                                "on movies.id = slist.movieId\n",
-                                        "\"" + tempGenre + "\"");
+                                tempQuery =  "SELECT count(id)\n" +
+                                        "from movies JOIN ratings on movies.id = ratings.movieId JOIN\n" +
+                                        "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List\n" +
+                                        "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id)\n" +
+                                        "WHERE genres.name = ?\n" +
+                                        "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN\n" +
+                                        "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
+                                        "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
+                                        "GROUP BY movieId) as slist \n" +
+                                        "on movies.id = slist.movieId\n";
+                                tempQuery += orderBy;
+                                preparedStatement = conn.prepareStatement(tempQuery);
+                                preparedStatement.setString(1, "\"" + tempGenre + "\"");
                             }
                             else if (tempGenre.equals("")){
                                 if (tempTitle.equals("*")){
-                                    tempQuery = String.format("SELECT count(id)\n" +
-                                                    "from movies JOIN ratings on movies.id = ratings.movieId JOIN\n" +
-                                                    "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List\n" +
-                                                    "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id)\n" +
-                                                    "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN\n" +
-                                                    "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
-                                                    "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
-                                                    "GROUP BY movieId) as slist \n" +
-                                                    "on movies.id = slist.movieId\n" +
-                                                    "where title not regexp %s\n",
-                                            "\"" + "^[a-zA-Z0-9]" + "\"");
+                                    tempQuery = "SELECT count(id)\n" +
+                                            "from movies JOIN ratings on movies.id = ratings.movieId JOIN\n" +
+                                            "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List\n" +
+                                            "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id)\n" +
+                                            "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN\n" +
+                                            "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
+                                            "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
+                                            "GROUP BY movieId) as slist \n" +
+                                            "on movies.id = slist.movieId\n" +
+                                            "where title not regexp ?\n";
+                                    tempQuery += orderBy;
+                                    preparedStatement = conn.prepareStatement(tempQuery);
+                                    preparedStatement.setString(1, "\"" + "^[a-zA-Z0-9]" + "\"");
                                 }
                                 else {
-                                    tempQuery = String.format("SELECT count(id)\n" +
-                                                    "from movies JOIN ratings on movies.id = ratings.movieId JOIN\n" +
-                                                    "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List\n" +
-                                                    "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id)\n" +
-                                                    "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN\n" +
-                                                    "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
-                                                    "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
-                                                    "GROUP BY movieId) as slist \n" +
-                                                    "on movies.id = slist.movieId\n" +
-                                                    "where title like %s%s\n",
-                                            "\"" + tempTitle, "%"+ "\"");
+                                    tempQuery = "SELECT count(id)\n" +
+                                            "from movies JOIN ratings on movies.id = ratings.movieId JOIN\n" +
+                                            "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List\n" +
+                                            "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id)\n" +
+                                            "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN\n" +
+                                            "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
+                                            "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
+                                            "GROUP BY movieId) as slist \n" +
+                                            "on movies.id = slist.movieId\n" +
+                                            "where title like ?\n";
+                                    tempQuery += orderBy;
+                                    preparedStatement = conn.prepareStatement(tempQuery);
+                                    preparedStatement.setString(1, "\"" + tempTitle + "%"+ "\"");
                                 }
                             }
-                            ResultSet rsTemp = tempStatement.executeQuery(tempQuery);
+                            ResultSet rsTemp = preparedStatement.executeQuery(); //FIXME
                             int num = 0;
                             while (rsTemp.next()) {
                                 num = Integer.parseInt(rsTemp.getString("count(id)"));
                                 System.out.println("COUNT: " + num);
                             }
-                            tempStatement.close();
+                            preparedStatement.close();
+//                            tempStatement.close();
                             rsTemp.close();
                             if (jump.equals("next")){
                                 int threshold = num / Integer.parseInt(previousBrowseParams.get(2)) + 1;
@@ -223,60 +238,79 @@ public class MovieServlet extends HttpServlet {
 
 
             if (tempTitle.equals("")){
-                query = String.format("SELECT id, title, year, director, Genres_List, Stars_List, rating\n" +
-                                "from movies JOIN ratings on movies.id = ratings.movieId JOIN\n" +
-                                "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List\n" +
-                                "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id)\n" +
-                                "WHERE genres.name = %s\n" +
-                                "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN\n" +
-                                "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
-                                "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
-                                "GROUP BY movieId) as slist \n" +
-                                "on movies.id = slist.movieId\n" +
-                                "%s\nlimit %s",
-                        "\"" + tempGenre + "\"", tempSort, tempNumPage);
+                query = "SELECT id, title, year, director, Genres_List, Stars_List, rating\n" +
+                        "from movies JOIN ratings on movies.id = ratings.movieId JOIN\n" +
+                        "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List\n" +
+                        "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id)\n" +
+                        "WHERE genres.name = ?\n" +
+                        "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN\n" +
+                        "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
+                        "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
+                        "GROUP BY movieId) as slist \n" +
+                        "on movies.id = slist.movieId\n" +
+                        "?\nlimit ?";
+                if (!offset.equals("")){
+                    query += " offset " + offset;
+                }
+                preparedStatement1 = conn.prepareStatement(query);
+                preparedStatement1.setString(1, "\"" + tempGenre + "\"");
+                preparedStatement1.setString(2, tempSort);
+                preparedStatement1.setString(3, tempNumPage);
             }
             else if (tempGenre.equals("")){
                 if (tempTitle.equals("*")){
-                    query = String.format("SELECT id, title, year, director, Genres_List, Stars_List, rating\n" +
-                                    "from movies JOIN ratings on movies.id = ratings.movieId JOIN\n" +
-                                    "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List\n" +
-                                    "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id)\n" +
-                                    "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN\n" +
-                                    "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
-                                    "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
-                                    "GROUP BY movieId) as slist \n" +
-                                    "on movies.id = slist.movieId\n" +
-                                    "where title not regexp %s\n" +
-                                    "%s\nlimit %s",
-                            "\"" + "^[a-zA-Z0-9]" + "\"", tempSort, tempNumPage);
+                    query = "SELECT id, title, year, director, Genres_List, Stars_List, rating\n" +
+                            "from movies JOIN ratings on movies.id = ratings.movieId JOIN\n" +
+                            "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List\n" +
+                            "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id)\n" +
+                            "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN\n" +
+                            "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
+                            "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
+                            "GROUP BY movieId) as slist \n" +
+                            "on movies.id = slist.movieId\n" +
+                            "where title not regexp ?\n" +
+                            "?\nlimit ?";
+                    if (!offset.equals("")){
+                        query += " offset " + offset;
+                    }
+                    preparedStatement1 = conn.prepareStatement(query);
+                    preparedStatement1.setString(1, "\"" + "^[a-zA-Z0-9]" + "\"");
+                    preparedStatement1.setString(2, tempSort);
+                    preparedStatement1.setString(3, tempNumPage);
                 }
                 else {
-                    query = String.format("SELECT id, title, year, director, Genres_List, Stars_List, rating\n" +
-                                    "from movies JOIN ratings on movies.id = ratings.movieId JOIN\n" +
-                                    "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List\n" +
-                                    "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id)\n" +
-                                    "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN\n" +
-                                    "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
-                                    "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
-                                    "GROUP BY movieId) as slist \n" +
-                                    "on movies.id = slist.movieId\n" +
-                                    "where title like %s%s\n" +
-                                    "%s\nlimit %s",
-                            "\"" + tempTitle, "%"+ "\"", tempSort, tempNumPage);
+                    query = "SELECT id, title, year, director, Genres_List, Stars_List, rating\n" +
+                            "from movies JOIN ratings on movies.id = ratings.movieId JOIN\n" +
+                            "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Genres_List\n" +
+                            "FROM (genres_in_movies as gim JOIN genres on gim.genreId = genres.id)\n" +
+                            "GROUP BY movieId) as glist on movies.id = glist.movieId JOIN\n" +
+                            "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
+                            "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
+                            "GROUP BY movieId) as slist \n" +
+                            "on movies.id = slist.movieId\n" +
+                            "where title like ?\n" +
+                            "?\nlimit ?";
+                    if (!offset.equals("")){
+                        query += " offset " + offset;
+                    }
+                    preparedStatement1 = conn.prepareStatement(query);
+                    preparedStatement1.setString(1, "\"" + tempTitle + "%"+ "\"");
+                    preparedStatement1.setString(2, tempSort);
+                    preparedStatement1.setString(3, tempNumPage);
                 }
             }
             else {
                 System.out.println("Get by title/genre------------>Input Error");
             }
 
-            if (!offset.equals("")){
-                query += " offset " + offset;
-            }
+//            if (!offset.equals("")){
+//                query += " offset " + offset;
+//            }
             System.out.println("QUERY from movieservlet: " + query);
 
             // Perform the query
-            ResultSet rs = statement.executeQuery(query);
+//            ResultSet rs = statement.executeQuery(query);
+            ResultSet rs = preparedStatement1.executeQuery();
 
             JsonArray jsonArray = new JsonArray();
 
@@ -295,13 +329,16 @@ public class MovieServlet extends HttpServlet {
 //                String[] temp = movies_stars.split(",");
 //                movies_stars = String.join(", ", temp[0], temp[1], temp[2]);
 
-                String query1 = String.format("select stars.id, stars.name from movies \n" +
+                String query1 = "select stars.id, stars.name from movies \n" +
                         "join stars_in_movies on movies.id = stars_in_movies.movieId \n" +
                         "join stars on stars_in_movies.starId = stars.id\n" +
-                        "where movies.id = %s\n" +
-                        "ORDER BY name limit 3", "\"" + movies_id + "\"");
+                        "where movies.id = ?\n" +
+                        "ORDER BY name limit 3";
+                preparedStatement2 = conn.prepareStatement(query1);
+                preparedStatement2.setString(1, "\"" + movies_id + "\"");
 
-                ResultSet rs1 = movieToStar.executeQuery(query1);
+//                ResultSet rs1 = movieToStar.executeQuery(query1);
+                ResultSet rs1 = preparedStatement2.executeQuery();
                 while (rs1.next()){
                     String stars_id = rs1.getString("id");
                     String star_name = rs1.getString("name");
@@ -355,8 +392,10 @@ public class MovieServlet extends HttpServlet {
                 rs1.close();
             }
             rs.close();
-            statement.close();
-            movieToStar.close();
+            preparedStatement1.close();
+            preparedStatement2.close();
+//            statement.close();
+//            movieToStar.close();
 
             // Log to localhost log
             request.getServletContext().log("getting " + jsonArray.size() + " results");
