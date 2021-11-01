@@ -104,8 +104,8 @@ public class LoginServlet extends HttpServlet {
             response.getWriter().write(responseJsonObject.toString());
 
 
-            rs.close();
-            preparedStatement.close();
+            rs_employee.close();
+            preparedStatement_employee.close();
 
         } catch (Exception e) {
             System.out.println("exception");
