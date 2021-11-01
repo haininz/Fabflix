@@ -56,22 +56,28 @@ public class LoginServlet extends HttpServlet {
 
         try (Connection conn = dataSource.getConnection()) {
 
-            String query = "SELECT * FROM customers WHERE email = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(query);
-            preparedStatement.setString(1, username);
+            String customer_query = "SELECT * FROM customers WHERE email = ?";
+            String employee_query = "SELECT * FROM employees WHERE email = ?";
+
+            PreparedStatement preparedStatement_employee = conn.prepareStatement(employee_query);
+            PreparedStatement preparedStatement_customer = conn.prepareStatement(customer_query);
+
+            preparedStatement_employee.setString(1, username);
+            preparedStatement_customer.setString(1, username);
 //            preparedStatement.setString(2, password);
 
 //            Statement statement = conn.createStatement();
 //            String query = "SELECT * FROM customers WHERE email = " + "\"" + username + "\""
 //                    + "and password = " + "\"" + password + "\"";
 //            ResultSet rs = statement.executeQuery(query);
-            ResultSet rs = preparedStatement.executeQuery();
+            ResultSet rs_employee = preparedStatement_employee.executeQuery();
+            ResultSet rs_customer = preparedStatement_customer.executeQuery();
 
             boolean success = false;
 
-            if (rs.next()) {
+            if (rs_employee.next()) {
                 // set this user into the session
-                String encryptedPassword = rs.getString("password");
+                String encryptedPassword = rs_employee.getString("password");
 
                 // use the same encryptor to compare the user input password with encrypted password stored in DB
                 success = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);

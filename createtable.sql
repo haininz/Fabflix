@@ -73,3 +73,12 @@ CREATE TABLE IF NOT EXISTS ratings (
     numVotes INTEGER NOT NULL,
     FOREIGN KEY (movieId) REFERENCES movies (id)
 );
+
+
+CREATE TABLE IF NOT EXISTS employees(
+    email VARCHAR(50) PRIMARY KEY,
+    password VARCHAR(20) NOT NULL,
+    fullname VARCHAR(100) NOT NULL
+);
+
+INSERT INTO employees VALUES('classta@email.edu', 'classta', 'TA CS122B');
