@@ -137,7 +137,7 @@ public class MovieServlet extends HttpServlet {
                                         "on movies.id = slist.movieId\n";
                                 tempQuery += orderBy;
                                 preparedStatement = conn.prepareStatement(tempQuery);
-                                preparedStatement.setString(1, "\"" + tempGenre + "\"");
+                                preparedStatement.setString(1, tempGenre);
                             }
                             else if (tempGenre.equals("")){
                                 if (tempTitle.equals("*")){
@@ -153,7 +153,7 @@ public class MovieServlet extends HttpServlet {
                                             "where title not regexp ?\n";
                                     tempQuery += orderBy;
                                     preparedStatement = conn.prepareStatement(tempQuery);
-                                    preparedStatement.setString(1, "\"" + "^[a-zA-Z0-9]" + "\"");
+                                    preparedStatement.setString(1, "^[a-zA-Z0-9]");
                                 }
                                 else {
                                     tempQuery = "SELECT count(id)\n" +
@@ -168,7 +168,7 @@ public class MovieServlet extends HttpServlet {
                                             "where title like ?\n";
                                     tempQuery += orderBy;
                                     preparedStatement = conn.prepareStatement(tempQuery);
-                                    preparedStatement.setString(1, "\"" + tempTitle + "%"+ "\"");
+                                    preparedStatement.setString(1, tempTitle + "%");
                                 }
                             }
                             ResultSet rsTemp = preparedStatement.executeQuery(); //FIXME
@@ -247,15 +247,16 @@ public class MovieServlet extends HttpServlet {
                         "(SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as Stars_List\n" +
                         "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
                         "GROUP BY movieId) as slist \n" +
-                        "on movies.id = slist.movieId\n" +
-                        "?\nlimit ?";
+                        "on movies.id = slist.movieId\n" + tempSort +
+                        "\nlimit ?";
                 if (!offset.equals("")){
                     query += " offset " + offset;
                 }
                 preparedStatement1 = conn.prepareStatement(query);
-                preparedStatement1.setString(1, "\"" + tempGenre + "\"");
-                preparedStatement1.setString(2, tempSort);
-                preparedStatement1.setString(3, tempNumPage);
+                preparedStatement1.setString(1, tempGenre);
+//                preparedStatement1.setString(2, tempSort);
+                preparedStatement1.setInt(2, Integer.parseInt(tempNumPage));
+//                preparedStatement1.setString(3, tempNumPage);
             }
             else if (tempGenre.equals("")){
                 if (tempTitle.equals("*")){
@@ -268,15 +269,14 @@ public class MovieServlet extends HttpServlet {
                             "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
                             "GROUP BY movieId) as slist \n" +
                             "on movies.id = slist.movieId\n" +
-                            "where title not regexp ?\n" +
-                            "?\nlimit ?";
+                            "where title not regexp ?\n" + tempSort +
+                            "\nlimit ?";
                     if (!offset.equals("")){
                         query += " offset " + offset;
                     }
                     preparedStatement1 = conn.prepareStatement(query);
-                    preparedStatement1.setString(1, "\"" + "^[a-zA-Z0-9]" + "\"");
-                    preparedStatement1.setString(2, tempSort);
-                    preparedStatement1.setString(3, tempNumPage);
+                    preparedStatement1.setString(1, "^[a-zA-Z0-9]");
+                    preparedStatement1.setInt(2, Integer.parseInt(tempNumPage));
                 }
                 else {
                     query = "SELECT id, title, year, director, Genres_List, Stars_List, rating\n" +
@@ -288,15 +288,14 @@ public class MovieServlet extends HttpServlet {
                             "FROM (stars_in_movies as sim JOIN stars on sim.starId = stars.id)\n" +
                             "GROUP BY movieId) as slist \n" +
                             "on movies.id = slist.movieId\n" +
-                            "where title like ?\n" +
-                            "?\nlimit ?";
+                            "where title like ?\n" + tempSort +
+                            "\nlimit ?";
                     if (!offset.equals("")){
                         query += " offset " + offset;
                     }
                     preparedStatement1 = conn.prepareStatement(query);
-                    preparedStatement1.setString(1, "\"" + tempTitle + "%"+ "\"");
-                    preparedStatement1.setString(2, tempSort);
-                    preparedStatement1.setString(3, tempNumPage);
+                    preparedStatement1.setString(1, tempTitle + "%");
+                    preparedStatement1.setInt(2, Integer.parseInt(tempNumPage));
                 }
             }
             else {
@@ -306,7 +305,10 @@ public class MovieServlet extends HttpServlet {
 //            if (!offset.equals("")){
 //                query += " offset " + offset;
 //            }
-            System.out.println("QUERY from movieservlet: " + query);
+            System.out.println("QUERY from movieservlet: \n" + query);
+
+            System.out.println("Prepared: " + preparedStatement1.toString());
+
 
             // Perform the query
 //            ResultSet rs = statement.executeQuery(query);
@@ -335,7 +337,7 @@ public class MovieServlet extends HttpServlet {
                         "where movies.id = ?\n" +
                         "ORDER BY name limit 3";
                 preparedStatement2 = conn.prepareStatement(query1);
-                preparedStatement2.setString(1, "\"" + movies_id + "\"");
+                preparedStatement2.setString(1, movies_id);
 
 //                ResultSet rs1 = movieToStar.executeQuery(query1);
                 ResultSet rs1 = preparedStatement2.executeQuery();
@@ -349,7 +351,7 @@ public class MovieServlet extends HttpServlet {
                 String[] tempG = movies_genres.split(", ");
                 Arrays.sort(tempG);
                 String temp_genres = "";
-                for(int z = 0; z < tempG.length && z < 3; z++){
+                for (int z = 0; z < tempG.length && z < 3; z++){
                     if(z == 2 || tempG.length - 1 == z){
                         temp_genres = temp_genres + tempG[z];
                         break;
@@ -363,7 +365,7 @@ public class MovieServlet extends HttpServlet {
                 String[] tempS = movies_stars.split(", ");
                 Arrays.sort(tempS);
                 String temp_stars = "";
-                for(int z = 0; z < tempS.length && z < 3; z++){
+                for (int z = 0; z < tempS.length && z < 3; z++){
                     if(z == 2 || tempS.length - 1 == z){
                         temp_stars = temp_stars + tempS[z];
                         break;
