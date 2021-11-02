@@ -81,7 +81,9 @@ CREATE TABLE IF NOT EXISTS employees(
     fullname VARCHAR(100) NOT NULL
 );
 
-
+DELIMITER $$
+create procedure add_movie (IN title varchar(100), year int, director varchar(100),
+                            star_name varchar(100), genre_name varchar(32))
 BEGIN
     set @count_movie := (select count(*) from movies where movies.title = title and movies.year = year and movies.director = director);
     IF @count_movie = 0 THEN
