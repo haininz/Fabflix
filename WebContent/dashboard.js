@@ -101,6 +101,10 @@ function handleInsertMovie(resultData){
     });
 }
 
+
+function showMetadataButton(){
+    window.location.replace("showMetadata.html");
+}
 // jQuery.ajax({
 //     dataType: "json",  // Setting return data type
 //     method: "GET",// Setting request method
