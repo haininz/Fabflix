@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+
+<h1>Metadata</h1>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <td>Table Name</td>
+        <td>Attributes</td>
+    </tr>
+    <tr>
+        <td>movies</td>
+        <td>
+            id:varchar(10) (primary key) <br>
+            title:varchar(100) <br>
+            year:integer <br>
+            director:varchar(100) <br>
+        </td>
+    </tr>
+    <tr>
+        <td>stars</td>
+        <td>
+            id:varchar(10) (primary key)  <br>
+            name:varchar(100) <br>
+            birthYear:integer <br>
+        </td>
+    </tr>
+    <tr>
+        <td>stars_in_movies</td>
+        <td>
+            starId:varchar(10) <br>
+            movieId:varchar(10) <br>
+        </td>
+    </tr>
+    <tr>
+        <td>genres</td>
+        <td>
+            id:integer (primary key) <br>
+            name:varchar(32) <br>
+        </td>
+    </tr>
+    <tr>
+        <td>genres_in_movies</td>
+        <td>
+            genreId:integer  <br>
+            movieId:varchar(10)  <br>
+        </td>
+    </tr>
+    <tr>
+        <td>customers</td>
+        <td>
+            id:integer (primary key) <br>
+            firstName:varchar(50) <br>
+            lastName:varchar(50) <br>
+            ccId:varchar(20) <br>
+            address:varchar(200) <br>
+            email:varchar(50) <br>
+            password:varchar(20) <br>
+        </td>
+    </tr>
+    <tr>
+        <td>sales</td>
+        <td>
+            id:integer (primary key) <br>
+            customerId:integer <br>
+            movieId:varchar(10) <br>
+            saleDate:date <br>
+        </td>
+    </tr>
+    <tr>
+        <td>creditcards</td>
+        <td>
+            id:varchar(20), (primary key) <br>
+            firstName:varchar(50) <br>
+            lastName:varchar(50) <br>
+            expiration:date <br>
+        </td>
+    </tr>
+    <tr>
+        <td>ratings</td>
+        <td>
+            movieId:varchar(10) <br>
+            rating:float <br>
+            numVotes:integer <br>
+        </td>
+    </tr>
+    <tr>
+        <td>employees</td>
+        <td>
+            email varchar(50) primary key <br>
+            password varchar(20)  <br>
+            fullname varchar(100) <br>
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+    </tr>
+
+    </thead>
+    <tbody id=search_result_table_body></tbody>
+</table>
+
+<br>
+<button id="go_Button" type="submit" onclick="window.location.replace('dashboard.html')">
+    Go to Employee Management Page</button>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</body>
+</html>
