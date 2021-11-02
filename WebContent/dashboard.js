@@ -96,18 +96,33 @@ insertMovie_form.submit(handleInsertMovie);
 // }
 
 
-function handleInsertMovie(resultData){
+function handleInsertMovie(formSubmitEvent){
     // document.getElementById("insertMovie_form").submit();
-    insertType = "insertMovie";
-    console.log("insertType: " + insertType);
+    formSubmitEvent.preventDefault();
+    $.ajax(
+        "dashboard", {
+            method: "get",
+            // Serialize the login form to the data sent by POST request
+            data: insertMovie_form.serialize(),
+            success: function (data) {
+                alert("success submitting handle insert movie");
+            },
+            error: function (data) {
+                alert("fail submitting handle insert movie");
+            }
+        }
+    );
 
-
-    jQuery.ajax({
-        dataType: "json", // Setting return data type
-        method: "GET", // Setting request method
-        url: "dashboard?movie_title=" + movie_title + "&movie_year=" + movie_year + "&movie_director=" + movie_director + "&star_name=" + star_name + "&movie_genre=" + movie_genre + "&insertType=" + insertType,
-        success: (resultData) => handleInsertResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
-    });
+    // insertType = "insertMovie";
+    // console.log("insertType: " + insertType);
+    //
+    //
+    // jQuery.ajax({
+    //     dataType: "json", // Setting return data type
+    //     method: "GET", // Setting request method
+    //     url: "dashboard?movie_title=" + movie_title + "&movie_year=" + movie_year + "&movie_director=" + movie_director + "&star_name=" + star_name + "&movie_genre=" + movie_genre + "&insertType=" + insertType,
+    //     success: (resultData) => handleInsertResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
+    // });
 }
 
 

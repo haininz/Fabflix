@@ -61,7 +61,7 @@ public class DashboardServlet extends HttpServlet {
             String movie_genre = request.getParameter("movie_genre");
 //            String star_birth = request.getParameter("star_birth");
 //            String movie_StarName = request.getParameter("movie_StarName");
-            String insert_type = request.getParameter("insertType");
+//            String insert_type = request.getParameter("insertType");
 //            String insert_type = null;
 //            if(movie_title == null){
 //                insert_type = "insertMovie";
@@ -105,17 +105,17 @@ public class DashboardServlet extends HttpServlet {
 //                preparedStatement = dbCon.prepareStatement(insertStar_query);
 //                preparedStatement.executeUpdate();
 //            }
-             if (insert_type.equals("insertMovie")){
-                String query = "CALL add_movie(?, ?, ?, ?, ?)";
-                preparedStatement = dbCon.prepareStatement(query);
-                preparedStatement.setString(1, movie_title);
-                preparedStatement.setInt(2, Integer.parseInt(movie_year));
-                preparedStatement.setString(3, movie_director);
-                preparedStatement.setString(4, star_name);
-                preparedStatement.setString(5, movie_genre);
-                System.out.println("preparedStatement for insert movies: \n" + preparedStatement);
-                preparedStatement.executeUpdate();
-            }
+//             if (insert_type.equals("insertMovie")){
+            String query = "CALL add_movie(?, ?, ?, ?, ?)";
+            preparedStatement = dbCon.prepareStatement(query);
+            preparedStatement.setString(1, movie_title);
+            preparedStatement.setInt(2, Integer.parseInt(movie_year));
+            preparedStatement.setString(3, movie_director);
+            preparedStatement.setString(4, star_name);
+            preparedStatement.setString(5, movie_genre);
+            System.out.println("preparedStatement for insert movies: \n" + preparedStatement);
+            preparedStatement.executeUpdate();
+//            }
             preparedStatement.close();
 
             JsonObject jsonObject = new JsonObject();
