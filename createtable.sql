@@ -81,3 +81,19 @@ CREATE TABLE IF NOT EXISTS employees(
     fullname VARCHAR(100) NOT NULL
 );
 
+
+DELIMITER $$
+create procedure add_movie (IN title varchar(100), year int, director varchar(100),
+                            star_name varchar(100), genre_name varchar(32))
+BEGIN
+	set @new_movie_id := (select concat('tt', cast(cast(substring(max(id) from 3) as unsigned)+1 as char(10))) from movies);
+    insert into movies values (@new_movie_id, title, year, director);
+    set @new_star_id := (select concat('nm', cast(cast(substring(max(id) from 3) as unsigned)+1 as char(10))) from stars);
+    insert into stars values (@new_star_id, star_name, null);
+    insert into stars_in_movies values (@new_star_id, @new_movie_id);
+    set @new_genre_id := (select max(id)+1 from genres);
+    insert into genres values (@new_genre_id, genre_name);
+    insert into genres_in_movies values (@new_genre_id, @new_movie_id);
+END
+$$
+DELIMITER ;
