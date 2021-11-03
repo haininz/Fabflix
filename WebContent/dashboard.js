@@ -55,84 +55,68 @@ function handleInsertResult(resultData) {
     // }
 }
 
-let movie_title = getParameterByName("movie_title");
-let movie_year = getParameterByName("movie_year");
-let movie_director = getParameterByName("movie_director");
-let star_name = getParameterByName("star_name");
-// let star_birth = getParameterByName("star_birth");
-let movie_genre = getParameterByName("movie_genre");
-// let movie_StarName = getParameterByName("movie_StarName");
-let insertType = null;
-
-console.log("======title: " + movie_title);
-console.log("======year: " + movie_year);
-console.log("======director: " + movie_director);
-console.log("======star_name: " + star_name);
-// console.log("======birth: " + star_birth);
-console.log("======genre: " + movie_genre);
-
-// let insertStar_form = $("#insertStar_form");
-// insertStar_form.submit(handleInsertStar);
+// let movie_title = getParameterByName("movie_title");
+// let movie_year = getParameterByName("movie_year");
+// let movie_director = getParameterByName("movie_director");
+// let star_name = getParameterByName("star_name");
+// // let star_birth = getParameterByName("star_birth");
+// let movie_genre = getParameterByName("movie_genre");
+// // let movie_StarName = getParameterByName("movie_StarName");
+// let insertType = null;
 //
+// console.log("======title: " + movie_title);
+// console.log("======year: " + movie_year);
+// console.log("======director: " + movie_director);
+// console.log("======star_name: " + star_name);
+// // console.log("======birth: " + star_birth);
+// console.log("======genre: " + movie_genre);
+
+let insertStar_form = $("#insertStar_form");
+insertStar_form.submit(handleInsertStar);
+
 let insertMovie_form = $("#insertMovie_form");
 insertMovie_form.submit(handleInsertMovie);
 
-// function handleInsertStar(resultData){
-//     // document.getElementById("insertStar_form").submit();
-//     insertType = "insertStar";
-//     console.log("insertType: " + insertType);
-//
-//
-//
-//     jQuery.ajax({
-//         dataType: "json", // Setting return data type
-//         method: "GET", // Setting request method
-//         url: "dashboard?star_name=" + star_name + "&star_birth=" + star_birth + "&insertType=" + insertType, // Setting request url, which is mapped by StarsServlet in Stars.java
-//         success: (resultData) => handleInsertResult(resultData), // Setting callback function to handle data returned successfully by the StarsServlet
-//         error: function (data) {
-//             alert("Wrong information! Please enter star name again!");
-//         }
-//     });
-// }
-
-
-function handleInsertMovie(formSubmitEvent){
-    // document.getElementById("insertMovie_form").submit();
+function handleInsertStar(formSubmitEvent){
     formSubmitEvent.preventDefault();
+
     $.ajax(
-        "dashboard", {
-            method: "get",
+        "addStar", {
+            method: "GET",
             // Serialize the login form to the data sent by POST request
-            data: insertMovie_form.serialize(),
+            data: insertStar_form.serialize(),
             success: function (data) {
-                alert("success submitting handle insert movie");
+                alert("Insert a new star successfully");
+                window.location.reload();
             },
             error: function (data) {
-                alert("fail submitting handle insert movie");
+                alert("Failure to insert a new star");
             }
         }
     );
+}
 
-    // insertType = "insertMovie";
-    // console.log("insertType: " + insertType);
-    //
-    //
-    // jQuery.ajax({
-    //     dataType: "json", // Setting return data type
-    //     method: "GET", // Setting request method
-    //     url: "dashboard?movie_title=" + movie_title + "&movie_year=" + movie_year + "&movie_director=" + movie_director + "&star_name=" + star_name + "&movie_genre=" + movie_genre + "&insertType=" + insertType,
-    //     success: (resultData) => handleInsertResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
-    // });
+
+function handleInsertMovie(formSubmitEvent){
+    formSubmitEvent.preventDefault();
+    $.ajax(
+        "dashboard", {
+            method: "GET",
+            // Serialize the login form to the data sent by POST request
+            data: insertMovie_form.serialize(),
+            success: function (data) {
+                alert("Insert a movie successfully");
+                window.location.reload();
+            },
+            error: function (data) {
+                alert("Failure to insert a new movie");
+            }
+        }
+    );
 }
 
 
 function showMetadataButton(){
     window.location.replace("showMetadata.html");
 }
-// jQuery.ajax({
-//     dataType: "json",  // Setting return data type
-//     method: "GET",// Setting request method
-//     url: "result?movie_title=" + movie_title + "&movie_year=" + movie_year + "&movie_director="
-//         + movie_director + "&star_name=" + star_name + "&jump=&number_page=" + number_page.value + "&sort_base=" + sort_base.value,
-//     success: (resultData) => handleSearchResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
-// });
+

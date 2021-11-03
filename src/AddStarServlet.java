@@ -25,8 +25,8 @@ import java.util.Arrays;
  */
 
 // Declaring a WebServlet called FormServlet, which maps to url "/form"
-@WebServlet(name = "DashboardServlet", urlPatterns = "/dashboard")
-public class DashboardServlet extends HttpServlet {
+@WebServlet(name = "AddStarServlet", urlPatterns = "/addStar")
+public class AddStarServlet extends HttpServlet {
 
     // Create a dataSource which registered in web.xml
     private DataSource dataSource;
@@ -53,29 +53,46 @@ public class DashboardServlet extends HttpServlet {
             // Declare a new statement
             PreparedStatement preparedStatement = null;
 
-            // Retrieve parameter "name" from the http request, which refers to the value of <input name="name"> in index.html
-            String movie_title = request.getParameter("movie_title");
-            String movie_year = request.getParameter("movie_year");
-            String movie_director = request.getParameter("movie_director");
             String star_name = request.getParameter("star_name");
-            String movie_genre = request.getParameter("movie_genre");
+            String star_birth = null;
+            try{
+                star_birth = request.getParameter("star_birth");
+                if(Integer.parseInt(star_birth) < 0 ){
+                    star_birth = null;
+                }
+            }catch (Exception e){
+                star_birth = null;
+            }
 
-
-            System.out.println("insert movie_title: " + movie_title );
-            System.out.println("insert movie_year: " + movie_year);
-            System.out.println("insert movie_director: " + movie_director);
             System.out.println("insert star_name: " + star_name);
-            System.out.println("insert movie_genre: " + movie_genre);
+            System.out.println("insert star_birth: " + star_birth);
 
-            String query = "CALL add_movie(?, ?, ?, ?, ?)";
-            preparedStatement = dbCon.prepareStatement(query);
-            preparedStatement.setString(1, movie_title);
-            preparedStatement.setInt(2, Integer.parseInt(movie_year));
-            preparedStatement.setString(3, movie_director);
-            preparedStatement.setString(4, star_name);
-            preparedStatement.setString(5, movie_genre);
-            System.out.println("preparedStatement for insert movies: \n" + preparedStatement);
+            // insert a star
+            String dropStar_query= "delete from stars where name = ?";
+            preparedStatement = dbCon.prepareStatement(dropStar_query);
+            preparedStatement.setString(1, star_name);
+            System.out.println("dropStar_query: " + preparedStatement);
             preparedStatement.executeUpdate();
+
+            String lastStarID_query = "select * from stars ORDER BY id DESC LIMIT 1";
+            preparedStatement = dbCon.prepareStatement(lastStarID_query);
+            ResultSet lastStarID_rs = preparedStatement.executeQuery();
+            lastStarID_rs.next();
+            String lastStarRecord_id = lastStarID_rs.getString("id");
+            // System.out.println("lastStarRecord_id : " + preparedStatement);
+            String nm = lastStarRecord_id.substring(0,2);
+            int starID = Integer.parseInt(lastStarRecord_id.substring(2));
+            System.out.println("starID : " + starID);
+            String newStarID = nm + String.valueOf(starID + 1);
+            System.out.println("newStarID : " + newStarID);
+
+
+            String insertStar_query = "INSERT INTO stars VALUES('" + newStarID + "', '" + star_name
+                        + "', " + star_birth + ")";
+            System.out.println("insert star query:" + insertStar_query);
+            preparedStatement = dbCon.prepareStatement(insertStar_query);
+            preparedStatement.executeUpdate();
+
 
             preparedStatement.close();
 
