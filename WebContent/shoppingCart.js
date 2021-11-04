@@ -78,7 +78,7 @@ function paymentClick(){
         alert("Your cart is empty!")
     }
     else {
-        window.location.replace("payment.html");
+        window.location.replace("checkout.html");
     }
     //console.log("checkEmpty in button:" + checkEmpty )
 

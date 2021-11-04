@@ -24,7 +24,7 @@ function handlePaymentResult(resultData) {
     if (resultJson["findPerson"] === "success"){
         window.localStorage.setItem("sale_id", resultJson["sale_id"]);
         // console.log(window.localStorage.getItem("sale_id"));
-        window.location.replace("result.html");
+        window.location.replace("configuration.html");
     }
     else{
         alert("Wrong information! Please enter again!");
@@ -48,8 +48,8 @@ function submitPaymentForm(formSubmitEvent) {
         }
     );
 }
-let placeorder_form = $("#placeorder_form");
-placeorder_form.submit(submitPaymentForm);
+let confirm_form = $("#confirm_form");
+confirm_form.submit(submitPaymentForm);
 
 let first_name = getParameterByName("first_name");
 let last_name = getParameterByName("last_name");
