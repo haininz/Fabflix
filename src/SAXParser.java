@@ -25,7 +25,7 @@ public class SAXParser extends DefaultHandler {
 
     public void runExample() {
         parseDocument();
-        printData();
+//        printData();
     }
 
     private void parseDocument() {
@@ -53,15 +53,15 @@ public class SAXParser extends DefaultHandler {
      * Iterate through the list and print
      * the contents
      */
-    private void printData() {
-
-        System.out.println("No of Movies '" + movies.size() + "'.");
-
-        Iterator<Movie> it = movies.iterator();
-        while (it.hasNext()) {
-            System.out.println(it.next().toString());
-        }
-    }
+//    private void printData() {
+//
+//        System.out.println("No of Movies '" + movies.size() + "'.");
+//
+//        Iterator<Movie> it = movies.iterator();
+//        while (it.hasNext()) {
+//            System.out.println(it.next().toString());
+//        }
+//    }
 
     //Event Handlers
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -84,7 +84,7 @@ public class SAXParser extends DefaultHandler {
         if (qName.equalsIgnoreCase("film")) {
             movies.add(tempMovie);
         }
-        else if (qName.equalsIgnoreCase("fid")) {
+        else if (qName.equalsIgnoreCase("fid") || qName.equalsIgnoreCase("filmed")) {
             tempMovie.setId(tempVal);
             //add it to the list
         }
@@ -116,9 +116,9 @@ public class SAXParser extends DefaultHandler {
         return movies;
     }
 
-    public static void main(String[] args) {
-        SAXParser spe = new SAXParser();
-        spe.runExample();
-    }
+//    public static void main(String[] args) {
+//        SAXParser spe = new SAXParser();
+//        spe.runExample();
+//    }
 
 }
