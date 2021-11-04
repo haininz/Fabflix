@@ -98,6 +98,7 @@ public class AddStarServlet extends HttpServlet {
 
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("insert_status", "success");
+            jsonObject.addProperty("star_id", newStarID);
 
             out.write(jsonObject.toString());
             response.setStatus(200);

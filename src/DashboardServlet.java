@@ -67,6 +67,12 @@ public class DashboardServlet extends HttpServlet {
             System.out.println("insert star_name: " + star_name);
             System.out.println("insert movie_genre: " + movie_genre);
 
+            String checkMovieNum_query = "select count(*) as num from movies";
+            preparedStatement = dbCon.prepareStatement(checkMovieNum_query);
+            ResultSet checkMovieNum_rs = preparedStatement.executeQuery();
+            checkMovieNum_rs.next();
+            int checkMovieNumBefore = Integer.parseInt(checkMovieNum_rs.getString("num"));
+
             String query = "CALL add_movie(?, ?, ?, ?, ?)";
             preparedStatement = dbCon.prepareStatement(query);
             preparedStatement.setString(1, movie_title);
@@ -77,10 +83,52 @@ public class DashboardServlet extends HttpServlet {
             System.out.println("preparedStatement for insert movies: \n" + preparedStatement);
             preparedStatement.executeUpdate();
 
+
+            preparedStatement = dbCon.prepareStatement(checkMovieNum_query);
+            checkMovieNum_rs = preparedStatement.executeQuery();
+            checkMovieNum_rs.next();
+            int checkMovieNumAfter = Integer.parseInt(checkMovieNum_rs.getString("num"));
+
+
+            String checkMovieID_query = "select * from movies where title = ? ";
+            preparedStatement = dbCon.prepareStatement(checkMovieID_query);
+            preparedStatement.setString(1, movie_title);
+            System.out.println("preparedStatement for check movie id: " + preparedStatement.toString());
+            ResultSet checkMovieID_rs = preparedStatement.executeQuery();
+            checkMovieID_rs.next();
+            String checkMovieID = checkMovieID_rs.getString("id");
+            System.out.println("checkMovieID: " + checkMovieID);
+
+
+            String checkStarID_query = "select * from stars_in_movies where movieId = ?";
+            preparedStatement = dbCon.prepareStatement(checkStarID_query);
+            preparedStatement.setString(1, checkMovieID);
+            ResultSet checkStarID_rs = preparedStatement.executeQuery();
+            checkStarID_rs.next();
+            String checkStarID = checkStarID_rs.getString("starId");
+
+
+            String checkGenreID_query = "select * from genres_in_movies where movieId = ?";
+            preparedStatement = dbCon.prepareStatement(checkGenreID_query);
+            preparedStatement.setString(1, checkMovieID);
+            ResultSet checkGenreID_rs = preparedStatement.executeQuery();
+            checkGenreID_rs.next();
+            String checkGenreID = checkGenreID_rs.getString("genreId");
+
             preparedStatement.close();
+
 
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("insert_status", "success");
+            if(checkMovieNumBefore == checkMovieNumAfter){
+                jsonObject.addProperty("check_insert", "same");
+            }
+            else{
+                jsonObject.addProperty("check_insert", "diff");
+            }
+            jsonObject.addProperty("insert_MovieID", checkMovieID);
+            jsonObject.addProperty("insert_StarID", checkStarID);
+            jsonObject.addProperty("insert_GenreID", checkGenreID);
 
             out.write(jsonObject.toString());
             response.setStatus(200);

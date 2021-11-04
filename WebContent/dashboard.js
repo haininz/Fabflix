@@ -86,7 +86,11 @@ function handleInsertStar(formSubmitEvent){
             // Serialize the login form to the data sent by POST request
             data: insertStar_form.serialize(),
             success: function (data) {
-                alert("Insert a new star successfully");
+                let dataJson = JSON.parse(data);
+                console.log("dataJson[\"star_id\"] : " + dataJson["star_id"]);
+
+                alert("Insert a new star successfully.\nStar ID: " + dataJson["star_id"]);
+
                 window.location.reload();
             },
             error: function (data) {
@@ -105,8 +109,16 @@ function handleInsertMovie(formSubmitEvent){
             // Serialize the login form to the data sent by POST request
             data: insertMovie_form.serialize(),
             success: function (data) {
-                alert("Insert a movie successfully");
-                window.location.reload();
+                let dataJson = JSON.parse(data);
+                console.log("dataJson[\"check_insert\"] : " + dataJson["check_insert"]);
+                if(dataJson["check_insert"] === "same"){
+                    alert("The movie is already exist.");
+                }
+                else{
+                    alert("Insert a movie successfully\nMovie ID: " + dataJson["insert_MovieID"] + ", Star ID: "
+                        + dataJson["insert_StarID"] + ", Genre ID: " + dataJson["insert_GenreID"]);
+                    window.location.reload();
+                }
             },
             error: function (data) {
                 alert("Failure to insert a new movie");
