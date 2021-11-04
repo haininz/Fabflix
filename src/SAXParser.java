@@ -11,16 +11,16 @@ import java.util.List;
 
 public class SAXParser extends DefaultHandler {
 
-    ArrayList<ArrayList<String>> titles;
+    public  ArrayList<Movie> movies;
 
     private String tempVal;
 
-    private ArrayList<String> tempList;
+    private Movie tempMovie;
 
     //to maintain context
 
     public SAXParser() {
-        titles = new ArrayList<ArrayList<String>>();
+        movies = new ArrayList<Movie>();
     }
 
     public void runExample() {
@@ -55,9 +55,9 @@ public class SAXParser extends DefaultHandler {
      */
     private void printData() {
 
-        System.out.println("No of Movies '" + titles.size() + "'.");
+        System.out.println("No of Movies '" + movies.size() + "'.");
 
-        Iterator<ArrayList<String>> it = titles.iterator();
+        Iterator<Movie> it = movies.iterator();
         while (it.hasNext()) {
             System.out.println(it.next().toString());
         }
@@ -69,7 +69,7 @@ public class SAXParser extends DefaultHandler {
         tempVal = "";
         if (qName.equalsIgnoreCase("film")) {
             //create a new instance of employee
-            tempList = new ArrayList<>();
+            tempMovie = new Movie();
 //            tempEmp = new Employee();
 //            tempEmp.setType(attributes.getValue("type"));
         }
@@ -81,25 +81,39 @@ public class SAXParser extends DefaultHandler {
 
     public void endElement(String uri, String localName, String qName) throws SAXException {
 
-        if (qName.equalsIgnoreCase("t")) {
-            tempList.add(tempVal);
+        if (qName.equalsIgnoreCase("film")) {
+            movies.add(tempMovie);
+        }
+        else if (qName.equalsIgnoreCase("fid")) {
+            tempMovie.setId(tempVal);
+            //add it to the list
+        }
+        else if (qName.equalsIgnoreCase("t")) {
+            tempMovie.setTitle(tempVal);
             //add it to the list
         }
         else if (qName.equalsIgnoreCase("year")) {
-            tempList.add(tempVal);
+            try {
+                tempMovie.setYear(Integer.parseInt(tempVal));
+            }
+            catch (Exception e){
+                tempMovie.setYear(0);
+            }
             //add it to the list
         }
         else if (qName.equalsIgnoreCase("dirn")) {
-            tempList.add(tempVal);
-
+            tempMovie.setDirectors(tempVal);
             //add it to the list
         }
         else if (qName.equalsIgnoreCase("cat")) {
-            tempList.add(tempVal);
-            titles.add(tempList);
+            tempMovie.setGenres(tempVal);
             //add it to the list
         }
 
+    }
+
+    public ArrayList<Movie> getMoviesList(){
+        return movies;
     }
 
     public static void main(String[] args) {
