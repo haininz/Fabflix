@@ -87,7 +87,7 @@ create procedure add_movie (IN title varchar(100), year int, director varchar(10
 BEGIN
     set @count_movie := (select count(*) from movies where movies.title = title and movies.year = year and movies.director = director);
     IF @count_movie = 0 THEN
-        set @new_movie_id := (select concat('tt', cast(cast(substring(max(id) from 3) as unsigned)+1 as char(10))) from movies);
+        set @new_movie_id := (select concat('tt0', cast(cast(substring(max(id) from 3) as unsigned)+1 as char(10))) from movies);
         insert into movies values (@new_movie_id, title, year, director);
 
         set @count_star := (select count(*) from stars where stars.name = star_name);
