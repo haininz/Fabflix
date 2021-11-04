@@ -9,6 +9,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -31,8 +32,9 @@ public class SAXStarParser extends DefaultHandler {
     public void runExample(ArrayList<Movie> movies) {
         this.movies = movies;
         parseDocument();
-        printData();
-//        insertData();
+        // printData();
+        // insertData();
+        System.out.println(movies.get(30).toString());
     }
 
     private void parseDocument() {
@@ -68,12 +70,19 @@ public class SAXStarParser extends DefaultHandler {
         while (it.hasNext()) {
             System.out.println(it.next().toString());
         }
+
     }
 
     private void insertData(){
         try {
-            dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedb");
-            Connection dbCon = dataSource.getConnection();
+//            dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedb");
+//            Connection dbCon = dataSource.getConnection();
+            String loginUser = "mytestuser";
+            String loginPasswd = "My6$Password";
+            String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
+            Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+            Connection dbCon = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+
             String query = "CALL add_movie(?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = dbCon.prepareStatement(query);
             preparedStatement = dbCon.prepareStatement(query);
