@@ -43,10 +43,10 @@ public class FormServlet extends HttpServlet {
         try {
 
             // Create a new connection to database
-            Connection dbCon = dataSource.getConnection();
-
-            // Declare a new statement
-            Statement statement = dbCon.createStatement();
+//            Connection dbCon = dataSource.getConnection();
+//
+//            // Declare a new statement
+//            Statement statement = dbCon.createStatement();
 
             // Retrieve parameter "name" from the http request, which refers to the value of <input name="name"> in index.html
             String star_name = request.getParameter("star_name");

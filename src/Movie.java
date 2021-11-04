@@ -6,6 +6,7 @@ public class Movie {
     private int year;
     private ArrayList<String> directors = new ArrayList<>();
     private ArrayList<String> genres = new ArrayList<>();
+    private ArrayList<String> stars = new ArrayList<>();
 
 
     public Movie(String id, String title, int year, ArrayList<String> director, ArrayList<String> genres) {
@@ -28,6 +29,7 @@ public class Movie {
                 ", year=" + year +
                 ", directors=" + directors.toString() +
                 ", genres=" + genres.toString() +
+                ", stars=" + stars.toString() +
                 '}';
     }
 
@@ -69,5 +71,13 @@ public class Movie {
 
     public void setGenres(String genre) {
         this.genres.add(genre);
+    }
+
+    public ArrayList<String> getStars() {
+        return stars;
+    }
+
+    public void setStars(String star) {
+        this.stars.add(star);
     }
 }
