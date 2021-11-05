@@ -98,7 +98,7 @@ public class SAXStarParser extends DefaultHandler {
         else if (qName.equalsIgnoreCase("a")) {
             for (int i = 0; i < movies.size(); i++) {
                 if (movies.get(i).getId().equals(tempid)) {
-                    movies.get(i).setStars(new Star("", tempVal, ""));
+                    movies.get(i).setStars(new Star(tempVal, ""));
                     break;
                 }
             }

@@ -104,20 +104,20 @@ public class SAXDobParser extends DefaultHandler {
             tempRoleName = tempVal;
             //add it to the list
         }
-        else if (qName.equalsIgnoreCase("familyname")) {
-            tempLastName = tempVal;
-            //add it to the list
-        }
-        else if (qName.equalsIgnoreCase("firstname")) {
-            tempFirstName = tempVal;
-            //add it to the list
-        }
+//        else if (qName.equalsIgnoreCase("familyname")) {
+//            tempLastName = tempVal;
+//            //add it to the list
+//        }
+//        else if (qName.equalsIgnoreCase("firstname")) {
+//            tempFirstName = tempVal;
+//            //add it to the list
+//        }
         else if (qName.equalsIgnoreCase("dob")) {
             for (int i = 0; i < movies.size(); i++) {
                 for (int j = 0; j < movies.get(i).getStars().size(); j++) {
-                    if (movies.get(i).getStars().get(j).getRoleName().equalsIgnoreCase(tempRoleName)) {
+                    if (movies.get(i).getStars().get(j).getName().equalsIgnoreCase(tempRoleName)) {
                         movies.get(i).getStars().get(j).setDob(tempVal);
-                        movies.get(i).getStars().get(j).setRealName(tempFirstName + " " + tempLastName);
+//                        movies.get(i).getStars().get(j).setRealName(tempFirstName + " " + tempLastName);
                     }
                 }
             }
@@ -154,9 +154,9 @@ public class SAXDobParser extends DefaultHandler {
                         preparedStatement.setString(1, movies.get(i).getTitle());
                         preparedStatement.setInt(2, movies.get(i).getYear());
                         preparedStatement.setString(3, movies.get(i).getDirectors().get(0));
-                        preparedStatement.setString(4, movies.get(i).getStars().get(j).getRealName());
-                        if (movies.get(i).getStars().get(j).getRealName().equals("")) {
-                            System.out.printf("Bad data, no insertion: star has no real name (year = %s, genre = %s, " +
+                        preparedStatement.setString(4, movies.get(i).getStars().get(j).getName());
+                        if (movies.get(i).getStars().get(j).getName().equals("")) {
+                            System.out.printf("Bad data, no insertion: one star has no name (year = %s, genre = %s, " +
                                             "title = %s, directors = %s, stars = %s)", movies.get(i).getYear(),
                                     movies.get(i).getGenres().toString(), movies.get(i).getTitle(),
                                     movies.get(i).getDirectors(), movies.get(i).getStars().toString());
