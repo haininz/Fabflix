@@ -158,29 +158,49 @@ public class SAXDobParser extends DefaultHandler {
                         preparedStatement.setInt(2, movies.get(i).getYear());
                         preparedStatement.setString(3, movies.get(i).getDirectors().get(0));
                         preparedStatement.setString(4, movies.get(i).getStars().get(j).getRealName());
-                        preparedStatement.setString(5, movies.get(i).getStars().get(j).getDob());
-
-                        for (int k = 0; k < movies.get(i).getGenres().size(); k++) {
-                            if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Dram")) {
-                                preparedStatement.setString(6, "Drama");
-                            }
-                            else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Actn")) {
-                                preparedStatement.setString(6, "Action");
-                            }
-                            else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Comd")) {
-                                preparedStatement.setString(6, "Comedy");
-                            }
-                            else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Myst")) {
-                                preparedStatement.setString(6, "Mystery");
-                            }
-                            else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Romt")) {
-                                preparedStatement.setString(6, "Romance");
+                        if (movies.get(i).getStars().get(j).getRealName().equals("")) {
+                            System.out.println("Bad data, no insertion");
+                        }
+                        else {
+                            if (movies.get(i).getStars().get(j).getDob().equals("")) {
+                                preparedStatement.setInt(5, 0);
                             }
                             else {
-                                preparedStatement.setString(6, movies.get(i).getGenres().get(k));
+                                try {
+                                    preparedStatement.setInt(5, Integer.parseInt(movies.get(i).getStars().get(j).getDob().replaceAll("\\s","")));
+                                    for (int k = 0; k < movies.get(i).getGenres().size(); k++) {
+                                        if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Dram")) {
+                                            preparedStatement.setString(6, "Drama");
+                                        }
+                                        else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Actn")) {
+                                            preparedStatement.setString(6, "Action");
+                                        }
+                                        else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Comd")) {
+                                            preparedStatement.setString(6, "Comedy");
+                                        }
+                                        else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Myst")) {
+                                            preparedStatement.setString(6, "Mystery");
+                                        }
+                                        else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Romt")) {
+                                            preparedStatement.setString(6, "Romance");
+                                        }
+                                        else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Musc")) {
+                                            preparedStatement.setString(6, "Musical");
+                                        }
+                                        else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Docu")) {
+                                            preparedStatement.setString(6, "Documentary");
+                                        }
+                                        else {
+                                            preparedStatement.setString(6, movies.get(i).getGenres().get(k));
+                                        }
+                                        System.out.println(preparedStatement.toString());
+                                        preparedStatement.executeUpdate();
+                                    }
+                                }
+                                catch (Exception e) {
+                                    System.out.println("Bad data, no insertion");
+                                }
                             }
-                            System.out.println(preparedStatement.toString());
-                            preparedStatement.executeUpdate();
                         }
                     }
 //                    if (movies.get(i).getGenres().get(0).equalsIgnoreCase("Dram")) {
