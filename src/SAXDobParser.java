@@ -182,8 +182,29 @@ public class SAXDobParser extends DefaultHandler {
                                     else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Actn")) {
                                         preparedStatement.setString(6, "Action");
                                     }
+                                    else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Advt")) {
+                                        preparedStatement.setString(6, "Adventure");
+                                    }
+                                    else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Bio")) {
+                                        preparedStatement.setString(6, "Biography");
+                                    }
                                     else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Comd")) {
                                         preparedStatement.setString(6, "Comedy");
+                                    }
+                                    else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Crim")) {
+                                        preparedStatement.setString(6, "Crime");
+                                    }
+                                    else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Faml")) {
+                                        preparedStatement.setString(6, "Family");
+                                    }
+                                    else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Fant")) {
+                                        preparedStatement.setString(6, "Fantasy");
+                                    }
+                                    else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Hist")) {
+                                        preparedStatement.setString(6, "History");
+                                    }
+                                    else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Horr")) {
+                                        preparedStatement.setString(6, "Horror");
                                     }
                                     else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Myst")) {
                                         preparedStatement.setString(6, "Mystery");
@@ -194,8 +215,14 @@ public class SAXDobParser extends DefaultHandler {
                                     else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Musc")) {
                                         preparedStatement.setString(6, "Musical");
                                     }
+                                    else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Scfi")) {
+                                        preparedStatement.setString(6, "Sci-Fi");
+                                    }
                                     else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Docu")) {
                                         preparedStatement.setString(6, "Documentary");
+                                    }
+                                    else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("West")) {
+                                        preparedStatement.setString(6, "Western");
                                     }
                                     else {
                                         preparedStatement.setString(6, movies.get(i).getGenres().get(k));

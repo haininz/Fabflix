@@ -75,13 +75,8 @@ public class UpdateSecurePassword {
         System.out.println("updating password");
         int count = 0;
         for (String updateQuery : updateQueryList) {
-<<<<<<< HEAD
-            preparedStatement = connection.prepareStatement(updateQuery);
-            int updateResult = preparedStatement.executeUpdate();
-=======
             ps1 = connection.prepareStatement(updateQuery);
             int updateResult = ps1.executeUpdate();
->>>>>>> 83f7d3c71d428df2f82fae9ed7bc5668f6da11b8
             count += updateResult;
         }
         System.out.println("updating password completed, " + count + " rows affected");
