@@ -160,6 +160,7 @@ public class SAXDobParser extends DefaultHandler {
                                             "title = %s, directors = %s, stars = %s)", movies.get(i).getYear(),
                                     movies.get(i).getGenres().toString(), movies.get(i).getTitle(),
                                     movies.get(i).getDirectors(), movies.get(i).getStars().toString());
+                            System.out.println();
                         }
                         else {
                             if (movies.get(i).getStars().get(j).getDob().equals("")) {
@@ -171,6 +172,7 @@ public class SAXDobParser extends DefaultHandler {
                                 }
                                 catch (Exception e) {
                                     System.out.printf("Bad data, no insertion (star birth format is not valid: %s)", movies.get(i).getStars().get(j).getDob());
+                                    System.out.println();
                                 }
                                 if (movies.get(i).getGenres().size() == 0) {
                                     preparedStatement.setString(6, "");
@@ -243,6 +245,7 @@ public class SAXDobParser extends DefaultHandler {
                     System.out.printf("Bad data, no insertion (year = %s, genre = %s, title = %s, directors = %s, stars = %s)",
                             movies.get(i).getYear(), movies.get(i).getGenres().toString(), movies.get(i).getTitle(),
                             movies.get(i).getDirectors(), movies.get(i).getStars().toString());
+                    System.out.println();
                 }
 //                preparedStatement.executeUpdate();
             }
