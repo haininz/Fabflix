@@ -69,7 +69,7 @@ public class UpdateSecurePasswordCustomer {
         System.out.println("updating password");
         int count = 0;
         for (String updateQuery : updateQueryList) {
-            preparedStatement = connection.prepareStatement(query);
+            preparedStatement = connection.prepareStatement(updateQuery);
             int updateResult = preparedStatement.executeUpdate();
             count += updateResult;
         }

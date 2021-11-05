@@ -80,13 +80,13 @@ public class LoginServlet extends HttpServlet {
             String encryptedPassword = null;
             String login_person = null;
 
-            if(rs_employee.next()){
+            if (rs_employee.next()){
                 // System.out.println("lol ----> ");
                 isExist = true;
                 encryptedPassword = rs_employee.getString("password");
                 login_person = "employee";
             }
-            else if(rs_customer.next()){
+            else if (rs_customer.next()){
                 // System.out.println("lol <---- ");
                 isExist = true;
                 encryptedPassword = rs_customer.getString("password");
