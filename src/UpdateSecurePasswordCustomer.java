@@ -3,6 +3,11 @@ import org.jasypt.util.password.StrongPasswordEncryptor;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
 
 public class UpdateSecurePasswordCustomer {
 
@@ -30,17 +35,17 @@ public class UpdateSecurePasswordCustomer {
         // change the customers table password column from VARCHAR(20) to VARCHAR(128)
         String alterQuery = "ALTER TABLE customers MODIFY COLUMN password VARCHAR(128)";
         // String alterQuery = "ALTER TABLE employees MODIFY COLUMN password VARCHAR(128)";
-        PreparedStatement preparedStatement = connection.prepareStatement(alterQuery);
-        int alterResult = preparedStatement.executeUpdate();
+        PreparedStatement p1 = connection.prepareStatement(alterQuery);
+        int alterResult = p1.executeUpdate();
         System.out.println("altering customers table schema completed, " + alterResult + " rows affected");
 
         // get the ID and password for each customer
         String query = "SELECT id, password from customers";
         // String query = "SELECT email, password from employees";
 
-        preparedStatement = connection.prepareStatement(query);
+        p1 = connection.prepareStatement(query);
 
-        ResultSet rs = preparedStatement.executeQuery();
+        ResultSet rs = p1.executeQuery();
 
         // we use the StrongPasswordEncryptor from jasypt library (Java Simplified Encryption)
         //  it internally use SHA-256 algorithm and 10,000 iterations to calculate the encrypted password
@@ -52,7 +57,6 @@ public class UpdateSecurePasswordCustomer {
         while (rs.next()) {
             // get the ID and plain text password from current table
             String id = rs.getString("id");
-            //String email = rs.getString("email");
             String password = rs.getString("password");
 
             // encrypt the password using StrongPasswordEncryptor
@@ -69,13 +73,18 @@ public class UpdateSecurePasswordCustomer {
         System.out.println("updating password");
         int count = 0;
         for (String updateQuery : updateQueryList) {
+<<<<<<< HEAD
             preparedStatement = connection.prepareStatement(updateQuery);
             int updateResult = preparedStatement.executeUpdate();
+=======
+            p1 = connection.prepareStatement(updateQuery);
+            int updateResult = p1.executeUpdate();
+>>>>>>> 83f7d3c71d428df2f82fae9ed7bc5668f6da11b8
             count += updateResult;
         }
         System.out.println("updating password completed, " + count + " rows affected");
 
-        preparedStatement.close();
+        p1.close();
         connection.close();
 
         System.out.println("finished");

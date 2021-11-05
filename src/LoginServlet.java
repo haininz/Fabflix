@@ -97,9 +97,10 @@ public class LoginServlet extends HttpServlet {
 
                 // use the same encryptor to compare the user input password with encrypted password stored in DB
                 success = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
-//                System.out.println("password ---> " + password );
-//                System.out.println("encryptedPassword ---> " + encryptedPassword);
-//                System.out.println("success ---> " + success);
+                System.out.println("password ---> " + password );
+                System.out.println("encryptedPassword ---> " + encryptedPassword);
+                System.out.println("success ---> " + success);
+                System.out.println("username ---> " + username);
 
                 if (success){
                     request.getSession().setAttribute("user", new User(username));
