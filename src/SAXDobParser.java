@@ -131,42 +131,67 @@ public class SAXDobParser extends DefaultHandler {
             Connection dbCon = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
 
             PreparedStatement preparedStatement = null;
-            String query = "CALL add_movie(?, ?, ?, ?, ?)";
+            String query = "CALL parse_xml(?, ?, ?, ?, ?, ?)";
+            preparedStatement = dbCon.prepareStatement(query);
 
 
-            Movie movie = movies.get(29);
-
-            for (int j = 0; j < movie.getStars().size(); j++) {
-                preparedStatement = dbCon.prepareStatement(query);
-                preparedStatement.setString(1, movie.getTitle());
-                preparedStatement.setInt(2, movie.getYear());
-                preparedStatement.setString(3, movie.getDirectors().get(0));
-                preparedStatement.setString(4, movie.getStars().get(j).getRealName());
-                preparedStatement.setString(5, movie.getGenres().get(0));
-                System.out.println(preparedStatement.toString());
-                preparedStatement.executeUpdate();
-            }
-//            for (int i = 0; i < movies.size(); i++) {
-////                preparedStatement.setString(1, movies.get(i).getTitle());
-//                if (movies.get(i).getYear() != 0) {
-////                    preparedStatement.setInt(2, movies.get(i).getYear());
-////                    preparedStatement.setString(3, movies.get(i).getDirectors().get(0));
-//                    for (int j = 0; j < movies.get(i).getStars().size(); j++) {
-//                        preparedStatement.setString(1, movies.get(i).getTitle());
-//                        preparedStatement.setInt(2, movies.get(i).getYear());
-//                        preparedStatement.setString(3, movies.get(i).getDirectors().get(0));
-//                        preparedStatement.setString(4, movies.get(i).getStars().get(i));
-//                        if (movies.get(i).getGenres().get(0).equalsIgnoreCase("Dram")) {
-//                            preparedStatement.setString(5, "Drama");
-//                        }
-//                        preparedStatement.executeUpdate();
-//                    }
-////                    if (movies.get(i).getGenres().get(0).equalsIgnoreCase("Dram")) {
-////                        preparedStatement.setString(5, "Drama");
-////                    }
-//                }
-////                preparedStatement.executeUpdate();
+//            Movie movie = movies.get(29);
+//
+//            for (int j = 0; j < movie.getStars().size(); j++) {
+//                preparedStatement = dbCon.prepareStatement(query);
+//                preparedStatement.setString(1, movie.getTitle());
+//                preparedStatement.setInt(2, movie.getYear());
+//                preparedStatement.setString(3, movie.getDirectors().get(0));
+//                preparedStatement.setString(4, movie.getStars().get(j).getRealName());
+//                preparedStatement.setString(5, movie.getGenres().get(0));
+//                System.out.println(preparedStatement.toString());
+//                preparedStatement.executeUpdate();
 //            }
+            for (int i = 0; i < movies.size(); i++) {
+//                preparedStatement.setString(1, movies.get(i).getTitle());
+                if (movies.get(i).getYear() != 0 && movies.get(i).getGenres().size() > 0
+                        && movies.get(i).getTitle() != null && movies.get(i).getDirectors().size() > 0) {
+//                    preparedStatement.setInt(2, movies.get(i).getYear());
+//                    preparedStatement.setString(3, movies.get(i).getDirectors().get(0));
+                    for (int j = 0; j < movies.get(i).getStars().size(); j++) {
+                        preparedStatement.setString(1, movies.get(i).getTitle());
+                        preparedStatement.setInt(2, movies.get(i).getYear());
+                        preparedStatement.setString(3, movies.get(i).getDirectors().get(0));
+                        preparedStatement.setString(4, movies.get(i).getStars().get(j).getRealName());
+                        preparedStatement.setString(5, movies.get(i).getStars().get(j).getDob());
+
+                        for (int k = 0; k < movies.get(i).getGenres().size(); k++) {
+                            if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Dram")) {
+                                preparedStatement.setString(6, "Drama");
+                            }
+                            else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Actn")) {
+                                preparedStatement.setString(6, "Action");
+                            }
+                            else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Comd")) {
+                                preparedStatement.setString(6, "Comedy");
+                            }
+                            else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Myst")) {
+                                preparedStatement.setString(6, "Mystery");
+                            }
+                            else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Romt")) {
+                                preparedStatement.setString(6, "Romance");
+                            }
+                            else {
+                                preparedStatement.setString(6, movies.get(i).getGenres().get(k));
+                            }
+                            System.out.println(preparedStatement.toString());
+                            preparedStatement.executeUpdate();
+                        }
+                    }
+//                    if (movies.get(i).getGenres().get(0).equalsIgnoreCase("Dram")) {
+//                        preparedStatement.setString(5, "Drama");
+//                    }
+                }
+                else {
+                    System.out.println("Bad data, no insertion");
+                }
+//                preparedStatement.executeUpdate();
+            }
 
             preparedStatement.close();
         } catch (Exception e) {
