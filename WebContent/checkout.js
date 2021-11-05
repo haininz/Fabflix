@@ -24,7 +24,7 @@ function handlePaymentResult(resultData) {
     if (resultJson["findPerson"] === "success"){
         window.localStorage.setItem("sale_id", resultJson["sale_id"]);
         // console.log(window.localStorage.getItem("sale_id"));
-        window.location.replace("configuration.html");
+        window.location.replace("confirmation.html");
     }
     else{
         alert("Wrong information! Please enter again!");
