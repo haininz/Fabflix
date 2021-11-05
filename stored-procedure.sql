@@ -1,3 +1,7 @@
+CREATE DATABASE IF NOT EXISTS moviedb;
+
+USE moviedb;
+
 DELIMITER $$
 create procedure add_movie (IN title varchar(100), year int, director varchar(100),
                             star_name varchar(100), genre_name varchar(32))
