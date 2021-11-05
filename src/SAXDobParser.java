@@ -228,7 +228,7 @@ public class SAXDobParser extends DefaultHandler {
                                         preparedStatement.setString(6, movies.get(i).getGenres().get(k));
                                     }
                                     preparedStatement.addBatch();
-                                    System.out.println(preparedStatement.toString());
+                                    // System.out.println(preparedStatement.toString());
                                     preparedStatement.executeBatch();
                                     dbCon.commit();
                                 }
