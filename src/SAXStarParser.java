@@ -32,9 +32,6 @@ public class SAXStarParser extends DefaultHandler {
     public void runExample(ArrayList<Movie> movies) {
         this.movies = movies;
         parseDocument();
-        // printData();
-        // insertData();
-        System.out.println(movies.get(30).toString());
     }
 
     private void parseDocument() {
@@ -62,69 +59,17 @@ public class SAXStarParser extends DefaultHandler {
      * Iterate through the list and print
      * the contents
      */
-    private void printData() {
+//    private void printData() {
+//
+//        System.out.println("No of Movies '" + movies.size() + "'.");
+//
+//        Iterator<Movie> it = movies.iterator();
+//        while (it.hasNext()) {
+//            System.out.println(it.next().toString());
+//        }
+//
+//    }
 
-        System.out.println("No of Movies '" + movies.size() + "'.");
-
-        Iterator<Movie> it = movies.iterator();
-        while (it.hasNext()) {
-            System.out.println(it.next().toString());
-        }
-
-    }
-
-    private void insertData(){
-        try {
-//            dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedb");
-//            Connection dbCon = dataSource.getConnection();
-            String loginUser = "mytestuser";
-            String loginPasswd = "My6$Password";
-            String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
-            Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-            Connection dbCon = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
-
-            String query = "CALL add_movie(?, ?, ?, ?, ?)";
-            PreparedStatement preparedStatement = dbCon.prepareStatement(query);
-            preparedStatement = dbCon.prepareStatement(query);
-            Movie movie = movies.get(30);
-
-            for (int j = 0; j < movie.getStars().size(); j++) {
-                preparedStatement.setString(1, movie.getTitle());
-                preparedStatement.setInt(2, movie.getYear());
-                preparedStatement.setString(3, movie.getDirectors().get(0));
-                preparedStatement.setString(4, movie.getStars().get(j));
-                if (movie.getGenres().get(0).equalsIgnoreCase("Dram")) {
-                    preparedStatement.setString(5, "Drama");
-                }
-                preparedStatement.executeUpdate();
-            }
-//            for (int i = 0; i < movies.size(); i++) {
-////                preparedStatement.setString(1, movies.get(i).getTitle());
-//                if (movies.get(i).getYear() != 0) {
-////                    preparedStatement.setInt(2, movies.get(i).getYear());
-////                    preparedStatement.setString(3, movies.get(i).getDirectors().get(0));
-//                    for (int j = 0; j < movies.get(i).getStars().size(); j++) {
-//                        preparedStatement.setString(1, movies.get(i).getTitle());
-//                        preparedStatement.setInt(2, movies.get(i).getYear());
-//                        preparedStatement.setString(3, movies.get(i).getDirectors().get(0));
-//                        preparedStatement.setString(4, movies.get(i).getStars().get(i));
-//                        if (movies.get(i).getGenres().get(0).equalsIgnoreCase("Dram")) {
-//                            preparedStatement.setString(5, "Drama");
-//                        }
-//                        preparedStatement.executeUpdate();
-//                    }
-////                    if (movies.get(i).getGenres().get(0).equalsIgnoreCase("Dram")) {
-////                        preparedStatement.setString(5, "Drama");
-////                    }
-//                }
-////                preparedStatement.executeUpdate();
-//            }
-
-            preparedStatement.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     //Event Handlers
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -153,7 +98,7 @@ public class SAXStarParser extends DefaultHandler {
         else if (qName.equalsIgnoreCase("a")) {
             for (int i = 0; i < movies.size(); i++) {
                 if (movies.get(i).getId().equals(tempid)) {
-                    movies.get(i).setStars(tempVal);
+                    movies.get(i).setStars(new Star("", tempVal, ""));
                     break;
                 }
             }
@@ -161,13 +106,7 @@ public class SAXStarParser extends DefaultHandler {
 
     }
 
-
-    public static void main(String[] args) {
-        SAXParser spe = new SAXParser();
-        spe.runExample();
-        ArrayList<Movie> movieList = spe.getMoviesList();
-        SAXStarParser saxStarParser = new SAXStarParser();
-        saxStarParser.runExample(movieList);
+    public ArrayList<Movie> getMovieList() {
+        return this.movies;
     }
-
 }

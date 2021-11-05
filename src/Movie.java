@@ -6,7 +6,7 @@ public class Movie {
     private int year;
     private ArrayList<String> directors = new ArrayList<>();
     private ArrayList<String> genres = new ArrayList<>();
-    private ArrayList<String> stars = new ArrayList<>();
+    private ArrayList<Star> stars = new ArrayList<>();
 
 
     public Movie(String id, String title, int year, ArrayList<String> director, ArrayList<String> genres) {
@@ -73,11 +73,11 @@ public class Movie {
         this.genres.add(genre);
     }
 
-    public ArrayList<String> getStars() {
+    public ArrayList<Star> getStars() {
         return stars;
     }
 
-    public void setStars(String star) {
+    public void setStars(Star star) {
         this.stars.add(star);
     }
 }
