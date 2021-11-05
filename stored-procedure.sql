@@ -43,6 +43,7 @@ BEGIN
     IF @count_movie = 0 THEN
         set @new_movie_id := (select concat('tt0', cast(cast(substring(max(id) from 3) as unsigned)+1 as char(10))) from movies);
         insert into movies values (@new_movie_id, title, year, director);
+        insert into ratings values (@new_movie_id, 0.0, 0);
     ELSE
         set @decision = 0;
         set @new_movie_id := (select id from movies where movies.title = title and movies.year = year and movies.director = director);
