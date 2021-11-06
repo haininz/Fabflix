@@ -62,7 +62,7 @@ public class SAXDobParser extends DefaultHandler {
             javax.xml.parsers.SAXParser sp = spf.newSAXParser();
 
             //parse the file and also register this class for call backs
-            sp.parse("./actors63.xml", this);
+            sp.parse("./xmls/actors63.xml", this);
 
         } catch (SAXException se) {
             se.printStackTrace();
@@ -415,7 +415,7 @@ public class SAXDobParser extends DefaultHandler {
 
                         preparedStatement.addBatch();
 //                        System.out.println(preparedStatement.toString());
-                        preparedStatement.executeBatch();
+//                      preparedStatement.executeBatch();
                         dbCon.commit();
                     }
 
