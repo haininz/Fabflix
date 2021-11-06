@@ -53,7 +53,7 @@ public class SAXDobParser extends DefaultHandler {
             javax.xml.parsers.SAXParser sp = spf.newSAXParser();
 
             //parse the file and also register this class for call backs
-            sp.parse("actors63.xml", this);
+            sp.parse("./xml/actors63.xml", this);
 
         } catch (SAXException se) {
             se.printStackTrace();
