@@ -62,11 +62,7 @@ public class SAXDobParser extends DefaultHandler {
             javax.xml.parsers.SAXParser sp = spf.newSAXParser();
 
             //parse the file and also register this class for call backs
-<<<<<<< HEAD
-            sp.parse("./xml/actors63.xml", this);
-=======
             sp.parse("./actors63.xml", this);
->>>>>>> p3
 
         } catch (SAXException se) {
             se.printStackTrace();
@@ -232,13 +228,7 @@ public class SAXDobParser extends DefaultHandler {
                             cantInsert_file.printf("Bad data, no insertion: one star has no name (year = %s, genre = %s, " +
                                             "title = %s, directors = %s, stars = %s)\n", movies.get(i).getYear(),
                                     movies.get(i).getGenres().toString(), movies.get(i).getTitle(),
-<<<<<<< HEAD
-                                    movies.get(i).getDirectors(), movies.get(i).getStars().toString());
-                            System.out.println();
-                        }
-=======
                                     movies.get(i).getDirectors(), movies.get(i).getStars().toString());; }
->>>>>>> p3
                         else {
                             boolean starExist = false;
                             String new_StarID = "";
@@ -250,11 +240,6 @@ public class SAXDobParser extends DefaultHandler {
                                     new_StarID = value.getKey();
                                     break;
                                 }
-<<<<<<< HEAD
-                                catch (Exception e) {
-                                    System.out.printf("Bad data, no insertion (star birth format is not valid: %s)", movies.get(i).getStars().get(j).getDob());
-                                    System.out.println();
-=======
                             }
                             if (!starExist) {
                                 // insert star
@@ -275,7 +260,6 @@ public class SAXDobParser extends DefaultHandler {
                                         // System.out.printf("Bad data, no insertion (star birth format is not valid: %s)", movies.get(i).getStars().get(j).getDob());
                                         cantInsert_file.printf("Bad data, no insertion (star birth format is not valid: %s) \n", movies.get(i).getStars().get(j).getDob());
                                     }
->>>>>>> p3
                                 }
                             }
                             boolean starMovieRelaExist = false;
@@ -296,13 +280,6 @@ public class SAXDobParser extends DefaultHandler {
                                         value.setValue(tempValues);
                                         break;
                                     }
-<<<<<<< HEAD
-                                    preparedStatement.addBatch();
-                                    // System.out.println(preparedStatement.toString());
-                                    preparedStatement.executeBatch();
-                                    dbCon.commit();
-=======
->>>>>>> p3
                                 }
                             }
                         }
@@ -453,7 +430,6 @@ public class SAXDobParser extends DefaultHandler {
                     cantInsert_file.printf("Bad data, no insertion (year = %s, genre = %s, title = %s, directors = %s, stars = %s)\n",
                             movies.get(i).getYear(), movies.get(i).getGenres().toString(), movies.get(i).getTitle(),
                             movies.get(i).getDirectors(), movies.get(i).getStars().toString());
-                    System.out.println();
                 }
 //                preparedStatement.executeUpdate();
             }
