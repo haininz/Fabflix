@@ -5,13 +5,14 @@ import org.xml.sax.helpers.DefaultHandler;
 import javax.sql.DataSource;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.io.*;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+
+import java.io.IOException;  // Import the IOException class to handle errors
+
 
 public class SAXDobParser extends DefaultHandler {
 
@@ -24,6 +25,12 @@ public class SAXDobParser extends DefaultHandler {
     private String tempLastName;
 
     private DataSource dataSource;
+
+    private HashMap<String, Integer> genreInDB_map;
+
+    private int max_MovieID;
+    private int max_genreID;
+    private int max_starID;
 
     //to maintain context
 
@@ -126,7 +133,7 @@ public class SAXDobParser extends DefaultHandler {
     }
 
 
-    private void insertData() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    private void insertData() throws ClassNotFoundException, InstantiationException, IllegalAccessException, FileNotFoundException {
         String loginUser = "mytestuser";
         String loginPasswd = "My6$Password";
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
@@ -139,22 +146,81 @@ public class SAXDobParser extends DefaultHandler {
             e.printStackTrace();
         }
 
+        // initials
+        genreInDB_map = new HashMap<>();
+
+        // create text file
+        PrintWriter movies_file = new PrintWriter("movies.txt");    // done    fixme 缺一个电影是否已经在database里面的判断
+        PrintWriter stars_file = new PrintWriter("stars.txt");      // done    fixme 需调整
+        PrintWriter genres_in_movies_file = new PrintWriter("genres_in_movies.txt");    // done   完成
+        PrintWriter genres_file = new PrintWriter("genres.txt"); // done  完成
+        PrintWriter stars_in_movies_file = new PrintWriter("stars_in_movies.txt");
+        PrintWriter stars_list_file = new PrintWriter("stars_list.txt");
+        PrintWriter rating_file = new PrintWriter("rating.txt");    // done  完成
+        PrintWriter cantInsert_file = new PrintWriter("cantInsert.md");
+
+
+
         PreparedStatement preparedStatement = null;
-        String query = "CALL parse_xml(?, ?, ?, ?, ?, ?);";
+        //String query = "CALL parse_xml(?, ?, ?, ?, ?, ?);";
+        String find_max_movieID = "select max(substring(id, 3)) as id from movies";
+        String find_max_genreID = "SELECT MAX(id) as id FROM genres";
+        String find_genre_list = "select * from genres";
+        String find_max_starID = "select max(substring(id, 3)) as starID from stars";
 
         try {
             dbCon.setAutoCommit(false);
-            preparedStatement = dbCon.prepareStatement(query);
+
+            // find max movie id
+            preparedStatement = dbCon.prepareStatement(find_max_movieID);
+            ResultSet max_movieID_r = preparedStatement.executeQuery();
+            max_movieID_r.next();
+            max_MovieID = Integer.parseInt(max_movieID_r.getString("id"));
+
+            // find max genre id
+            preparedStatement = dbCon.prepareStatement(find_max_genreID);
+            ResultSet max_genreID_r = preparedStatement.executeQuery();
+            max_genreID_r.next();
+            max_genreID = Integer.parseInt(max_genreID_r.getString("id"));
+
+            // make a genre hash map
+            preparedStatement = dbCon.prepareStatement(find_genre_list);
+            ResultSet rSet = preparedStatement.executeQuery();
+            while(rSet.next()){
+                int get_genreID = Integer.parseInt(rSet.getString("id"));
+                genreInDB_map.put(rSet.getString("name"), get_genreID);
+            }
+
+            // find max star id
+            preparedStatement = dbCon.prepareStatement(find_max_starID);
+            ResultSet max_starID_r = preparedStatement.executeQuery();
+            max_starID_r.next();
+            max_starID = Integer.parseInt(max_starID_r.getString("starID"));
+
+
+
 
             for (int i = 0; i < movies.size(); i++) {
+
+                // movie id increment
+                max_MovieID++;
+                String new_MovieID = String.format("tt%07d", max_MovieID);
+
                 if (movies.get(i).getYear() != 0 && movies.get(i).getTitle() != null
                         && !movies.get(i).getTitle().equals("") && movies.get(i).getDirectors().size() > 0
                         && movies.get(i).getStars().size() > 0) {
+
+                    // insert movie
+                    movies_file.printf("%s,%s,%d,%s\n", new_MovieID, movies.get(i).getTitle(),
+                            movies.get(i).getYear(), movies.get(i).getDirectors().get(0));
+                    rating_file.printf("%s, %d, %d\n", new_MovieID, 0, 0);
+
                     for (int j = 0; j < movies.get(i).getStars().size(); j++) {
-                        preparedStatement.setString(1, movies.get(i).getTitle());
-                        preparedStatement.setInt(2, movies.get(i).getYear());
-                        preparedStatement.setString(3, movies.get(i).getDirectors().get(0));
-                        preparedStatement.setString(4, movies.get(i).getStars().get(j).getName());
+
+//                        preparedStatement.setString(1, movies.get(i).getTitle());
+//                        preparedStatement.setInt(2, movies.get(i).getYear());
+//                        preparedStatement.setString(3, movies.get(i).getDirectors().get(0));
+//                        preparedStatement.setString(4, movies.get(i).getStars().get(j).getName());
                         if (movies.get(i).getStars().get(j).getName().equals("")) {
                             System.out.printf("Bad data, no insertion: one star has no name (year = %s, genre = %s, " +
                                             "title = %s, directors = %s, stars = %s)", movies.get(i).getYear(),
@@ -162,74 +228,129 @@ public class SAXDobParser extends DefaultHandler {
                                     movies.get(i).getDirectors(), movies.get(i).getStars().toString());
                         }
                         else {
+
+
+                            // insert star
+                            max_starID++;
+                            String new_StarID = String.format("nm%07d", max_starID);
+
+
                             if (movies.get(i).getStars().get(j).getDob().equals("")) {
-                                preparedStatement.setInt(5, 0);
+                                // 还没判断star 是否已经存在   #fixme
+                                stars_file.printf("%s, %s%s\n", new_StarID, movies.get(i).getStars().get(j).getName(), "");
                             }
                             else {
                                 try {
-                                    preparedStatement.setInt(5, Integer.parseInt(movies.get(i).getStars().get(j).getDob().replaceAll("\\s", "")));
+                                    stars_file.printf("%s, %s, %d\n", new_StarID, movies.get(i).getStars().get(j).getName(), Integer.parseInt(movies.get(i).getStars().get(j).getDob()));
                                 }
                                 catch (Exception e) {
                                     System.out.printf("Bad data, no insertion (star birth format is not valid: %s)", movies.get(i).getStars().get(j).getDob());
                                 }
-                                if (movies.get(i).getGenres().size() == 0) {
-                                    preparedStatement.setString(6, "");
-                                }
+
+
+//                                if (movies.get(i).getGenres().size() == 0) {
+//                                    preparedStatement.setString(6, "");
+//                                }
+
+                                String genre_temp = "";
                                 for (int k = 0; k < movies.get(i).getGenres().size(); k++) {
                                     if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Dram")) {
-                                        preparedStatement.setString(6, "Drama");
+                                        genre_temp="Drama";
                                     }
                                     else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Actn")) {
-                                        preparedStatement.setString(6, "Action");
+                                        genre_temp="Action";
                                     }
                                     else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Advt")) {
-                                        preparedStatement.setString(6, "Adventure");
+                                        genre_temp="Adventure";
                                     }
                                     else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Bio")) {
-                                        preparedStatement.setString(6, "Biography");
+                                        genre_temp= "Biography";
                                     }
                                     else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Comd")) {
-                                        preparedStatement.setString(6, "Comedy");
+                                        genre_temp = "Comedy";
                                     }
                                     else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Crim")) {
-                                        preparedStatement.setString(6, "Crime");
+                                        genre_temp = "Crime";
                                     }
                                     else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Faml")) {
-                                        preparedStatement.setString(6, "Family");
+                                        genre_temp = "Family";
                                     }
                                     else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Fant")) {
-                                        preparedStatement.setString(6, "Fantasy");
+                                        genre_temp= "Fantasy";
                                     }
                                     else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Hist")) {
-                                        preparedStatement.setString(6, "History");
+                                        genre_temp = "History";
                                     }
                                     else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Horr")) {
-                                        preparedStatement.setString(6, "Horror");
+                                        genre_temp="Horror";
                                     }
                                     else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Myst")) {
-                                        preparedStatement.setString(6, "Mystery");
+                                        genre_temp= "Mystery";
                                     }
                                     else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Romt")) {
-                                        preparedStatement.setString(6, "Romance");
+                                        genre_temp = "Romance";
                                     }
                                     else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Musc")) {
-                                        preparedStatement.setString(6, "Musical");
+                                        genre_temp = "Musical";
                                     }
                                     else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Scfi")) {
-                                        preparedStatement.setString(6, "Sci-Fi");
+                                        genre_temp = "Sci-Fi";
                                     }
                                     else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Docu")) {
-                                        preparedStatement.setString(6, "Documentary");
+                                        genre_temp = "Documentary";
                                     }
                                     else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("West")) {
-                                        preparedStatement.setString(6, "Western");
+                                        genre_temp = "Western";
+                                    }
+                                    else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("susp")) {
+                                        genre_temp = "Thriller";
+                                    }
+                                    else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("tv")) {
+                                        genre_temp = "TV Show";
+                                    }
+                                    else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("biop")) {
+                                        genre_temp = "Biographical Picture";
+                                    }
+                                    else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Disa")) {
+                                        genre_temp = "Disaster";
+                                    }
+                                    else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("camp")) {
+                                        genre_temp = "Camp";
+                                    }
+                                    else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Epic")) {
+                                        genre_temp = "Epic";
+                                    }
+                                    else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Noir")) {
+                                        genre_temp = "Dark";
+                                    }
+                                    else if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Weird")) {
+                                        genre_temp = "Weird";
                                     }
                                     else {
-                                        preparedStatement.setString(6, movies.get(i).getGenres().get(k));
+                                        genre_temp = movies.get(i).getGenres().get(k);
                                     }
+
+                                    // check the genre id in hashmap, otherwise insert a new one
+                                    if(genreInDB_map.containsKey(genre_temp)){
+                                        genres_in_movies_file.printf("%d, %s\n", genreInDB_map.get(genre_temp), new_MovieID);
+                                    }
+                                    else{
+                                        max_genreID++;
+                                        genreInDB_map.put(genre_temp, max_genreID);
+
+                                        // new genres type, write inside
+                                        genres_file.printf("%d, %s\n", max_genreID, genre_temp);
+                                    }
+                                    System.out.println("genre_temp --->" + genre_temp);
+
+
+
+
+
+
                                     preparedStatement.addBatch();
-                                    System.out.println(preparedStatement.toString());
-                                    preparedStatement.executeBatch();
+                                    // System.out.println(preparedStatement.toString());
+                                    // preparedStatement.executeBatch();
                                     dbCon.commit();
                                 }
                             }
@@ -246,6 +367,17 @@ public class SAXDobParser extends DefaultHandler {
                 }
 //                preparedStatement.executeUpdate();
             }
+
+
+            // close file
+            movies_file.close();
+            stars_file.close();
+            genres_in_movies_file.close();
+            genres_file.close();
+            stars_in_movies_file.close();
+            stars_list_file.close();
+            rating_file.close();
+            cantInsert_file.close();
 
             preparedStatement.close();
         } catch (Exception e) {
