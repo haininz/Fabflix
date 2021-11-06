@@ -38,7 +38,11 @@ public class SAXParser extends DefaultHandler {
             javax.xml.parsers.SAXParser sp = spf.newSAXParser();
 
             //parse the file and also register this class for call backs
+<<<<<<< HEAD
             sp.parse("./xml/mains243.xml", this);
+=======
+            sp.parse("./mains243.xml", this);
+>>>>>>> p3
 
         } catch (SAXException se) {
             se.printStackTrace();
