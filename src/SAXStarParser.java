@@ -44,11 +44,7 @@ public class SAXStarParser extends DefaultHandler {
             javax.xml.parsers.SAXParser sp = spf.newSAXParser();
 
             //parse the file and also register this class for call backs
-<<<<<<< HEAD
-            sp.parse("./xml/casts124.xml", this);
-=======
             sp.parse("./casts124.xml", this);
->>>>>>> p3
 
         } catch (SAXException se) {
             se.printStackTrace();
