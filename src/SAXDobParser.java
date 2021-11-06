@@ -7,9 +7,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 
 import java.io.IOException;  // Import the IOException class to handle errors
 
@@ -26,7 +24,9 @@ public class SAXDobParser extends DefaultHandler {
 
     private DataSource dataSource;
 
-    private HashMap<String, Integer> genreInDB_map;
+    private HashMap<String, Integer> genreInDB_map;   // genres name, id
+    private Map<String, Set<Integer>> genreInMovie_map; // id, genre id
+    private HashMap<String, String> movieID_map;       // movie id, movie title
 
     private int max_MovieID;
     private int max_genreID;
@@ -148,6 +148,8 @@ public class SAXDobParser extends DefaultHandler {
 
         // initials
         genreInDB_map = new HashMap<>();
+        genreInMovie_map = new HashMap<>();
+        movieID_map = new HashMap<>();
 
         // create text file
         PrintWriter movies_file = new PrintWriter("movies.txt");    // done    fixme 缺一个电影是否已经在database里面的判断
@@ -214,6 +216,7 @@ public class SAXDobParser extends DefaultHandler {
                     movies_file.printf("%s,%s,%d,%s\n", new_MovieID, movies.get(i).getTitle(),
                             movies.get(i).getYear(), movies.get(i).getDirectors().get(0));
                     rating_file.printf("%s, %d, %d\n", new_MovieID, 0, 0);
+                    movieID_map.put(new_MovieID, movies.get(i).getTitle());
 
                     for (int j = 0; j < movies.get(i).getStars().size(); j++) {
 
@@ -244,7 +247,7 @@ public class SAXDobParser extends DefaultHandler {
                                     stars_file.printf("%s, %s, %d\n", new_StarID, movies.get(i).getStars().get(j).getName(), Integer.parseInt(movies.get(i).getStars().get(j).getDob()));
                                 }
                                 catch (Exception e) {
-                                    System.out.printf("Bad data, no insertion (star birth format is not valid: %s)", movies.get(i).getStars().get(j).getDob());
+                                    // System.out.printf("Bad data, no insertion (star birth format is not valid: %s)", movies.get(i).getStars().get(j).getDob());
                                 }
 
 
@@ -253,6 +256,7 @@ public class SAXDobParser extends DefaultHandler {
 //                                }
 
                                 String genre_temp = "";
+                                // System.out.println("======>"+ movies.get(i).getTitle() + " : "+ movies.get(i).getGenres());
                                 for (int k = 0; k < movies.get(i).getGenres().size(); k++) {
                                     if (movies.get(i).getGenres().get(k).equalsIgnoreCase("Dram")) {
                                         genre_temp="Drama";
@@ -330,9 +334,9 @@ public class SAXDobParser extends DefaultHandler {
                                         genre_temp = movies.get(i).getGenres().get(k);
                                     }
 
-                                    // check the genre id in hashmap, otherwise insert a new one
+
+                                    // check genre if is exist in hashmap, otherwise create a new one
                                     if(genreInDB_map.containsKey(genre_temp)){
-                                        genres_in_movies_file.printf("%d, %s\n", genreInDB_map.get(genre_temp), new_MovieID);
                                     }
                                     else{
                                         max_genreID++;
@@ -341,9 +345,18 @@ public class SAXDobParser extends DefaultHandler {
                                         // new genres type, write inside
                                         genres_file.printf("%d, %s\n", max_genreID, genre_temp);
                                     }
-                                    System.out.println("genre_temp --->" + genre_temp);
+                                    // System.out.println("genre_temp --->" + genre_temp);
 
-
+                                    // read genre id according to movie id
+                                    Set<Integer> temp_Set =  new HashSet<Integer>();
+                                    if(genreInMovie_map.containsKey(new_MovieID)){
+                                        temp_Set = genreInMovie_map.get(new_MovieID);
+                                        temp_Set.add(genreInDB_map.get(genre_temp));
+                                    }
+                                    else{
+                                        temp_Set.add(genreInDB_map.get(genre_temp));
+                                    }
+                                    genreInMovie_map.put(new_MovieID, temp_Set);
 
 
 
@@ -369,6 +382,16 @@ public class SAXDobParser extends DefaultHandler {
             }
 
 
+            // write into genres_in_movies_file
+            for(String key : genreInMovie_map.keySet()){
+                Set<Integer> temp = genreInMovie_map.get(key);
+                for(Integer x : temp){
+                    genres_in_movies_file.printf("%s, %s\n", x, key);
+                    // System.out.println("get key from movie ID" + x + " : " + key);
+                }
+            }
+
+
             // close file
             movies_file.close();
             stars_file.close();
@@ -383,6 +406,16 @@ public class SAXDobParser extends DefaultHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static Object getKey(Map map, Object value){
+        List<Object> keyList = new ArrayList<>();
+        for(Object key: map.keySet()){
+            if(map.get(key).equals(value)){
+                keyList.add(key);
+            }
+        }
+        return keyList;
     }
 
 
