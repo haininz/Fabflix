@@ -426,7 +426,7 @@ public class SAXDobParser extends DefaultHandler {
 //                            movies.get(i).getYear(), movies.get(i).getGenres().toString(), movies.get(i).getTitle(),
 //                            movies.get(i).getDirectors(), movies.get(i).getStars().toString());
 //                    System.out.print("\n");
-                    System.out.print("1");
+                    // System.out.print("1");
                     cantInsert_file.printf("Bad data, no insertion (year = %s, genre = %s, title = %s, directors = %s, stars = %s)\n",
                             movies.get(i).getYear(), movies.get(i).getGenres().toString(), movies.get(i).getTitle(),
                             movies.get(i).getDirectors(), movies.get(i).getStars().toString());
