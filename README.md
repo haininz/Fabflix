@@ -1,6 +1,6 @@
 # cs122b-fall21-team-25
 
-1. Project 3 Demo Url: https://youtu.be/b2XCOj5Nqlg
+1. Project 3 Demo Url: https://youtu.be/sZSYYuTj-qM
    <br><br>
 
 2. How to deploy application on Tomcat
@@ -38,11 +38,15 @@
    
 4. Parsing time optimization strategies:
    <br>
-    - Use stored procedures
-    - Use addBatch() and executeBatch() for PreparedStatement
-    - Tried HashMap for checking duplicates
+    - Used stored procedures
+    - Used addBatch() and executeBatch() for PreparedStatement
+    - Used HashMaps for checking duplicates
+    - Wrote insert statements into files and used load data to speed up insertion
+    
+5. Inconsistency Report:
+   <br>
+   We wrote each piece of report information into the file "inconsistency_report.md" on AWS; We also showed the content of it at the end of the demo
 
-<br>
 6. Each member's contribution:
    <br>
 
@@ -50,7 +54,7 @@
         - Implemented HTTPS
         - Implemented Password Encryption
         - Implemented Employee Dashboard
-          <br><br>
+    <br><br>
 
     - Haining Zhou:
         - Implemented reCAPTCHA
