@@ -38,10 +38,46 @@
                 text-align: left;
             }
         }
+
+        .autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+        .autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+        .autocomplete-selected { background: #F0F0F0; }
+        .autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+        .autocomplete-group { padding: 2px 5px; }
+        .autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+        }
+
+        .container {
+            height: 20%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .autocomplete-searchbox {
+            height: 50px;
+            width: 550px;
+        }
+
     </style>
-    <!-- Bootstrap CSS -->
+    <!-- Using jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- include jquery autocomplete JS  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.devbridge-autocomplete/1.4.11/jquery.autocomplete.min.js"></script>
+
+    <!-- Bootstrap for CSS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
 </head>
 <body>
 
@@ -55,18 +91,21 @@
     <a href="shoppingCart.html?show=true">Shopping Cart</a></li>
 </div>
 
+<!--<button id="autoComplete_Button" type="submit" onclick=window.location.replace("autocomplete.html")>Autocomplete Search</button>-->
 
-<!-- Load jQuery and Bootstrap JS -->
-<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>-->
-<!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
+<h2>AutoComplete Search</h2>
+<div class="container">
+    <input type="text" name="hero" id="autocomplete"
+           class="autocomplete-searchbox form-control"
+           placeholder="Search"/>
+    <input id = "autocomplete_button" TYPE="SUBMIT" VALUE="Search" onclick=handleNormalSearch($('#autocomplete').val())>
+</div>
 
-<!--&lt;!&ndash; Load our own JS file &ndash;&gt;-->
-<!--&lt;!&ndash; The path is relative to index.html, since these two files are in the same directory &ndash;&gt;-->
-<!--&lt;!&ndash; Note the url does not contain a "/" in the beginning, which means the url is relative to current path-->
-<!--     otherwise the url is relative to the root path&ndash;&gt;-->
-<!--<script src="index.js"></script>-->
+<script src="autocomplete.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
 </body>
-
-
 </html>
