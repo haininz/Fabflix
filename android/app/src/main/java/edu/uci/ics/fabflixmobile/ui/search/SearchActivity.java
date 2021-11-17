@@ -62,7 +62,7 @@ public class SearchActivity extends AppCompatActivity {
         // request type is POST
         final StringRequest searchRequest = new StringRequest(
                 Request.Method.POST,
-                baseURL + "/result?",
+                baseURL + "/result",
                 response -> {
                     // TODO: should parse the json response to redirect to appropriate functions
                     //  upon different response value.
