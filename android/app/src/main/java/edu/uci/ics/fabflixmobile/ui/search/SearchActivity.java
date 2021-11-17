@@ -62,7 +62,7 @@ public class SearchActivity extends AppCompatActivity {
         // request type is POST
         final StringRequest searchRequest = new StringRequest(
                 Request.Method.POST,
-                baseURL + "/autocompleteSearch",
+                baseURL + "/result?",
                 response -> {
                     // TODO: should parse the json response to redirect to appropriate functions
                     //  upon different response value.
@@ -104,7 +104,13 @@ public class SearchActivity extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 // POST request form data
                 final Map<String, String> params = new HashMap<>();
-                params.put("query", query.getText().toString());
+                params.put("movie_title", query.getText().toString());
+                params.put("star_name", "");
+                params.put("movie_year", "");
+                params.put("movie_director", "");
+                params.put("number_page", "10");
+                params.put("jump", "");
+                params.put("sort_base", "");
                 return params;
             }
         };

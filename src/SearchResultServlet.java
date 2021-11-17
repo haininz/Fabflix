@@ -66,6 +66,18 @@ public class SearchResultServlet extends HttpServlet {
             String jump = request.getParameter("jump");
             String sortBase = request.getParameter("sort_base");
 
+            System.out.println("title: " + title);
+            System.out.println("name: " + name);
+            System.out.println("year: " + year);
+            System.out.println("director: " + director);
+            System.out.println("number_page: " + number_page);
+            System.out.println("jump: " + year);
+            System.out.println("sortBase: " + sortBase);
+
+            String requiredQuery = "+" + title;
+            requiredQuery = requiredQuery.replaceAll(" ","* +") + "*";
+            System.out.println("requiredQuery: " + requiredQuery);
+
             String offset = new String("");
             String orderBy = new String("");
             if (sortBase.equals("trascasc")) {
@@ -148,7 +160,8 @@ public class SearchResultServlet extends HttpServlet {
                                     whereClause += "and ";
                                 }
                                 hasPrevious = true;
-                                whereClause += "m.title like " + "\"%" + tempTitle + "%\" ";
+                                whereClause += "MATCH (title) AGAINST ('" +requiredQuery+ "' in boolean mode)";
+                                // whereClause += "m.title like " + "\"%" + tempTitle + "%\" ";
                             }
                             if (!tempDirector.equals("")){
                                 if (hasPrevious){
@@ -268,7 +281,8 @@ public class SearchResultServlet extends HttpServlet {
                     whereClause += "and ";
                 }
                 hasPrevious = true;
-                whereClause += "m.title like " + "\"%" + tempTitle + "%\" ";
+                whereClause += "MATCH (title) AGAINST ('" +requiredQuery+ "' in boolean mode)";
+                // whereClause += "m.title like " + "\"%" + tempTitle + "%\" ";
             }
             if (!tempDirector.equals("")){
                 if (hasPrevious){
