@@ -2124,6 +2124,7 @@ id navigation_header_container
 id never
 id neverCompleteToEnd
 id neverCompleteToStart
+id nextButton
 id noScroll
 id noState
 id none
@@ -2152,6 +2153,7 @@ id percent
 id pin
 id position
 id postLayout
+id prevButton
 id progress_circular
 id progress_horizontal
 id query

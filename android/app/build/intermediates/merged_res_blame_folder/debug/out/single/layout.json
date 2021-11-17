@@ -1,18 +1,18 @@
 [
     {
-        "merged": "/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/activity_login.xml",
-        "source": "/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/res/layout/activity_login.xml"
+        "merged": "/Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/activity_search.xml",
+        "source": "/Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/res/layout/activity_search.xml"
     },
     {
-        "merged": "/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/movielist_row.xml",
-        "source": "/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/res/layout/movielist_row.xml"
+        "merged": "/Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/activity_movielist.xml",
+        "source": "/Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/res/layout/activity_movielist.xml"
     },
     {
-        "merged": "/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/activity_search.xml",
-        "source": "/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/res/layout/activity_search.xml"
+        "merged": "/Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/movielist_row.xml",
+        "source": "/Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/res/layout/movielist_row.xml"
     },
     {
-        "merged": "/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/activity_movielist.xml",
-        "source": "/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/res/layout/activity_movielist.xml"
+        "merged": "/Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/activity_login.xml",
+        "source": "/Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/res/layout/activity_login.xml"
     }
 ]

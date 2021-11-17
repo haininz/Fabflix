@@ -50,7 +50,7 @@ public class MovieListViewAdapter extends ArrayAdapter<Movie> {
         // Populate the data from the data object via the viewHolder object
         // into the template view.
         viewHolder.title.setText(movie.getName());
-        viewHolder.subtitle.setText(movie.getYear() + "");
+        viewHolder.subtitle.setText(movie.getYear() + "  " + movie.getDirector() + "  ");
         // Return the completed view to render on screen
         return convertView;
     }

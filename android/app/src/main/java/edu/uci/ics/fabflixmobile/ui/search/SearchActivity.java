@@ -74,6 +74,7 @@ public class SearchActivity extends AppCompatActivity {
                         // initialize the activity(page)/destination
                         // !! Once the current activity (login) succeeds, start a new activity
                         Intent MovieListPage = new Intent(SearchActivity.this, MovieListActivity.class);
+                        MovieListPage.putExtra("moviesList", response);
                         // activate the list page.
                         startActivity(MovieListPage);
                     }

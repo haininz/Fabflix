@@ -4,6 +4,7 @@ package edu.uci.ics.fabflixmobile.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,9 +22,18 @@ public final class ActivityMovielistBinding implements ViewBinding {
   @NonNull
   public final ListView list;
 
-  private ActivityMovielistBinding(@NonNull ConstraintLayout rootView, @NonNull ListView list) {
+  @NonNull
+  public final Button nextButton;
+
+  @NonNull
+  public final Button prevButton;
+
+  private ActivityMovielistBinding(@NonNull ConstraintLayout rootView, @NonNull ListView list,
+      @NonNull Button nextButton, @NonNull Button prevButton) {
     this.rootView = rootView;
     this.list = list;
+    this.nextButton = nextButton;
+    this.prevButton = prevButton;
   }
 
   @Override
@@ -59,7 +69,20 @@ public final class ActivityMovielistBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityMovielistBinding((ConstraintLayout) rootView, list);
+      id = R.id.nextButton;
+      Button nextButton = rootView.findViewById(id);
+      if (nextButton == null) {
+        break missingId;
+      }
+
+      id = R.id.prevButton;
+      Button prevButton = rootView.findViewById(id);
+      if (prevButton == null) {
+        break missingId;
+      }
+
+      return new ActivityMovielistBinding((ConstraintLayout) rootView, list, nextButton,
+          prevButton);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));
