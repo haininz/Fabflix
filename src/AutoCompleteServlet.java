@@ -66,6 +66,7 @@ public class AutoCompleteServlet extends HttpServlet {
 
             // get the query string from parameter
             String requiredQuery = request.getParameter("query");
+            System.out.println("Required Query ---> " + requiredQuery);
             requiredQuery = "+" + requiredQuery;
             requiredQuery = requiredQuery.replaceAll(" ","* +") + "*";
 

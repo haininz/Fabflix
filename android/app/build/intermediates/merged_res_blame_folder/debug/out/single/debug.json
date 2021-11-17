@@ -4,6 +4,10 @@
         "source": "/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/res/mipmap-mdpi/ic_launcher.png"
     },
     {
+        "merged": "/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/build/intermediates/res/merged/debug/layout_activity_search.xml.flat",
+        "source": "/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/res/layout/activity_search.xml"
+    },
+    {
         "merged": "/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/build/intermediates/res/merged/debug/mipmap-xhdpi_ic_launcher_round.png.flat",
         "source": "/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png"
     },
@@ -16,12 +20,12 @@
         "source": "/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/res/mipmap-hdpi/ic_launcher.png"
     },
     {
-        "merged": "/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/build/intermediates/res/merged/debug/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
-        "source": "/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml"
-    },
-    {
         "merged": "/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/build/intermediates/res/merged/debug/layout_activity_movielist.xml.flat",
         "source": "/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/res/layout/activity_movielist.xml"
+    },
+    {
+        "merged": "/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/build/intermediates/res/merged/debug/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml"
     },
     {
         "merged": "/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/build/intermediates/res/merged/debug/mipmap-hdpi_ic_launcher_round.png.flat",

@@ -35,15 +35,15 @@ public class LoginServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         JsonObject responseJsonObject = new JsonObject();
-        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
-        try {
-            RecaptchaVerifyUtils.verify(gRecaptchaResponse);
-        } catch (Exception e) {
-            responseJsonObject.addProperty("status", "fail");
-            responseJsonObject.addProperty("message", "Please verify reCAPTCHA first!");
-            response.getWriter().write(responseJsonObject.toString());
-            return;
-        }
+//        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+//        try {
+//            RecaptchaVerifyUtils.verify(gRecaptchaResponse);
+//        } catch (Exception e) {
+//            responseJsonObject.addProperty("status", "fail");
+//            responseJsonObject.addProperty("message", "Please verify reCAPTCHA first!");
+//            response.getWriter().write(responseJsonObject.toString());
+//            return;
+//        }
 
         String username = request.getParameter("username");
         String password = request.getParameter("password");

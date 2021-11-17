@@ -2154,6 +2154,7 @@ id position
 id postLayout
 id progress_circular
 id progress_horizontal
+id query
 id radio
 id ratio
 id rectangles
@@ -2174,6 +2175,7 @@ id scrollIndicatorDown
 id scrollIndicatorUp
 id scrollView
 id scrollable
+id search
 id search_badge
 id search_bar
 id search_button
@@ -2368,6 +2370,7 @@ layout abc_select_dialog_material
 layout abc_tooltip
 layout activity_login
 layout activity_movielist
+layout activity_search
 layout custom_dialog
 layout design_bottom_navigation_item
 layout design_bottom_sheet_dialog
@@ -2483,6 +2486,8 @@ string abc_searchview_description_voice
 string abc_shareactionprovider_share_with
 string abc_shareactionprovider_share_with_application
 string abc_toolbar_collapse_description
+string action_search
+string action_search_short
 string action_sign_in
 string action_sign_in_short
 string app_name
@@ -2567,6 +2572,7 @@ string path_password_eye_mask_visible
 string path_password_strike_through
 string prompt_email
 string prompt_password
+string prompt_search
 string search_menu_title
 string status_bar_notification_info_overflow
 string welcome

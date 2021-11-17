@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:2:1-27:12
-INJECTED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:2:1-27:12
-INJECTED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:2:1-27:12
-INJECTED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:2:1-27:12
+ADDED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:2:1-28:12
+INJECTED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:2:1-28:12
+INJECTED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:2:1-28:12
+INJECTED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:2:1-28:12
 MERGED from [androidx.databinding:viewbinding:4.1.1] /Users/hainingzhou/.gradle/caches/transforms-2/files-2.1/c14212cc95253ad4cc1201c6969d8146/viewbinding-4.1.1/AndroidManifest.xml:17:1-22:12
 MERGED from [com.google.android.material:material:1.4.0] /Users/hainingzhou/.gradle/caches/transforms-2/files-2.1/5ea4fda9f77022c8fb04ae1910479df3/material-1.4.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.1] /Users/hainingzhou/.gradle/caches/transforms-2/files-2.1/1421ce4e3f7dcd32c4d8ce8559028d82/constraintlayout-2.1.1/AndroidManifest.xml:2:1-11:12
@@ -41,20 +41,20 @@ MERGED from [androidx.documentfile:documentfile:1.0.0] /Users/hainingzhou/.gradl
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /Users/hainingzhou/.gradle/caches/transforms-2/files-2.1/bf26629f70dea4ca798c2406f924569f/localbroadcastmanager-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.print:print:1.0.0] /Users/hainingzhou/.gradle/caches/transforms-2/files-2.1/56edac70175553536c33fb6d440aed47/print-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.annotation:annotation-experimental:1.0.0] /Users/hainingzhou/.gradle/caches/transforms-2/files-2.1/4e0beaa7487f7a736e2812c27ec8d5ab/annotation-experimental-1.0.0/AndroidManifest.xml:17:1-24:12
-INJECTED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:2:1-27:12
-INJECTED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:2:1-27:12
-INJECTED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:2:1-27:12
+INJECTED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:2:1-28:12
+INJECTED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:2:1-28:12
+INJECTED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:2:1-28:12
 	package
 		ADDED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:3:5-40
 		INJECTED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml
 		INJECTED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml
 	android:versionName
 		INJECTED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml
-		ADDED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:2:1-27:12
+		ADDED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:2:1-28:12
 		INJECTED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml
 	android:versionCode
 		INJECTED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml
-		ADDED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:2:1-27:12
+		ADDED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:2:1-28:12
 		INJECTED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml
 	xmlns:android
 		ADDED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:2:11-69
@@ -63,7 +63,7 @@ ADDED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/
 	android:name
 		ADDED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:5:22-64
 application
-ADDED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:7:5-25:19
+ADDED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:7:5-26:19
 MERGED from [com.google.android.material:material:1.4.0] /Users/hainingzhou/.gradle/caches/transforms-2/files-2.1/5ea4fda9f77022c8fb04ae1910479df3/material-1.4.0/AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.4.0] /Users/hainingzhou/.gradle/caches/transforms-2/files-2.1/5ea4fda9f77022c8fb04ae1910479df3/material-1.4.0/AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.1] /Users/hainingzhou/.gradle/caches/transforms-2/files-2.1/1421ce4e3f7dcd32c4d8ce8559028d82/constraintlayout-2.1.1/AndroidManifest.xml:9:5-20
@@ -110,6 +110,10 @@ category#android.intent.category.LAUNCHER
 ADDED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:22:17-77
 	android:name
 		ADDED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:22:27-74
+activity#edu.uci.ics.fabflixmobile.ui.search.SearchActivity
+ADDED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:25:9-62
+	android:name
+		ADDED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:25:19-59
 uses-sdk
 INJECTED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml

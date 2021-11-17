@@ -15,7 +15,7 @@
 11-->/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:5:22-64
 12
 13    <application
-13-->/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:7:5-25:19
+13-->/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:7:5-26:19
 14        android:allowBackup="false"
 14-->/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:8:9-36
 15        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
@@ -57,6 +57,9 @@
 33-->/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:22:27-74
 34            </intent-filter>
 35        </activity>
-36    </application>
-37
-38</manifest>
+36        <activity android:name="edu.uci.ics.fabflixmobile.ui.search.SearchActivity" />
+36-->/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:25:9-62
+36-->/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/src/main/AndroidManifest.xml:25:19-59
+37    </application>
+38
+39</manifest>

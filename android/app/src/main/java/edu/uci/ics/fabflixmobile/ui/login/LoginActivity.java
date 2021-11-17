@@ -19,6 +19,7 @@ import com.android.volley.toolbox.StringRequest;
 import edu.uci.ics.fabflixmobile.data.NetworkManager;
 import edu.uci.ics.fabflixmobile.databinding.ActivityLoginBinding;
 import edu.uci.ics.fabflixmobile.ui.movielist.MovieListActivity;
+import edu.uci.ics.fabflixmobile.ui.search.SearchActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -82,9 +83,9 @@ public class LoginActivity extends AppCompatActivity {
                         finish();
                         // initialize the activity(page)/destination
                         // !! Once the current activity (login) succeeds, start a new activity
-                        Intent MovieListPage = new Intent(LoginActivity.this, MovieListActivity.class);
+                        Intent SearchPage = new Intent(LoginActivity.this, SearchActivity.class);
                         // activate the list page.
-                        startActivity(MovieListPage);
+                        startActivity(SearchPage);
                     }
                 },
                 error -> {
