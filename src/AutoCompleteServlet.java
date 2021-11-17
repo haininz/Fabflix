@@ -103,6 +103,11 @@ public class AutoCompleteServlet extends HttpServlet {
         }
     }
 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        doGet(request, response);
+    }
+
     /*
      * Generate the JSON Object from hero to be like this format:
      * {

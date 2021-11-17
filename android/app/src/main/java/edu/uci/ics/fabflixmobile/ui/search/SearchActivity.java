@@ -54,21 +54,33 @@ public class SearchActivity extends AppCompatActivity {
         return x;
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI19n")
     public void search() {
 //        message.setText("Trying to login");
         // use the same network queue across our application
         final RequestQueue queue = NetworkManager.sharedManager(this).queue;
         // request type is POST
         final StringRequest searchRequest = new StringRequest(
-                Request.Method.GET,
+                Request.Method.POST,
                 baseURL + "/autocompleteSearch",
                 response -> {
                     // TODO: should parse the json response to redirect to appropriate functions
                     //  upon different response value.
 
                     Log.d("search.success", response);
-                    System.out.println("!!!!!!: " + response);
+                    if (!response.isEmpty()) {
+                        //Complete and destroy login activity once successful
+                        finish();
+                        // initialize the activity(page)/destination
+                        // !! Once the current activity (login) succeeds, start a new activity
+                        Intent MovieListPage = new Intent(SearchActivity.this, MovieListActivity.class);
+                        // activate the list page.
+                        startActivity(MovieListPage);
+                    }
+                    else {
+                        @SuppressLint("DefaultLocale") String message = "No such movie! Please try again!";
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                    }
 //                    if (response.contains("fail")) {
 //                        @SuppressLint("DefaultLocale") String message = "Wrong user name or password! Please try again!";
 //                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
@@ -86,7 +98,6 @@ public class SearchActivity extends AppCompatActivity {
                 error -> {
                     // error
                     Log.d("search.error", error.toString());
-                    System.out.println("????: " + error);
                 }) {
             @Override
             protected Map<String, String> getParams() {
