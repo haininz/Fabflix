@@ -31,16 +31,27 @@ public class MovieListActivity extends AppCompatActivity {
         Intent getMovies_intent = this.getIntent();
         previous = findViewById(R.id.prevButton);
         next = findViewById(R.id.nextButton);
+
+        final ArrayList<Movie> movies = new ArrayList<>();
+
         try{
             JSONArray result = new JSONArray(getMovies_intent.getStringExtra("moviesList"));
+            for (int i = 0; i < result.length(); i++) {
+                movies.add(new Movie(result.getJSONObject(i).getString("movies_title"),
+                        Short.parseShort(result.getJSONObject(i).getString("movies_year")),
+                        result.getJSONObject(i).getString("movies_director"),
+                        result.getJSONObject(i).getString("movies_genres"),
+                        result.getJSONObject(i).getString("movies_stars")));
+            }
             System.out.println("result -> " + result.toString());
+            System.out.println("movies -> " + movies.get(0).toString());
         }catch (JSONException e) {
             e.printStackTrace();
         }
 
-        final ArrayList<Movie> movies = new ArrayList<>();
-        movies.add(new Movie("The Terminal", (short) 2004, "a", "a", "a"));
-        movies.add(new Movie("The Final Season", (short) 2007, "a", "a", "a"));
+
+//        movies.add(new Movie("The Terminal", (short) 2004, "a", "a", "a"));
+//        movies.add(new Movie("The Final Season", (short) 2007, "a", "a", "a"));
         MovieListViewAdapter adapter = new MovieListViewAdapter(this, movies);
         ListView listView = findViewById(R.id.list); // !! Reference to list defined in activity_movielist.xml
         listView.setAdapter(adapter);
