@@ -108,7 +108,7 @@ public class SingleMovieActivity extends AppCompatActivity {
 
                         mStars = findViewById(R.id.single_movie_Stars);
                         mStars.setText(starslist);
-                        
+
 
                         System.out.println("genres -> " + singleMovies.get(0).getThree_genres());
                         System.out.println("starslist -> " + starslist);
