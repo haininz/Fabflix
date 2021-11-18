@@ -176,7 +176,7 @@ public class SearchResultServlet extends HttpServlet {
                             tempQuery = "SELECT count(distinct(id))\n" +
                                     "from (SELECT m.* from stars s, movies m, stars_in_movies sim\n"+ whereClause +"\n" +
                                     "and s.id = sim.starId and m.id = sim.movieId) as movies\n" +
-                                    "JOIN ratings on movies.id = ratings.movieId\n" +
+                                    "LEFT JOIN ratings on movies.id = ratings.movieId\n" +
                                     "JOIN (SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as genres\n" +
                                     "FROM (genres_in_movies JOIN genres on genres_in_movies.genreId = genres.id)\n" +
                                     "GROUP BY movieId) as g\n" +
@@ -302,7 +302,7 @@ public class SearchResultServlet extends HttpServlet {
             String query = "SELECT DISTINCT id, title, year, director, genres, starList, rating\n" +
                     "from (SELECT m.* from stars s, movies m, stars_in_movies sim\n"+ whereClause +"\n" +
                     "and s.id = sim.starId and m.id = sim.movieId) as movies\n" +
-                    "JOIN ratings on movies.id = ratings.movieId\n" +
+                    "LEFT JOIN ratings on movies.id = ratings.movieId\n" +
                     "JOIN (SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as genres\n" +
                     "FROM (genres_in_movies JOIN genres on genres_in_movies.genreId = genres.id)\n" +
                     "GROUP BY movieId) as g\n" +

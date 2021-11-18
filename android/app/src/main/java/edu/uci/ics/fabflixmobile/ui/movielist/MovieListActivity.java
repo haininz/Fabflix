@@ -39,6 +39,8 @@ public class MovieListActivity extends AppCompatActivity {
     private final String domain = "project4-war";
     private final String baseURL = "http://" + host + ":" + port + "/" + domain;
 
+    private static String prevResponse = new String("");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,7 +103,8 @@ public class MovieListActivity extends AppCompatActivity {
                     //  upon different response value.
 
                     Log.d("search.success", response);
-                    if (!response.isEmpty()) {
+                    if (!response.isEmpty() && !response.equals(prevResponse)) {
+                        prevResponse = response;
                         //Complete and destroy login activity once successful
                         finish();
                         // initialize the activity(page)/destination
@@ -112,7 +115,7 @@ public class MovieListActivity extends AppCompatActivity {
                         startActivity(MovieListPage);
                     }
                     else {
-                        @SuppressLint("DefaultLocale") String message = "No such movie! Please try again!";
+                        @SuppressLint("DefaultLocale") String message = "This is the last page!";
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                     }
                 },
@@ -149,7 +152,8 @@ public class MovieListActivity extends AppCompatActivity {
                     //  upon different response value.
 
                     Log.d("search.success", response);
-                    if (!response.isEmpty()) {
+                    if (!response.isEmpty() && !response.equals(prevResponse) && !prevResponse.isEmpty()) {
+                        prevResponse = response;
                         //Complete and destroy login activity once successful
                         finish();
                         // initialize the activity(page)/destination
@@ -160,7 +164,7 @@ public class MovieListActivity extends AppCompatActivity {
                         startActivity(MovieListPage);
                     }
                     else {
-                        @SuppressLint("DefaultLocale") String message = "No such movie! Please try again!";
+                        @SuppressLint("DefaultLocale") String message = "This is the first page!";
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                     }
                 },
