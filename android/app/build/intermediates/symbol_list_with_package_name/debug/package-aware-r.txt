@@ -2199,6 +2199,11 @@ id showCustom
 id showHome
 id showTitle
 id sin
+id single_movie_Director
+id single_movie_Genres
+id single_movie_Stars
+id single_movie_Title
+id single_movie_Year
 id skipCollapsed
 id skipped
 id slide

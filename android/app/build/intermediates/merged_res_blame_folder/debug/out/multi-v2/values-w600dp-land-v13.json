@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/hainingzhou/Desktop/2021-Fall/122B/mycs122b-projects/project4/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-w600dp-land-v13/values-w600dp-land-v13.xml",
+            "outputFile": "/Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-w600dp-land-v13/values-w600dp-land-v13.xml",
             "map": [
                 {
-                    "source": "/Users/hainingzhou/.gradle/caches/transforms-2/files-2.1/5ea4fda9f77022c8fb04ae1910479df3/material-1.4.0/res/values-w600dp-land-v13/values-w600dp-land-v13.xml",
+                    "source": "/Users/HugH_Lin/.gradle/caches/transforms-2/files-2.1/5ea4fda9f77022c8fb04ae1910479df3/material-1.4.0/res/values-w600dp-land-v13/values-w600dp-land-v13.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

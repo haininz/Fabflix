@@ -77,7 +77,12 @@ public class MovieListActivity extends AppCompatActivity {
 //            @SuppressLint("DefaultLocale") String message = String.format("Clicked on position: %d, name: %s, %d, id: %s", position, movie.getName(), movie.getYear(), movies.get(position).getMovid_id());
 //            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             Intent sing_movie_page = new Intent(MovieListActivity.this, SingleMovieActivity.class);
+            sing_movie_page.putExtra("movies_title", movies.get(position).getName());
             sing_movie_page.putExtra("movies_id", movies.get(position).getMovid_id());
+            sing_movie_page.putExtra("movies_director", movies.get(position).getDirector());
+            // sing_movie_page.putExtra("movies_stars", movies.get(position));
+            sing_movie_page.putExtra("movies_id", movies.get(position).getMovid_id());
+
             startActivity(sing_movie_page);
         });
 

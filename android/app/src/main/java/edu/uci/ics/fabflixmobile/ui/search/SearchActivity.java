@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,8 +19,6 @@ import java.util.Map;
 
 import edu.uci.ics.fabflixmobile.R;
 import edu.uci.ics.fabflixmobile.data.NetworkManager;
-import edu.uci.ics.fabflixmobile.databinding.ActivityLoginBinding;
-import edu.uci.ics.fabflixmobile.databinding.ActivitySearchBinding;
 import edu.uci.ics.fabflixmobile.ui.movielist.MovieListActivity;
 
 public class SearchActivity extends AppCompatActivity {
