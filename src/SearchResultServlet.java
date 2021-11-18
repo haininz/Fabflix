@@ -71,7 +71,7 @@ public class SearchResultServlet extends HttpServlet {
             System.out.println("year: " + year);
             System.out.println("director: " + director);
             System.out.println("number_page: " + number_page);
-            System.out.println("jump: " + year);
+            System.out.println("jump: " + jump);
             System.out.println("sortBase: " + sortBase);
 
             String requiredQuery = "+" + title;
@@ -134,6 +134,7 @@ public class SearchResultServlet extends HttpServlet {
                         previousSearchParams.set(7, "search");
                         System.out.println("previousParams list in else original: " + previousSearchParams.toString());
                         if (jump.equals("next") || jump.equals("previous")){
+                            System.out.println("----->In jump");
 //                            Statement tempStatement = dbCon.createStatement();
                             String tempName = previousSearchParams.get(0);
                             String tempTitle = previousSearchParams.get(1);
@@ -160,7 +161,9 @@ public class SearchResultServlet extends HttpServlet {
                                     whereClause += "and ";
                                 }
                                 hasPrevious = true;
-                                whereClause += "MATCH (title) AGAINST ('" +requiredQuery+ "' in boolean mode)";
+                                tempTitle = "+" + tempTitle;
+                                tempTitle = tempTitle.replaceAll(" ","* +") + "*";
+                                whereClause += "MATCH (title) AGAINST ('" +tempTitle+ "' in boolean mode)";
                                 // whereClause += "m.title like " + "\"%" + tempTitle + "%\" ";
                             }
                             if (!tempDirector.equals("")){
@@ -183,6 +186,8 @@ public class SearchResultServlet extends HttpServlet {
                                     "GROUP BY movieId) as s\n" +
                                     "on movies.id = s.movieId\n";
 
+                            System.out.println("Temp Query ---> " + tempQuery);
+
                             preparedStatement = dbCon.prepareStatement(tempQuery);
 
                             ResultSet rsTemp = preparedStatement.executeQuery();
@@ -195,6 +200,7 @@ public class SearchResultServlet extends HttpServlet {
                             rsTemp.close();
 
                             if (jump.equals("next")){
+                                System.out.println("---->In next");
                                 int threshold = num / Integer.parseInt(previousSearchParams.get(4)) + 1;
                                 System.out.println("THRESHOLD: " + threshold);
                                 System.out.println("CURRENT PAGE NUMBER: " + previousSearchParams.get(5));
@@ -281,7 +287,9 @@ public class SearchResultServlet extends HttpServlet {
                     whereClause += "and ";
                 }
                 hasPrevious = true;
-                whereClause += "MATCH (title) AGAINST ('" +requiredQuery+ "' in boolean mode)";
+                tempTitle = "+" + tempTitle;
+                tempTitle = tempTitle.replaceAll(" ","* +") + "*";
+                whereClause += "MATCH (title) AGAINST ('" +tempTitle+ "' in boolean mode)";
                 // whereClause += "m.title like " + "\"%" + tempTitle + "%\" ";
             }
             if (!tempDirector.equals("")){
