@@ -4,6 +4,10 @@
         "source": "/Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/res/layout/activity_search.xml"
     },
     {
+        "merged": "/Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/single_movie.xml",
+        "source": "/Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/res/layout/single_movie.xml"
+    },
+    {
         "merged": "/Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/build/intermediates/incremental/mergeDebugResources/stripped.dir/layout/activity_movielist.xml",
         "source": "/Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/res/layout/activity_movielist.xml"
     },

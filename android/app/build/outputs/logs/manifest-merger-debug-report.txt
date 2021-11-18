@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:2:1-28:12
-INJECTED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:2:1-28:12
-INJECTED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:2:1-28:12
-INJECTED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:2:1-28:12
+ADDED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:2:1-29:12
+INJECTED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:2:1-29:12
+INJECTED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:2:1-29:12
+INJECTED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:2:1-29:12
 MERGED from [androidx.databinding:viewbinding:4.1.1] /Users/HugH_Lin/.gradle/caches/transforms-2/files-2.1/c14212cc95253ad4cc1201c6969d8146/viewbinding-4.1.1/AndroidManifest.xml:17:1-22:12
 MERGED from [com.google.android.material:material:1.4.0] /Users/HugH_Lin/.gradle/caches/transforms-2/files-2.1/5ea4fda9f77022c8fb04ae1910479df3/material-1.4.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.1] /Users/HugH_Lin/.gradle/caches/transforms-2/files-2.1/1421ce4e3f7dcd32c4d8ce8559028d82/constraintlayout-2.1.1/AndroidManifest.xml:2:1-11:12
@@ -41,20 +41,20 @@ MERGED from [androidx.documentfile:documentfile:1.0.0] /Users/HugH_Lin/.gradle/c
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /Users/HugH_Lin/.gradle/caches/transforms-2/files-2.1/bf26629f70dea4ca798c2406f924569f/localbroadcastmanager-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.print:print:1.0.0] /Users/HugH_Lin/.gradle/caches/transforms-2/files-2.1/56edac70175553536c33fb6d440aed47/print-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.annotation:annotation-experimental:1.0.0] /Users/HugH_Lin/.gradle/caches/transforms-2/files-2.1/4e0beaa7487f7a736e2812c27ec8d5ab/annotation-experimental-1.0.0/AndroidManifest.xml:17:1-24:12
-INJECTED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:2:1-28:12
-INJECTED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:2:1-28:12
-INJECTED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:2:1-28:12
+INJECTED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:2:1-29:12
+INJECTED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:2:1-29:12
+INJECTED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:2:1-29:12
 	package
 		ADDED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:3:5-40
 		INJECTED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml
 		INJECTED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml
 	android:versionName
 		INJECTED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml
-		ADDED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:2:1-28:12
+		ADDED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:2:1-29:12
 		INJECTED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml
 	android:versionCode
 		INJECTED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml
-		ADDED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:2:1-28:12
+		ADDED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:2:1-29:12
 		INJECTED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml
 	xmlns:android
 		ADDED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:2:11-69
@@ -63,7 +63,7 @@ ADDED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android
 	android:name
 		ADDED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:5:22-64
 application
-ADDED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:7:5-26:19
+ADDED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:7:5-27:19
 MERGED from [com.google.android.material:material:1.4.0] /Users/HugH_Lin/.gradle/caches/transforms-2/files-2.1/5ea4fda9f77022c8fb04ae1910479df3/material-1.4.0/AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.4.0] /Users/HugH_Lin/.gradle/caches/transforms-2/files-2.1/5ea4fda9f77022c8fb04ae1910479df3/material-1.4.0/AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.1] /Users/HugH_Lin/.gradle/caches/transforms-2/files-2.1/1421ce4e3f7dcd32c4d8ce8559028d82/constraintlayout-2.1.1/AndroidManifest.xml:9:5-20
@@ -114,6 +114,10 @@ activity#edu.uci.ics.fabflixmobile.ui.search.SearchActivity
 ADDED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:25:9-62
 	android:name
 		ADDED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:25:19-59
+activity#edu.uci.ics.fabflixmobile.ui.singlemovie.SingleMovieActivity
+ADDED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:26:9-72
+	android:name
+		ADDED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:26:19-69
 uses-sdk
 INJECTED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml

@@ -15,12 +15,16 @@ import org.json.JSONException;
 
 import edu.uci.ics.fabflixmobile.R;
 import edu.uci.ics.fabflixmobile.data.model.Movie;
+import edu.uci.ics.fabflixmobile.ui.login.LoginActivity;
+import edu.uci.ics.fabflixmobile.ui.search.SearchActivity;
+import edu.uci.ics.fabflixmobile.ui.singlemovie.SingleMovieActivity;
 
 import java.util.ArrayList;
 
 public class MovieListActivity extends AppCompatActivity {
 
     Button previous, next;
+    final ArrayList<Movie> movies = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +36,6 @@ public class MovieListActivity extends AppCompatActivity {
         previous = findViewById(R.id.prevButton);
         next = findViewById(R.id.nextButton);
 
-        final ArrayList<Movie> movies = new ArrayList<>();
-
         try{
             JSONArray result = new JSONArray(getMovies_intent.getStringExtra("moviesList"));
             for (int i = 0; i < result.length(); i++) {
@@ -41,7 +43,9 @@ public class MovieListActivity extends AppCompatActivity {
                         Short.parseShort(result.getJSONObject(i).getString("movies_year")),
                         result.getJSONObject(i).getString("movies_director"),
                         result.getJSONObject(i).getString("movies_genres"),
-                        result.getJSONObject(i).getString("movies_stars")));
+                        result.getJSONObject(i).getString("movies_stars"),
+                        result.getJSONObject(i).getString("movies_id"))
+                );
             }
             System.out.println("result -> " + result.toString());
             System.out.println("movies -> " + movies.get(0).toString());
@@ -56,9 +60,12 @@ public class MovieListActivity extends AppCompatActivity {
         ListView listView = findViewById(R.id.list); // !! Reference to list defined in activity_movielist.xml
         listView.setAdapter(adapter);
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            Movie movie = movies.get(position);
-            @SuppressLint("DefaultLocale") String message = String.format("Clicked on position: %d, name: %s, %d", position, movie.getName(), movie.getYear());
-            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+//            Movie movie = movies.get(position);
+//            @SuppressLint("DefaultLocale") String message = String.format("Clicked on position: %d, name: %s, %d, id: %s", position, movie.getName(), movie.getYear(), movies.get(position).getMovid_id());
+//            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+            Intent sing_movie_page = new Intent(MovieListActivity.this, SingleMovieActivity.class);
+            sing_movie_page.putExtra("movies_id", movies.get(position).getMovid_id());
+            startActivity(sing_movie_page);
         });
     }
 }

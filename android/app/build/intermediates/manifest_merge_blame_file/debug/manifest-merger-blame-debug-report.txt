@@ -15,7 +15,7 @@
 11-->/Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:5:22-64
 12
 13    <application
-13-->/Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:7:5-26:19
+13-->/Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:7:5-27:19
 14        android:allowBackup="false"
 14-->/Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:8:9-36
 15        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
@@ -60,6 +60,9 @@
 36        <activity android:name="edu.uci.ics.fabflixmobile.ui.search.SearchActivity" />
 36-->/Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:25:9-62
 36-->/Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:25:19-59
-37    </application>
-38
-39</manifest>
+37        <activity android:name="edu.uci.ics.fabflixmobile.ui.singlemovie.SingleMovieActivity" />
+37-->/Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:26:9-72
+37-->/Users/HugH_Lin/Desktop/CS 122B/aws/git/cs122b-fall21-team-25/android/app/src/main/AndroidManifest.xml:26:19-69
+38    </application>
+39
+40</manifest>

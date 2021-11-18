@@ -108,7 +108,7 @@ public class SearchActivity extends AppCompatActivity {
                 params.put("star_name", "");
                 params.put("movie_year", "");
                 params.put("movie_director", "");
-                params.put("number_page", "10");
+                params.put("number_page", "20");
                 params.put("jump", "");
                 params.put("sort_base", "");
                 return params;

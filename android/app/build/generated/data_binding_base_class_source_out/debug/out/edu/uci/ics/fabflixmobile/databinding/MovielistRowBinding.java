@@ -19,16 +19,24 @@ public final class MovielistRowBinding implements ViewBinding {
   private final LinearLayout rootView;
 
   @NonNull
-  public final TextView subtitle;
+  public final TextView genres;
+
+  @NonNull
+  public final TextView stars;
 
   @NonNull
   public final TextView title;
 
-  private MovielistRowBinding(@NonNull LinearLayout rootView, @NonNull TextView subtitle,
-      @NonNull TextView title) {
+  @NonNull
+  public final TextView yearDirector;
+
+  private MovielistRowBinding(@NonNull LinearLayout rootView, @NonNull TextView genres,
+      @NonNull TextView stars, @NonNull TextView title, @NonNull TextView yearDirector) {
     this.rootView = rootView;
-    this.subtitle = subtitle;
+    this.genres = genres;
+    this.stars = stars;
     this.title = title;
+    this.yearDirector = yearDirector;
   }
 
   @Override
@@ -58,9 +66,15 @@ public final class MovielistRowBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
-      id = R.id.subtitle;
-      TextView subtitle = rootView.findViewById(id);
-      if (subtitle == null) {
+      id = R.id.genres;
+      TextView genres = rootView.findViewById(id);
+      if (genres == null) {
+        break missingId;
+      }
+
+      id = R.id.stars;
+      TextView stars = rootView.findViewById(id);
+      if (stars == null) {
         break missingId;
       }
 
@@ -70,7 +84,13 @@ public final class MovielistRowBinding implements ViewBinding {
         break missingId;
       }
 
-      return new MovielistRowBinding((LinearLayout) rootView, subtitle, title);
+      id = R.id.year_director;
+      TextView yearDirector = rootView.findViewById(id);
+      if (yearDirector == null) {
+        break missingId;
+      }
+
+      return new MovielistRowBinding((LinearLayout) rootView, genres, stars, title, yearDirector);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));
