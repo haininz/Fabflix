@@ -82,19 +82,6 @@ public class SearchActivity extends AppCompatActivity {
                         @SuppressLint("DefaultLocale") String message = "No such movie! Please try again!";
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                     }
-//                    if (response.contains("fail")) {
-//                        @SuppressLint("DefaultLocale") String message = "Wrong user name or password! Please try again!";
-//                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-//                    }
-//                    else {
-//                        //Complete and destroy login activity once successful
-//                        finish();
-//                        // initialize the activity(page)/destination
-//                        // !! Once the current activity (login) succeeds, start a new activity
-//                        Intent MovieListPage = new Intent(SearchActivity.this, MovieListActivity.class);
-//                        // activate the list page.
-//                        startActivity(MovieListPage);
-//                    }
                 },
                 error -> {
                     // error

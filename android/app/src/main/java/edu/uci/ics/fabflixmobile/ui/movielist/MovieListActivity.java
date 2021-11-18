@@ -2,6 +2,7 @@ package edu.uci.ics.fabflixmobile.ui.movielist;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -10,21 +11,33 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import edu.uci.ics.fabflixmobile.R;
+import edu.uci.ics.fabflixmobile.data.NetworkManager;
 import edu.uci.ics.fabflixmobile.data.model.Movie;
 import edu.uci.ics.fabflixmobile.ui.login.LoginActivity;
 import edu.uci.ics.fabflixmobile.ui.search.SearchActivity;
 import edu.uci.ics.fabflixmobile.ui.singlemovie.SingleMovieActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MovieListActivity extends AppCompatActivity {
 
     Button previous, next;
     final ArrayList<Movie> movies = new ArrayList<>();
+
+    private final String host = "10.0.2.2";
+    private final String port = "8080";
+    private final String domain = "project4-war";
+    private final String baseURL = "http://" + host + ":" + port + "/" + domain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,5 +80,104 @@ public class MovieListActivity extends AppCompatActivity {
             sing_movie_page.putExtra("movies_id", movies.get(position).getMovid_id());
             startActivity(sing_movie_page);
         });
+
+        next.setOnClickListener(view -> next());
+        previous.setOnClickListener(view -> previous());
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void next(){
+        final RequestQueue queue = NetworkManager.sharedManager(this).queue;
+        final StringRequest nextRequest = new StringRequest(
+                Request.Method.POST,
+                baseURL + "/result",
+                response -> {
+                    // TODO: should parse the json response to redirect to appropriate functions
+                    //  upon different response value.
+
+                    Log.d("search.success", response);
+                    if (!response.isEmpty()) {
+                        //Complete and destroy login activity once successful
+                        finish();
+                        // initialize the activity(page)/destination
+                        // !! Once the current activity (login) succeeds, start a new activity
+                        Intent MovieListPage = new Intent(MovieListActivity.this, MovieListActivity.class);
+                        MovieListPage.putExtra("moviesList", response);
+                        // activate the list page.
+                        startActivity(MovieListPage);
+                    }
+                    else {
+                        @SuppressLint("DefaultLocale") String message = "No such movie! Please try again!";
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    // error
+                    Log.d("search.error", error.toString());
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // POST request form data
+                final Map<String, String> params = new HashMap<>();
+                params.put("movie_title", "");
+                params.put("star_name", "");
+                params.put("movie_year", "");
+                params.put("movie_director", "");
+                params.put("number_page", "20");
+                params.put("jump", "next");
+                params.put("sort_base", "");
+                return params;
+            }
+        };
+        // important: queue.add is where the login request is actually sent to the server
+        queue.add(nextRequest);
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void previous(){
+        final RequestQueue queue = NetworkManager.sharedManager(this).queue;
+        final StringRequest nextRequest = new StringRequest(
+                Request.Method.POST,
+                baseURL + "/result",
+                response -> {
+                    // TODO: should parse the json response to redirect to appropriate functions
+                    //  upon different response value.
+
+                    Log.d("search.success", response);
+                    if (!response.isEmpty()) {
+                        //Complete and destroy login activity once successful
+                        finish();
+                        // initialize the activity(page)/destination
+                        // !! Once the current activity (login) succeeds, start a new activity
+                        Intent MovieListPage = new Intent(MovieListActivity.this, MovieListActivity.class);
+                        MovieListPage.putExtra("moviesList", response);
+                        // activate the list page.
+                        startActivity(MovieListPage);
+                    }
+                    else {
+                        @SuppressLint("DefaultLocale") String message = "No such movie! Please try again!";
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    // error
+                    Log.d("search.error", error.toString());
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // POST request form data
+                final Map<String, String> params = new HashMap<>();
+                params.put("movie_title", "");
+                params.put("star_name", "");
+                params.put("movie_year", "");
+                params.put("movie_director", "");
+                params.put("number_page", "20");
+                params.put("jump", "previous");
+                params.put("sort_base", "");
+                return params;
+            }
+        };
+        // important: queue.add is where the login request is actually sent to the server
+        queue.add(nextRequest);
     }
 }
