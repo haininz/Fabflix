@@ -36,6 +36,7 @@ public class SingleMovieServlet extends HttpServlet {
 
         String id = request.getParameter("id");
         request.getServletContext().log("getting id: " + id);
+        System.out.println("movie id: " + id);
 
         PrintWriter out = response.getWriter();
 
@@ -185,5 +186,10 @@ public class SingleMovieServlet extends HttpServlet {
         } finally {
             out.close();
         }
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        doGet(request, response);
     }
 }

@@ -60,6 +60,7 @@ public class MovieServlet extends HttpServlet {
 
 
             String title = request.getParameter("title");
+            System.out.println("Title--->" + title);
             String genre = request.getParameter("genre");
             String number_page = request.getParameter("number_page");
             String jump = request.getParameter("jump");
@@ -424,5 +425,11 @@ public class MovieServlet extends HttpServlet {
         }
 
         // Always remember to close db connection after usage. Here it's done by try-with-resources
+    }
+
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        doGet(request, response);
     }
 }

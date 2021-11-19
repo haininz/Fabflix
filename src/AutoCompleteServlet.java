@@ -66,13 +66,16 @@ public class AutoCompleteServlet extends HttpServlet {
 
             // get the query string from parameter
             String requiredQuery = request.getParameter("query");
+            System.out.println("Required Query ---> " + requiredQuery);
             requiredQuery = "+" + requiredQuery;
             requiredQuery = requiredQuery.replaceAll(" ","* +") + "*";
 
             // search on superheroes and add the results to JSON Array
             // this example only does a substring match
 
-            String search_query = "SELECT id, title from movies WHERE MATCH (title) AGAINST ('" +requiredQuery+ "' in boolean mode) ORDER BY title ASC LIMIT 10";
+            String search_query = "SELECT id, title from movies WHERE MATCH (title) " +
+                    "AGAINST ('" +requiredQuery+ "' in boolean mode) or ed('" + requiredQuery + "', title) <= 5 " +
+                    "ORDER BY title ASC LIMIT 10";
             System.out.println("search_query: " + search_query);
             ResultSet search_rs = statement.executeQuery(search_query);
 
@@ -100,6 +103,11 @@ public class AutoCompleteServlet extends HttpServlet {
             System.out.println(e);
             response.sendError(500, e.getMessage());
         }
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        doGet(request, response);
     }
 
     /*

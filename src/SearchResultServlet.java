@@ -66,6 +66,18 @@ public class SearchResultServlet extends HttpServlet {
             String jump = request.getParameter("jump");
             String sortBase = request.getParameter("sort_base");
 
+            System.out.println("title: " + title);
+            System.out.println("name: " + name);
+            System.out.println("year: " + year);
+            System.out.println("director: " + director);
+            System.out.println("number_page: " + number_page);
+            System.out.println("jump: " + jump);
+            System.out.println("sortBase: " + sortBase);
+
+//            String requiredQuery = "+" + title;
+//            requiredQuery = requiredQuery.replaceAll(" ","* +") + "*";
+//            System.out.println("requiredQuery: " + requiredQuery);
+
             String offset = new String("");
             String orderBy = new String("");
             if (sortBase.equals("trascasc")) {
@@ -122,6 +134,7 @@ public class SearchResultServlet extends HttpServlet {
                         previousSearchParams.set(7, "search");
                         System.out.println("previousParams list in else original: " + previousSearchParams.toString());
                         if (jump.equals("next") || jump.equals("previous")){
+                            System.out.println("----->In jump");
 //                            Statement tempStatement = dbCon.createStatement();
                             String tempName = previousSearchParams.get(0);
                             String tempTitle = previousSearchParams.get(1);
@@ -148,7 +161,10 @@ public class SearchResultServlet extends HttpServlet {
                                     whereClause += "and ";
                                 }
                                 hasPrevious = true;
-                                whereClause += "m.title like " + "\"%" + tempTitle + "%\" ";
+                                tempTitle = "+" + tempTitle;
+                                tempTitle = tempTitle.replaceAll(" ","* +") + "*";
+                                whereClause += "MATCH (title) AGAINST ('" +tempTitle+ "' in boolean mode) or ed('" + tempTitle + "', title) <= 5 ";
+                                // whereClause += "m.title like " + "\"%" + tempTitle + "%\" ";
                             }
                             if (!tempDirector.equals("")){
                                 if (hasPrevious){
@@ -160,7 +176,7 @@ public class SearchResultServlet extends HttpServlet {
                             tempQuery = "SELECT count(distinct(id))\n" +
                                     "from (SELECT m.* from stars s, movies m, stars_in_movies sim\n"+ whereClause +"\n" +
                                     "and s.id = sim.starId and m.id = sim.movieId) as movies\n" +
-                                    "JOIN ratings on movies.id = ratings.movieId\n" +
+                                    "LEFT JOIN ratings on movies.id = ratings.movieId\n" +
                                     "JOIN (SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as genres\n" +
                                     "FROM (genres_in_movies JOIN genres on genres_in_movies.genreId = genres.id)\n" +
                                     "GROUP BY movieId) as g\n" +
@@ -169,6 +185,8 @@ public class SearchResultServlet extends HttpServlet {
                                     "FROM (stars_in_movies JOIN stars on stars_in_movies.starId = stars.id)\n" +
                                     "GROUP BY movieId) as s\n" +
                                     "on movies.id = s.movieId\n";
+
+                            System.out.println("Temp Query ---> " + tempQuery);
 
                             preparedStatement = dbCon.prepareStatement(tempQuery);
 
@@ -182,6 +200,7 @@ public class SearchResultServlet extends HttpServlet {
                             rsTemp.close();
 
                             if (jump.equals("next")){
+                                System.out.println("---->In next");
                                 int threshold = num / Integer.parseInt(previousSearchParams.get(4)) + 1;
                                 System.out.println("THRESHOLD: " + threshold);
                                 System.out.println("CURRENT PAGE NUMBER: " + previousSearchParams.get(5));
@@ -268,7 +287,10 @@ public class SearchResultServlet extends HttpServlet {
                     whereClause += "and ";
                 }
                 hasPrevious = true;
-                whereClause += "m.title like " + "\"%" + tempTitle + "%\" ";
+                tempTitle = "+" + tempTitle;
+                tempTitle = tempTitle.replaceAll(" ","* +") + "*";
+                whereClause += "MATCH (title) AGAINST ('" +tempTitle+ "' in boolean mode) or ed('" + tempTitle + "', title) <= 5 ";
+                // whereClause += "m.title like " + "\"%" + tempTitle + "%\" ";
             }
             if (!tempDirector.equals("")){
                 if (hasPrevious){
@@ -280,7 +302,7 @@ public class SearchResultServlet extends HttpServlet {
             String query = "SELECT DISTINCT id, title, year, director, genres, starList, rating\n" +
                     "from (SELECT m.* from stars s, movies m, stars_in_movies sim\n"+ whereClause +"\n" +
                     "and s.id = sim.starId and m.id = sim.movieId) as movies\n" +
-                    "JOIN ratings on movies.id = ratings.movieId\n" +
+                    "LEFT JOIN ratings on movies.id = ratings.movieId\n" +
                     "JOIN (SELECT DISTINCT movieId, GROUP_CONCAT(name SEPARATOR ', ') as genres\n" +
                     "FROM (genres_in_movies JOIN genres on genres_in_movies.genreId = genres.id)\n" +
                     "GROUP BY movieId) as g\n" +
