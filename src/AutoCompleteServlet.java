@@ -73,7 +73,9 @@ public class AutoCompleteServlet extends HttpServlet {
             // search on superheroes and add the results to JSON Array
             // this example only does a substring match
 
-            String search_query = "SELECT id, title from movies WHERE MATCH (title) AGAINST ('" +requiredQuery+ "' in boolean mode) ORDER BY title ASC LIMIT 10";
+            String search_query = "SELECT id, title from movies WHERE MATCH (title) " +
+                    "AGAINST ('" +requiredQuery+ "' in boolean mode) or ed('" + requiredQuery + "', title) <= 5 " +
+                    "ORDER BY title ASC LIMIT 10";
             System.out.println("search_query: " + search_query);
             ResultSet search_rs = statement.executeQuery(search_query);
 

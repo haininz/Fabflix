@@ -74,9 +74,9 @@ public class SearchResultServlet extends HttpServlet {
             System.out.println("jump: " + jump);
             System.out.println("sortBase: " + sortBase);
 
-            String requiredQuery = "+" + title;
-            requiredQuery = requiredQuery.replaceAll(" ","* +") + "*";
-            System.out.println("requiredQuery: " + requiredQuery);
+//            String requiredQuery = "+" + title;
+//            requiredQuery = requiredQuery.replaceAll(" ","* +") + "*";
+//            System.out.println("requiredQuery: " + requiredQuery);
 
             String offset = new String("");
             String orderBy = new String("");
@@ -163,7 +163,7 @@ public class SearchResultServlet extends HttpServlet {
                                 hasPrevious = true;
                                 tempTitle = "+" + tempTitle;
                                 tempTitle = tempTitle.replaceAll(" ","* +") + "*";
-                                whereClause += "MATCH (title) AGAINST ('" +tempTitle+ "' in boolean mode)";
+                                whereClause += "MATCH (title) AGAINST ('" +tempTitle+ "' in boolean mode) or ed('" + tempTitle + "', title) <= 5 ";
                                 // whereClause += "m.title like " + "\"%" + tempTitle + "%\" ";
                             }
                             if (!tempDirector.equals("")){
@@ -289,7 +289,7 @@ public class SearchResultServlet extends HttpServlet {
                 hasPrevious = true;
                 tempTitle = "+" + tempTitle;
                 tempTitle = tempTitle.replaceAll(" ","* +") + "*";
-                whereClause += "MATCH (title) AGAINST ('" +tempTitle+ "' in boolean mode)";
+                whereClause += "MATCH (title) AGAINST ('" +tempTitle+ "' in boolean mode) or ed('" + tempTitle + "', title) <= 5 ";
                 // whereClause += "m.title like " + "\"%" + tempTitle + "%\" ";
             }
             if (!tempDirector.equals("")){
