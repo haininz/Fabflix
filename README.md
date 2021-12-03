@@ -1,62 +1,68 @@
-# cs122b-fall21-team-25
-
-1. Project 3 Demo Url: https://youtu.be/tFKI3vBU_sk
-   <br><br>
-
-2. How to deploy application on Tomcat
-    - install maven
-    - create a new directory and git clone
-    - mvn clean and mvn package
-    - copy war file under tomcat web apps file
-    - run war file on tomcat manager page
-      <br><br>
-
-3. Prepared Statement Usage:
-   <br>
-   AddStarServlet.java: https://github.com/UCI-Chenli-teaching/cs122b-fall21-team-25/blob/main/src/AddStarServlet.java
-   <br>
-   DashboardServlet.java: https://github.com/UCI-Chenli-teaching/cs122b-fall21-team-25/blob/main/src/DashboardServlet.java
-   <br>
-   LoginServlet.java: https://github.com/UCI-Chenli-teaching/cs122b-fall21-team-25/blob/main/src/LoginServlet.java
-   <br>
-   MovieServlet.java: https://github.com/UCI-Chenli-teaching/cs122b-fall21-team-25/blob/main/src/MovieServlet.java
-   <br>
-   PlaceOrderServlet.java: https://github.com/UCI-Chenli-teaching/cs122b-fall21-team-25/blob/main/src/PlaceOrderServlet.java
-   <br>
-   SAXDobParser.java: https://github.com/UCI-Chenli-teaching/cs122b-fall21-team-25/blob/main/src/SAXDobParser.java
-   <br>
-   SearchResultServlet.java: https://github.com/UCI-Chenli-teaching/cs122b-fall21-team-25/blob/main/src/SearchResultServlet.java
-   <br>
-   SingleMovieServlet.java: https://github.com/UCI-Chenli-teaching/cs122b-fall21-team-25/blob/main/src/SingleMovieServlet.java
-   <br>
-   SingleStarServlet.java: https://github.com/UCI-Chenli-teaching/cs122b-fall21-team-25/blob/main/src/SingleStarServlet.java
-   <br>
-   UpdateSecurePassword.java: https://github.com/UCI-Chenli-teaching/cs122b-fall21-team-25/blob/main/src/UpdateSecurePassword.java
-   <br>
-   UpdateSecurePasswordCustomer.java: https://github.com/UCI-Chenli-teaching/cs122b-fall21-team-25/blob/main/src/UpdateSecurePasswordCustomer.java
-<br>
-   
-4. Parsing time optimization strategies:
-   <br>
-    - Used stored procedures
-    - Used addBatch() and executeBatch() for PreparedStatement
-    - Used HashMaps for checking duplicates
-    - Wrote insert statements into files and used load data to speed up insertion
+- # General
+    - #### Team#: 25
     
-5. Inconsistency Report:
-   <br>
-   We wrote each piece of report information into the file "inconsistency_report.md" on AWS; We also showed the content of it at the end of the demo
+    - #### Names: Haining Zhou; Haoxin Lin
+    
+    - #### Project 5 Video Demo Link:
 
-6. Each member's contribution:
-   <br>
+    - #### Instruction of deployment:
 
-    - Haoxin Lin:
-        - Implemented HTTPS
-        - Implemented Password Encryption
-        - Implemented Employee Dashboard
-    <br><br>
+    - #### Collaborations and Work Distribution:
 
-    - Haining Zhou:
-        - Implemented reCAPTCHA
-        - Implemented Employee Dashboard
-        - Implemented XML Parsing
+
+- # Connection Pooling
+    - #### Include the filename/path of all code/configuration files in GitHub of using JDBC Connection Pooling.
+      https://github.com/UCI-Chenli-teaching/cs122b-fall21-team-25/blob/main/src/AddStarServlet.java
+      https://github.com/UCI-Chenli-teaching/cs122b-fall21-team-25/blob/main/src/AutoCompleteServlet.java
+      https://github.com/UCI-Chenli-teaching/cs122b-fall21-team-25/blob/main/src/CheckOutServlet.java
+      https://github.com/UCI-Chenli-teaching/cs122b-fall21-team-25/blob/main/src/DashboardServlet.java
+      https://github.com/UCI-Chenli-teaching/cs122b-fall21-team-25/blob/main/src/FormServlet.java
+      https://github.com/UCI-Chenli-teaching/cs122b-fall21-team-25/blob/main/src/IndexServlet.java
+      https://github.com/UCI-Chenli-teaching/cs122b-fall21-team-25/blob/main/src/LoginServlet.java
+      https://github.com/UCI-Chenli-teaching/cs122b-fall21-team-25/blob/main/src/MovieServlet.java
+      https://github.com/UCI-Chenli-teaching/cs122b-fall21-team-25/blob/main/src/PlaceOrderServlet.java
+      https://github.com/UCI-Chenli-teaching/cs122b-fall21-team-25/blob/main/src/SearchResultServlet.java
+      https://github.com/UCI-Chenli-teaching/cs122b-fall21-team-25/blob/main/src/SingleMovieServlet.java
+      https://github.com/UCI-Chenli-teaching/cs122b-fall21-team-25/blob/main/src/SingleStarServlet.java
+      
+    - #### Explain how Connection Pooling is utilized in the Fabflix code.
+      Connection Pooling is used to increase the performance of Fabflix via reusing connections. In order to add the 
+      functionality, we modify the context.xml file under /WebContent/META-INF/. When there is a request to get 
+      connection, a connection is taken from the "pool" (previous connections) instead of being newly generated; when
+      the connection is closed, it is returned to the "pool" rather than being "killed".
+    
+    - #### Explain how Connection Pooling works with two backend SQL.
+      I assume the two backend SQL refers to the Master instance and the Slave instance. We enable Connection Pooling
+      on both the Master instance and the Slave instance. When there is a connection request in either of the instances,
+      it will behave like what is stated in the above question.
+  
+- # Master/Slave
+    - #### Include the filename/path of all code/configuration files in GitHub of routing queries to Master/Slave SQL.
+      https://github.com/UCI-Chenli-teaching/cs122b-fall21-team-25/blob/main/WebContent/META-INF/context.xml
+  
+    - #### How read/write requests were routed to Master/Slave SQL?
+      A reading request can be sent to either the Master instance or the Slave instance, while a writing request should
+      be sent to only the Master instance because the things being written will be automatically sync to the Slave
+      instance. To do this, we set up 2 resources in the context.xml file called jdbc/moviedb (localhost) and 
+      jdbc/master (master instance ip) separately. For the servlets that have the write functionality (AddStarServlet 
+      and DashboardServlet), we use the jdbc/master; for all of the other servlets with read functionality, we use jdbc/moviedb.
+        
+
+- # JMeter TS/TJ Time Logs
+    - #### Instructions of how to use the `log_processing.*` script to process the JMeter logs.
+      log_processing.py [file_name]
+
+- # JMeter TS/TJ Time Measurement Report
+
+| **Single-instance Version Test Plan**          | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
+|------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
+| Case 1: HTTP/1 thread                          | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
+| Case 2: HTTP/10 threads                        | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
+| Case 3: HTTPS/10 threads                       | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
+| Case 4: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
+
+| **Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
+|------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
+| Case 1: HTTP/1 thread                          | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
+| Case 2: HTTP/10 threads                        | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
+| Case 3: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |

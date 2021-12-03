@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -27,16 +29,21 @@ import java.util.Arrays;
 // Declaring a WebServlet called FormServlet, which maps to url "/form"
 @WebServlet(name = "SearchResultServlet", urlPatterns = "/result")
 public class SearchResultServlet extends HttpServlet {
-
+    long tsStartTime = System.nanoTime();
+    long tj = 0;
+    long ts = 0;
     // Create a dataSource which registered in web.xml
     private DataSource dataSource;
 
     public void init(ServletConfig config) {
+        long tjStartTime = System.nanoTime();
         try {
             dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedb");
         } catch (NamingException e) {
             e.printStackTrace();
         }
+        long tjEndTime = System.nanoTime();
+        tj = tjEndTime - tjStartTime;
     }
 
     // Use http GET
@@ -163,8 +170,9 @@ public class SearchResultServlet extends HttpServlet {
                                 hasPrevious = true;
                                 tempTitle = "+" + tempTitle;
                                 tempTitle = tempTitle.replaceAll(" ","* +") + "*";
-                                whereClause += "MATCH (title) AGAINST ('" +tempTitle+ "' in boolean mode) or ed('" + tempTitle + "', title) <= 5 ";
-                                // whereClause += "m.title like " + "\"%" + tempTitle + "%\" ";
+                                whereClause += "MATCH (title) AGAINST ('" +tempTitle+ "' in boolean mode) ";
+//                                whereClause += "MATCH (title) AGAINST ('" +tempTitle+ "' in boolean mode) or ed('" + tempTitle + "', title) <= 5 ";
+//                                whereClause += "m.title like " + "\"%" + tempTitle + "%\" ";
                             }
                             if (!tempDirector.equals("")){
                                 if (hasPrevious){
@@ -188,6 +196,7 @@ public class SearchResultServlet extends HttpServlet {
 
                             System.out.println("Temp Query ---> " + tempQuery);
 
+                            long tjStartTime1 = System.nanoTime();
                             preparedStatement = dbCon.prepareStatement(tempQuery);
 
                             ResultSet rsTemp = preparedStatement.executeQuery();
@@ -198,6 +207,8 @@ public class SearchResultServlet extends HttpServlet {
                             }
 //                            tempStatement.close();
                             rsTemp.close();
+                            long tjEndTime1 = System.nanoTime();
+                            tj += tjEndTime1 - tjStartTime1;
 
                             if (jump.equals("next")){
                                 System.out.println("---->In next");
@@ -289,8 +300,9 @@ public class SearchResultServlet extends HttpServlet {
                 hasPrevious = true;
                 tempTitle = "+" + tempTitle;
                 tempTitle = tempTitle.replaceAll(" ","* +") + "*";
-                whereClause += "MATCH (title) AGAINST ('" +tempTitle+ "' in boolean mode) or ed('" + tempTitle + "', title) <= 5 ";
-                // whereClause += "m.title like " + "\"%" + tempTitle + "%\" ";
+                whereClause += "MATCH (title) AGAINST ('" +tempTitle+ "' in boolean mode) ";
+//                whereClause += "MATCH (title) AGAINST ('" +tempTitle+ "' in boolean mode) or ed('" + tempTitle + "', title) <= 5 ";
+//                 whereClause += "m.title like " + "\"%" + tempTitle + "%\" ";
             }
             if (!tempDirector.equals("")){
                 if (hasPrevious){
@@ -315,8 +327,8 @@ public class SearchResultServlet extends HttpServlet {
             if (!offset.equals("")){
                 query += " offset " + offset;
             }
+            long tjStartTime2 = System.nanoTime();
             preparedStatement = dbCon.prepareStatement(query);
-            System.out.println("QUERY from searchservlet: \n" + query);
 
 
             // Log to localhost log
@@ -351,6 +363,9 @@ public class SearchResultServlet extends HttpServlet {
                     String star_name = rs1.getString("name");
                     movies_stars_id += stars_id + "," + star_name + "\n";
                 }
+
+                long tjEndTime2 = System.nanoTime();
+                tj += tjEndTime2 - tjStartTime2;
 
 
                 String[] tempG = movies_genres.split(", ");
@@ -410,6 +425,12 @@ public class SearchResultServlet extends HttpServlet {
             System.out.println("jsonArray.toString() --->" + jsonArray.toString());
             response.setStatus(200);
 
+
+            long tsEndTime = System.nanoTime();
+            ts = tsEndTime - tsStartTime;
+            System.out.println("TS : " + ts);
+            System.out.println("TJ: " + tj);
+
         } catch (Exception e) {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("errorMessage", e.getMessage());
@@ -417,6 +438,20 @@ public class SearchResultServlet extends HttpServlet {
             response.setStatus(500);
         }
         out.close();
+
+        System.out.println("Output file is at: " + request.getServletContext().getRealPath("/") );
+
+        File file = new File( request.getServletContext().getRealPath("/") + "log.txt");
+        if (file.createNewFile()){
+            FileWriter myWriter = new FileWriter(request.getServletContext().getRealPath("/") + file.getName());
+            myWriter.write(ts + " " + tj + "\n");
+            myWriter.close();
+        }
+        else {
+            FileWriter myWriter = new FileWriter(request.getServletContext().getRealPath("/") + file.getName(), true);
+            myWriter.write(ts + " " + tj + "\n");
+            myWriter.close();
+        }
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

@@ -20,28 +20,42 @@
  * The doneCallback is a callback function provided by the library, after you get the
  *   suggestion list from AJAX, you need to call this function to let the library know.
  */
+var query_cache = new Map();
 function handleLookup(query, doneCallback) {
     console.log("autocomplete initiated")
-    console.log("sending AJAX request to backend Java Servlet")
 
     // TODO: if you want to check past query results first, you can do it here
+    let cached_result = "";
+    for (let [key, value] of query_cache) {
+        if (query === key) {
+            cached_result = value;
+        }
+    }
+    if (!(cached_result === "")) {
+        console.log("Getting suggestion list from front-end cache: ")
+        handleLookupAjaxSuccess(cached_result, query, doneCallback)
+    }
+    else {
+        console.log("Getting suggestion list from back-end server: ")
+        jQuery.ajax({
+            "method": "GET",
+            // generate the request url from the query.
+            // escape the query string to avoid errors caused by special characters
+            "url": "autocompleteSearch?query=" + escape(query),
+            "success": function(data) {
+                // pass the data, query, and doneCallback function into the success handler
+                handleLookupAjaxSuccess(data, query, doneCallback)
+            },
+            "error": function(errorData) {
+                console.log("lookup ajax error")
+                console.log(errorData)
+            }
+        })
+    }
+
 
     // sending the HTTP GET request to the Java Servlet endpoint hero-suggestion
     // with the query data
-    jQuery.ajax({
-        "method": "GET",
-        // generate the request url from the query.
-        // escape the query string to avoid errors caused by special characters
-        "url": "autocompleteSearch?query=" + escape(query),
-        "success": function(data) {
-            // pass the data, query, and doneCallback function into the success handler
-            handleLookupAjaxSuccess(data, query, doneCallback)
-        },
-        "error": function(errorData) {
-            console.log("lookup ajax error")
-            console.log(errorData)
-        }
-    })
 }
 
 
@@ -57,9 +71,16 @@ function handleLookupAjaxSuccess(data, query, doneCallback) {
 
     // parse the string into JSON
     var jsonData = JSON.parse(data);
-    console.log(jsonData)
+    console.log(jsonData);
 
     // TODO: if you want to cache the result into a global variable you can do it here
+    // window.localStorage.setItem("auto_query", query);
+    // window.localStorage.setItem("auto_data", jsonData);
+    //
+    // console.log("query---->" + window.localStorage.getItem("auto_query"))
+    // console.log("data---->" + window.localStorage.getItem("auto_data"))
+    query_cache.set(query, data);
+
 
     // call the callback function provided by the autocomplete library
     // add "{suggestions: jsonData}" to satisfy the library response format according to
