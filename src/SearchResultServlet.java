@@ -29,31 +29,39 @@ import java.util.Arrays;
 // Declaring a WebServlet called FormServlet, which maps to url "/form"
 @WebServlet(name = "SearchResultServlet", urlPatterns = "/result")
 public class SearchResultServlet extends HttpServlet {
-    long tsStartTime = System.nanoTime();
-    long tj = 0;
-    long ts = 0;
+    private long tj = 0;
+    private long ts = 0;
+
     // Create a dataSource which registered in web.xml
     private DataSource dataSource;
 
-    public void init(ServletConfig config) {
-        long tjStartTime = System.nanoTime();
-        try {
-            dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedb");
-        } catch (NamingException e) {
-            e.printStackTrace();
-        }
-        long tjEndTime = System.nanoTime();
-        tj = tjEndTime - tjStartTime;
-    }
+//    public void init(ServletConfig config) {
+////        long tjStartTime = System.nanoTime();
+//        try {
+//            dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedb");
+//        } catch (NamingException e) {
+//            e.printStackTrace();
+//        }
+////        long tjEndTime = System.nanoTime();
+////        tj = tjEndTime - tjStartTime;
+//    }
 
     // Use http GET
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
+        long tsStartTime = System.nanoTime();
+
         response.setContentType("application/json");    // Response mime type
         PrintWriter out = response.getWriter();
 
         HttpSession session = request.getSession();
+
+        try {
+            dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedb");
+        } catch (NamingException e) {
+            e.printStackTrace();
+        }
 
         try {
             // Create a new connection to database
@@ -121,6 +129,8 @@ public class SearchResultServlet extends HttpServlet {
             if (previousBrowseParams != null){
                 previousBrowseParams.set(5, "none");
             }
+
+            long tjStartTime = System.nanoTime();
 
             if (title != null && name != null && year != null && director != null){
                 if (previousSearchParams == null){
@@ -208,7 +218,7 @@ public class SearchResultServlet extends HttpServlet {
 //                            tempStatement.close();
                             rsTemp.close();
                             long tjEndTime1 = System.nanoTime();
-                            tj += tjEndTime1 - tjStartTime1;
+                            tj += (tjEndTime1 - tjStartTime1);
 
                             if (jump.equals("next")){
                                 System.out.println("---->In next");
@@ -365,7 +375,7 @@ public class SearchResultServlet extends HttpServlet {
                 }
 
                 long tjEndTime2 = System.nanoTime();
-                tj += tjEndTime2 - tjStartTime2;
+                tj += (tjEndTime2 - tjStartTime2);
 
 
                 String[] tempG = movies_genres.split(", ");
@@ -426,10 +436,8 @@ public class SearchResultServlet extends HttpServlet {
             response.setStatus(200);
 
 
-            long tsEndTime = System.nanoTime();
-            ts = tsEndTime - tsStartTime;
-            System.out.println("TS : " + ts);
-            System.out.println("TJ: " + tj);
+            long tjEndTime = System.nanoTime();
+            tj = tjEndTime - tjStartTime;
 
         } catch (Exception e) {
             JsonObject jsonObject = new JsonObject();
@@ -441,17 +449,27 @@ public class SearchResultServlet extends HttpServlet {
 
         System.out.println("Output file is at: " + request.getServletContext().getRealPath("/") );
 
+        long tsEndTime = System.nanoTime();
+        ts = tsEndTime - tsStartTime;
+
+        System.out.println("TS : " + ts);
+        System.out.println("TJ: " + tj);
+
         File file = new File( request.getServletContext().getRealPath("/") + "log.txt");
-        if (file.createNewFile()){
-            FileWriter myWriter = new FileWriter(request.getServletContext().getRealPath("/") + file.getName());
-            myWriter.write(ts + " " + tj + "\n");
-            myWriter.close();
+        if (ts > tj) {
+            if (file.createNewFile()){
+                FileWriter myWriter = new FileWriter(request.getServletContext().getRealPath("/") + file.getName());
+                myWriter.write(ts + " " + tj + "\n");
+                myWriter.close();
+            }
+            else {
+                FileWriter myWriter = new FileWriter(request.getServletContext().getRealPath("/") + file.getName(), true);
+                myWriter.write(ts + " " + tj + "\n");
+                myWriter.close();
+            }
         }
-        else {
-            FileWriter myWriter = new FileWriter(request.getServletContext().getRealPath("/") + file.getName(), true);
-            myWriter.write(ts + " " + tj + "\n");
-            myWriter.close();
-        }
+        ts = 0;
+        tj = 0;
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

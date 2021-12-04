@@ -1,13 +1,35 @@
 - # General
     - #### Team#: 25
-    
+
     - #### Names: Haining Zhou; Haoxin Lin
-    
-    - #### Project 5 Video Demo Link:
+
+    - #### Project 5 Video Demo Link: https://youtu.be/M5OtdeYzMFk
 
     - #### Instruction of deployment:
+        - Setup AWS service and Google cloud computing services with Tomcat and Apache2
+        - Install JAVA 11
+        - Install Mysql 8.0 and inserted the original database and xml data
+        - Build the replication relationship between master and slave instance on Mysql
+        - Maven package the code and upload the .war file into master and slave instance
+        - Setup the port between servicers such as 22, 80, 3306, 8080 and 8443
+        - Download the Jmeter and make the configuration based on the url
+        - Use python command to run the codebase of Time measurement
 
     - #### Collaborations and Work Distribution:
+      Haoxin Lin
+      <br>
+        - Implement MySQL master-Slave Replication
+        - GCP environment Setup
+        - Built Load Banlancer
+        - Collect the performance results
+        - Optimization  
+          <br>
+          Haining Zhou
+        - Implement Connection Pooling
+        - Developed the Tomcat service
+        - Built Apache JMeter
+        - Design the codebase of Time measurement
+        - Optimization
 
 
 - # Connection Pooling
@@ -56,13 +78,13 @@
 
 | **Single-instance Version Test Plan**          | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
 |------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
-| Case 1: HTTP/1 thread                          | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
-| Case 2: HTTP/10 threads                        | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
-| Case 3: HTTPS/10 threads                       | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
-| Case 4: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
+| Case 1: HTTP/1 thread                          | ![](path to image in img/)   | 320                        | 200.72845609732622                  | 200.52109728877005        | Since there is only 1 thread, the time is relatively low compared with 10 threads. Ts and Tj do not differ much because the main tasks in doGet are all related to JDBC            |
+| Case 2: HTTP/10 threads                        | ![](path to image in img/)   | 1583                       | 1506.4742903073661                  | 1506.2769840885           | With the number of threads increase to 10, the time significantly increases. Ts and Tj again do not differ much because the main tasks in doGet are all related to JDBC            |
+| Case 3: HTTPS/10 threads                       | ![](path to image in img/)   | 2113                       | 2108.566413405948                   | 2078.058532541264         | A big reason why the number could be very big is we switch from t2 micro to t3 small after this. Ts and Tj again do not differ much because the main tasks in doGet are all related to JDBC           |
+| Case 4: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | 1619                       | 1693.411808524398                   | 1514.8124157983084        | Without connection pooling, each time a connection is newly created instead of picked from the pool. Therefore, it generally takes longer time than case 2           |
 
 | **Scaled Version Test Plan**                   | **Graph Results Screenshot** | **Average Query Time(ms)** | **Average Search Servlet Time(ms)** | **Average JDBC Time(ms)** | **Analysis** |
 |------------------------------------------------|------------------------------|----------------------------|-------------------------------------|---------------------------|--------------|
-| Case 1: HTTP/1 thread                          | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
-| Case 2: HTTP/10 threads                        | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
-| Case 3: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | ??                         | ??                                  | ??                        | ??           |
+| Case 1: HTTP/1 thread                          | ![](path to image in img/)   | 313                        | 230.622125                          | 224.8265865               | ??           |
+| Case 2: HTTP/10 threads                        | ![](path to image in img/)   | 1056                       |                           |                | ??           |
+| Case 3: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | 1569                       | 1630.3162123865031                  | 1438.0681238006134        | With the number of threads increase to 10, the time significantly increases. With load balancingTs and Tj again do not differ much because the main tasks in doGet are all related to JDBC           |
