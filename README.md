@@ -17,7 +17,7 @@
   - # Overall Structure:
   ![](images/structure.png)
       
-  ##Stage 1: Setup AWS, MySQL, JDBC, Tomcat, Start Fabflix
+  - # Stage 1: Setup AWS, MySQL, JDBC, Tomcat, Start Fabflix
    - #### Collaborations and Work Distribution:
      Haoxin Lin:
         - Set up the environment
@@ -38,7 +38,7 @@
 
    - #### Demo URL: https://youtu.be/YwcTtcIKyZw
 
-  ##Stage 2: Developing Fabflix Website
+  - # Stage 2: Developing Fabflix Website
     - ####Substring matching design:
       Basically, we use % to match an arbitrary number of characters for MySQL in our substring match function.
       For searching the movie title, director, and star name, we use two % to include the substring that users input in
@@ -63,7 +63,7 @@
 
     - #### Demo URL: https://youtu.be/4LG-mj_MNEU
   
-  ##Stage 3: reCAPTCHA, HTTPS, PreparedStatement, Stored Procedure, XML Parsing
+  - # Stage 3: reCAPTCHA, HTTPS, PreparedStatement, Stored Procedure, XML Parsing
     - ####Parsing time optimization strategies:
       - Used stored procedures
       - Used addBatch() and executeBatch() for PreparedStatement
@@ -84,7 +84,7 @@
 
     - #### Demo URL: https://youtu.be/-yPmK0sfq_s
 
-  ##Stage 4: Full-Text Search, Autocomplete, Android Application, FuzzySearch
+  - # Stage 4: Full-Text Search, Autocomplete, Android Application, FuzzySearch
     - #### Collaborations and Work Distribution:
       Haoxin Lin:
         - Implemented Autocomplete
@@ -95,7 +95,7 @@
 
     - #### Demo URL: https://youtu.be/i1zzBd0H-Fo
 
-  ##Stage 5: Scaling Fabflix and Performance Tuning
+  - # Stage 5: Scaling Fabflix and Performance Tuning
       
     - #### How Connection Pooling is utilized in the Fabflix code.
       Connection Pooling is used to increase the performance of Fabflix via reusing connections. In order to add the 
