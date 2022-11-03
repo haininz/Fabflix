@@ -1,16 +1,16 @@
 <component name="ArtifactManager">
-  <artifact type="war" name="project4:war">
+  <artifact type="war" name="fabflix:war">
     <output-path>$PROJECT_DIR$/target</output-path>
     <properties id="maven-jee-properties">
       <options>
         <exploded>false</exploded>
-        <module>project4</module>
+        <module>fabflix</module>
         <packaging>war</packaging>
         <unpackNestedArchives>false</unpackNestedArchives>
       </options>
     </properties>
-    <root id="archive" name="project4.war">
-      <element id="artifact" artifact-name="project4:war exploded" />
+    <root id="archive" name="fabflix.war">
+      <element id="artifact" artifact-name="fabflix:war exploded" />
     </root>
   </artifact>
 </component>

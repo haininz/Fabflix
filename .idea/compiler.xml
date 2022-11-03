@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="project4" />
+        <module name="fabflix" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="project4" target="11" />
+      <module name="fabflix" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

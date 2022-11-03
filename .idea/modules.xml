@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/project4.iml" filepath="$PROJECT_DIR$/project4.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fabflix.iml" filepath="$PROJECT_DIR$/fabflix.iml" />
     </modules>
   </component>
 </project>
