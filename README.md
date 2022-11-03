@@ -14,7 +14,7 @@
         - Use python command to run the codebase of Time measurement
         - For test log in, use "a@email.com" as username and "a2" as password
       
-  ##Overall Structure:
+  - # Overall Structure:
   ![](images/structure.png)
       
   ##Stage 1: Setup AWS, MySQL, JDBC, Tomcat, Start Fabflix
