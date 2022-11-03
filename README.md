@@ -39,7 +39,7 @@
    - #### Demo URL: https://youtu.be/YwcTtcIKyZw
 
   - # Stage 2: Developing Fabflix Website
-    - ####Substring matching design:
+    - #### Substring matching design:
       Basically, we use % to match an arbitrary number of characters for MySQL in our substring match function.
       For searching the movie title, director, and star name, we use two % to include the substring that users input in
       our search query.  It will search the data to find which contains the substring part and return. But for the
@@ -64,7 +64,7 @@
     - #### Demo URL: https://youtu.be/4LG-mj_MNEU
   
   - # Stage 3: reCAPTCHA, HTTPS, PreparedStatement, Stored Procedure, XML Parsing
-    - ####Parsing time optimization strategies:
+    - #### Parsing time optimization strategies:
       - Used stored procedures
       - Used addBatch() and executeBatch() for PreparedStatement
       - Used HashMaps for checking duplicates
