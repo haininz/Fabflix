@@ -133,14 +133,14 @@
 | Case 2: HTTP/10 threads                        | ![](path to image in img/)   | 1561                       | 1483.8507295420366                  | 1483.4765393671019        | With the number of threads increase to 10, the time significantly increases. With load balancing, the time in general is less than single instance case 3. Ts and Tj again do not differ much because the main tasks in doGet are all related to JDBC 
 | Case 3: HTTP/10 threads/No connection pooling  | ![](path to image in img/)   | 1569                       | 1630.3162123865031                  | 1438.0681238006134        | With the number of threads increase to 10, the time significantly increases. With load balancing, the time in general is less than single instance case 4. Ts and Tj again do not differ much because the main tasks in doGet are all related to JDBC           |
     
-  - #### Collaborations and Work Distribution:
-    Haoxin Lin:
-      - Implement MySQL master-Slave Replication
-      - GCP environment Setup
-      - Built Load Banlancer
-      - Collect the performance results
-      - Optimization  
-        <br>
+    - #### Collaborations and Work Distribution:
+      Haoxin Lin:
+        - Implement MySQL master-Slave Replication
+        - GCP environment Setup
+        - Built Load Banlancer
+        - Collect the performance results
+        - Optimization  
+          <br>
 
     Haining Zhou:
       - Implement Connection Pooling
